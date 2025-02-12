@@ -2,7 +2,7 @@
 
 [![Built with Astro](https://astro.badg.es/v2/built-with-astro/small.svg)](https://astro.build)
 
-[IMAGE PLACEHOLDER - Add your banner image here]
+![accessible-astro-components](https://github.com/user-attachments/assets/ba773cb6-ee7e-421d-8228-6f9fd3e13575)
 
 A comprehensive library of accessible, easy-to-use UI Components for [Astro](https://astro.build). Each component is built with accessibility in mind, following WCAG guidelines and ARIA best practices, providing a solid foundation for building inclusive web applications. The components are designed to be customizable, performant, and developer-friendly, with full TypeScript support.
 
