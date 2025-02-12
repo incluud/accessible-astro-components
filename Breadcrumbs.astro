@@ -1,21 +1,43 @@
 ---
 import type { BreadcrumbsItem } from '.'
 
+/**
+ * Breadcrumbs Component
+ *
+ * @description A fully accessible breadcrumb navigation that follows WAI-ARIA guidelines
+ */
+
 interface Props {
+  /**
+   * Additional classes to apply to the breadcrumbs container
+   */
+  class?: string
+  /**
+   * Breadcrumb items to render
+   */
   children: BreadcrumbsItem | BreadcrumbsItem[]
+  /**
+   * Accessible label for the breadcrumb navigation
+   */
+  ariaLabel: string
 }
+
+const { class: classNames, ariaLabel = 'Breadcrumbs' } = Astro.props
 ---
 
-<nav class="breadcrumbs" aria-label="Breadcrumbs">
+<nav class:list={['breadcrumbs', classNames]} aria-label={ariaLabel}>
   <ol>
     <slot />
   </ol>
 </nav>
 
-<style is:global>
-  .breadcrumbs ol {
-    padding: 0;
+<style>
+  :where(.breadcrumbs ol) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin: 0;
+    padding: 0;
     list-style: none;
   }
 </style>

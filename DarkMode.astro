@@ -1,89 +1,190 @@
 ---
+/**
+ * Dark Mode Toggle Component
+ *
+ * @description A fully accessible dark mode toggle with auto/light/dark modes
+ */
 interface Props {
+  /**
+   * Initial color scheme mode
+   */
   initialMode?: 'light' | 'dark' | 'auto'
+  /**
+   * Accessible label for the toggle button
+   */
+  label?: string
+  /**
+   * Additional classes to apply to the button
+   */
+  class?: string
 }
 
-const { initialMode = 'auto' } = Astro.props
+const { initialMode = 'auto', label = 'Toggle Dark Mode', class: className } = Astro.props
 ---
 
 <button
-  class="darkmode-toggle"
+  class:list={['darkmode-toggle', className]}
   aria-pressed="false"
-  aria-label="Toggle Dark Mode"
+  aria-label={label}
   data-initial-mode={initialMode}
   transition:persist
 >
-  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24"
-    ><path
-      fill="currentColor"
-      d="M9.353 3C5.849 4.408 3 7.463 3 11.47A9.53 9.53 0 0 0 12.53 21c4.007 0 7.062-2.849 8.47-6.353C8.17 17.065 8.14 8.14 9.353 3z"
-    ></path></svg
-  >
+  <span class="icon icon-light">
+    <slot name="light">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M13 3a1 1 0 1 0-2 0v1a1 1 0 1 0 2 0V3zM5.707 4.293a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414-1.414l-1-1zm14 0a1 1 0 0 0-1.414 0l-1 1a1 1 0 0 0 1.414 1.414l1-1a1 1 0 0 0 0-1.414zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-9 4a1 1 0 1 0 0 2h1a1 1 0 1 0 0-2H3zm17 0a1 1 0 1 0 0 2h1a1 1 0 1 0 0-2h-1zM6.707 18.707a1 1 0 1 0-1.414-1.414l-1 1a1 1 0 1 0 1.414 1.414l1-1zm12-1.414a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414-1.414l-1-1zM13 20a1 1 0 1 0-2 0v1a1 1 0 1 0 2 0v-1z"
+          fill="currentColor"></path>
+      </svg>
+    </slot>
+  </span>
+  <span class="icon icon-dark">
+    <slot name="dark">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="M9.353 3C5.849 4.408 3 7.463 3 11.47A9.53 9.53 0 0 0 12.53 21c4.007 0 7.062-2.849 8.47-6.353C8.17 17.065 8.14 8.14 9.353 3z"
+        ></path>
+      </svg>
+    </slot>
+  </span>
 </button>
 
 <script is:inline define:vars={{ initialMode }}>
-  // variables
-  let darkMode = localStorage.getItem('darkMode')
-  const darkModeToggle = document.querySelector('.darkmode-toggle')
-  const root = document.documentElement
+  // Only run once
+  if (!window.darkModeInitialized) {
+    window.darkModeInitialized = true
 
-  // functions
-  const enableDarkMode = (store = true) => {
-    root.classList.add('darkmode')
-    root.style.colorScheme = 'dark'
-    darkModeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 3a1 1 0 1 0-2 0v1a1 1 0 1 0 2 0V3zM5.707 4.293a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414-1.414l-1-1zm14 0a1 1 0 0 0-1.414 0l-1 1a1 1 0 0 0 1.414 1.414l1-1a1 1 0 0 0 0-1.414zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-9 4a1 1 0 1 0 0 2h1a1 1 0 1 0 0-2H3zm17 0a1 1 0 1 0 0 2h1a1 1 0 1 0 0-2h-1zM6.707 18.707a1 1 0 1 0-1.414-1.414l-1 1a1 1 0 1 0 1.414 1.414l1-1zm12-1.414a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414-1.414l-1-1zM13 20a1 1 0 1 0-2 0v1a1 1 0 1 0 2 0v-1z" fill="currentColor"/></svg>`
-    darkModeToggle.setAttribute('aria-pressed', 'true')
-    if (store) localStorage.setItem('darkMode', 'enabled')
-  }
+    const root = document.documentElement
+    let darkMode = localStorage.getItem('darkMode')
 
-  const disableDarkMode = (store = true) => {
-    root.classList.remove('darkmode')
-    root.style.colorScheme = 'light'
-    darkModeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M9.353 3C5.849 4.408 3 7.463 3 11.47A9.53 9.53 0 0 0 12.53 21c4.007 0 7.062-2.849 8.47-6.353C8.17 17.065 8.14 8.14 9.353 3z"/></svg>`
-    darkModeToggle.setAttribute('aria-pressed', 'false')
-    if (store) localStorage.setItem('darkMode', 'disabled')
-  }
-
-  const checkPreference = () => {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      enableDarkMode(false)
-    } else {
-      disableDarkMode(false)
-    }
-  }
-
-  // Initial setup based on props
-  const initializeDarkMode = () => {
-    if (darkMode) {
-      // If user has a preference, respect that first
-      darkMode === 'enabled' ? enableDarkMode() : disableDarkMode()
-      return
+    const enableDarkMode = (store = true) => {
+      const darkModeToggles = document.querySelectorAll('.darkmode-toggle')
+      root.classList.add('darkmode')
+      root.style.colorScheme = 'dark'
+      darkModeToggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'true'))
+      if (store) localStorage.setItem('darkMode', 'enabled')
     }
 
-    // Handle initial mode
-    switch (initialMode) {
-      case 'dark':
-        enableDarkMode()
-        break
-      case 'light':
-        disableDarkMode()
-        break
-      default: // 'auto'
-        checkPreference()
+    const disableDarkMode = (store = true) => {
+      const darkModeToggles = document.querySelectorAll('.darkmode-toggle')
+      root.classList.remove('darkmode')
+      root.style.colorScheme = 'light'
+      darkModeToggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'false'))
+      if (store) localStorage.setItem('darkMode', 'disabled')
     }
-  }
 
-  // execution
-  initializeDarkMode()
+    const checkPreference = () => {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        enableDarkMode(false)
+      } else {
+        disableDarkMode(false)
+      }
+    }
 
-  darkModeToggle.addEventListener('click', () => {
-    darkMode = root.classList.contains('darkmode')
-    !darkMode ? enableDarkMode() : disableDarkMode()
-  })
+    const initializeDarkMode = () => {
+      if (darkMode) {
+        darkMode === 'enabled' ? enableDarkMode() : disableDarkMode()
+        return
+      }
 
-  // Listen for view transitions
-  document.addEventListener('astro:after-swap', () => {
-    darkMode = localStorage.getItem('darkMode')
+      switch (initialMode) {
+        case 'dark':
+          enableDarkMode()
+          break
+        case 'light':
+          disableDarkMode()
+          break
+        default: // 'auto'
+          checkPreference()
+      }
+    }
+
+    // execution
     initializeDarkMode()
-  })
+
+    // Add click handlers to all toggles
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.darkmode-toggle')) {
+        darkMode = root.classList.contains('darkmode')
+        !darkMode ? enableDarkMode() : disableDarkMode()
+      }
+    })
+
+    // Listen for view transitions
+    document.addEventListener('astro:after-swap', () => {
+      darkMode = localStorage.getItem('darkMode')
+      initializeDarkMode()
+    })
+  }
 </script>
+
+<style>
+  :where(.darkmode-toggle) {
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    background: transparent;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: box-shadow var(--transition-duration) var(--transition-easing);
+    }
+  }
+
+  :where(.darkmode-toggle:hover),
+  :where(.darkmode-toggle:focus-visible) {
+    box-shadow: 0 0 0 0.25rem;
+  }
+
+  :where(.darkmode-toggle:focus-visible) {
+    outline: none;
+  }
+
+  :where(.icon) {
+    display: flex;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  /* Target both default and slotted icons */
+  :where(.icon svg),
+  :where(.icon) :global(svg) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Show/hide based on dark mode */
+  .icon-light {
+    display: none;
+  }
+
+  :global(.darkmode) .icon-light {
+    display: flex;
+  }
+
+  :global(.darkmode) .icon-dark {
+    display: none;
+  }
+</style>

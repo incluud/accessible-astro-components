@@ -1,8 +1,25 @@
 ---
+/**
+ * TabsTab Component
+ *
+ * @description A tab within a Tabs component
+ */
 interface Props {
+  /**
+   * Unique identifier for the tab
+   */
   id: string
+  /**
+   * ID of the panel this tab controls
+   */
   controls: string
+  /**
+   * Whether this tab is currently selected
+   */
   selected?: boolean
+  /**
+   * Additional classes to apply to the tab
+   */
   class?: string
 }
 
@@ -20,35 +37,42 @@ const { id, controls, selected = false, class: className } = Astro.props
   <slot />
 </button>
 
-<style is:global>
-  .tab {
+<style>
+  :where(.tab) {
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
     flex-grow: 1;
-    border: 2px solid light-dark(#202020, #f0f0f0);
-    border-radius: 6px;
-    font-size: 1.125rem;
-    font-weight: 700;
-    text-align: center;
-    text-decoration: none;
     cursor: pointer;
+    border: 2px solid;
+    border-color: light-dark(hsl(0 0% 10%), hsl(0 0% 90%));
+    border-radius: 0.5rem;
+    background-color: transparent;
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+    color: inherit;
+    font-weight: 700;
+    font-size: 1.125rem;
+    text-align: center;
 
     @media (prefers-reduced-motion: no-preference) {
-      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all var(--transition-duration) var(--transition-easing);
     }
   }
 
-  .tab[aria-selected='true'],
-  .tab:where(:hover, :focus-visible) {
-    color: light-dark(#f0f0f0, #202020);
-    background-color: light-dark(#202020, #dddddd);
-    border-color: light-dark(#202020, #f0f0f0);
+  :where(.tab[aria-selected='true']),
+  :where(.tab:hover),
+  :where(.tab:focus-visible) {
+    box-shadow: 0 0 0 0.25rem light-dark(hsl(0 0% 10% / 0.2), hsl(0 0% 90% / 0.2));
+    background-color: light-dark(hsl(0 0% 10%), hsl(0 0% 90%));
+    color: light-dark(hsl(0 0% 100%), hsl(215 25% 27%));
   }
 
-  @media (min-width: 500px) {
-    .tab {
-      padding: 1rem;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-      border-bottom: none;
+  @media (min-width: 31.25rem) {
+    :where(.tab) {
+      border-block-end: 0;
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
     }
   }
 </style>

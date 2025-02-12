@@ -1,11 +1,82 @@
 ---
+/**
+ * Media Component
+ *
+ * @description A responsive media component with support for various aspect ratios and loading strategies
+ */
 interface Props {
+  /**
+   * Additional classes to apply to the media wrapper
+   */
   class?: string
+  /**
+   * Source URL for the media
+   */
   src?: string
+  /**
+   * Alt text for the media
+   */
   alt?: string
+  /**
+   * Aspect ratio of the media
+   */
+  ratio?: '1:1' | '4:3' | '16:9' | '21:9' | 'auto'
+  /**
+   * Loading strategy
+   */
+  loading?: 'lazy' | 'eager'
+  /**
+   * Decoding strategy
+   */
+  decoding?: 'async' | 'sync' | 'auto'
+  /**
+   * Fetch priority
+   */
+  fetchpriority?: 'high' | 'low' | 'auto'
 }
 
-const { class: classNames, src = 'https://fakeimg.pl/640x360', alt = '' } = Astro.props
+const {
+  class: className,
+  src = 'https://fakeimg.pl/640x360',
+  alt = '',
+  ratio = 'auto',
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority = 'auto',
+} = Astro.props
+
+const aspectRatios = {
+  '1:1': '1',
+  '4:3': '4/3',
+  '16:9': '16/9',
+  '21:9': '21/9',
+  auto: 'auto',
+}
 ---
 
-<img class={classNames} src={src} alt={alt} loading="lazy" decoding="async" />
+<div class:list={['media-wrapper', className]} data-ratio={ratio}>
+  <img
+    src={src}
+    alt={alt}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    style={ratio !== 'auto' ? `aspect-ratio: ${aspectRatios[ratio]};` : ''}
+  />
+</div>
+
+<style>
+  :where(.media-wrapper) {
+    position: relative;
+    border-radius: 0.5rem;
+    inline-size: 100%;
+    overflow: hidden;
+  }
+
+  :where(img) {
+    border-radius: inherit;
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: cover;
+  }
+</style>

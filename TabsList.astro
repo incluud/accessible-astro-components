@@ -1,5 +1,13 @@
 ---
+/**
+ * TabsList Component
+ *
+ * @description A list of tabs within a Tabs component
+ */
 interface Props {
+  /**
+   * Additional classes to apply to the tabs list container
+   */
   class?: string
 }
 
@@ -10,8 +18,8 @@ const { class: className } = Astro.props
   <slot />
 </div>
 
-<style is:global>
-  .tabs-list {
+<style>
+  :where(.tabs-list) {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
@@ -19,9 +27,9 @@ const { class: className } = Astro.props
     margin-block-end: 0.5rem;
   }
 
-  @media (min-width: 500px) {
-    .tabs-list {
-      margin-block-end: 0px;
+  @media (min-width: 31.25rem) {
+    :where(.tabs-list) {
+      margin-block-end: 0;
     }
   }
 </style>

@@ -1,5 +1,13 @@
 ---
+/**
+ * Tabs Component
+ *
+ * @description A fully accessible tabs component that follows WAI-ARIA guidelines
+ */
 interface Props {
+  /**
+   * Additional classes to apply to the tabs container
+   */
   class?: string
 }
 
@@ -11,26 +19,6 @@ const { class: className } = Astro.props
 </div>
 
 <script>
-  /**
-   * Accessible Tabs Component
-   *
-   * @description A fully accessible tabs component that follows WAI-ARIA guidelines
-   *
-   * Accessibility features:
-   * 1. Uses aria-controls on tabs and corresponding ids on panels for screen reader relationships
-   * 2. Arrow key navigation between tabs while tabbing moves to the panel content
-   * 3. aria-selected indicates the active tab to screen readers
-   * 4. aria-hidden manages panel visibility for screen readers
-   *
-   * @example
-   * <Tabs>
-   *   <TabsList>
-   *     <TabsTab id="tab-1" controls="panel-1" selected>Tab 1</TabsTab>
-   *   </TabsList>
-   *   <TabsPanel id="panel-1" labelledby="tab-1" selected>Content 1</TabsPanel>
-   * </Tabs>
-   */
-
   interface TabElement extends HTMLElement {
     setAttribute(name: string, value: string): void
     getAttribute(name: string): string | null
@@ -91,11 +79,14 @@ const { class: className } = Astro.props
         panel.setAttribute('aria-hidden', 'true')
       })
 
-      const targetPanel = component.querySelector<HTMLElement>(`#${nextTab.getAttribute('aria-controls')}`)
+      const targetPanel = component.querySelector<HTMLElement>(
+        `#${nextTab.getAttribute('aria-controls')}`
+      )
       targetPanel?.setAttribute('aria-hidden', 'false')
     }
   }
 
+  // Handle Astro view transitions
   document.addEventListener('astro:after-swap', () => {
     document.querySelectorAll<HTMLElement>('.tabs').forEach(initializeTabComponent)
   })

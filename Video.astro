@@ -1,0 +1,94 @@
+---
+/**
+ * Video Component
+ *
+ * @description A responsive video component with YouTube embed support and privacy enhancements
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the video wrapper
+   */
+  class?: string
+  /**
+   * URL of the video (YouTube or direct embed)
+   */
+  src: string
+  /**
+   * Accessible title for the video
+   */
+  title: string
+  /**
+   * Aspect ratio of the video
+   */
+  ratio?: '1:1' | '4:3' | '16:9' | '21:9'
+  /**
+   * Loading strategy for the iframe
+   */
+  loading?: 'lazy' | 'eager'
+}
+
+const {
+  class: className,
+  src,
+  title = 'YouTube video player',
+  ratio = '16:9',
+  loading = 'lazy',
+} = Astro.props
+
+const aspectRatios = {
+  '1:1': '1',
+  '4:3': '4/3',
+  '16:9': '16/9',
+  '21:9': '21/9',
+}
+
+// Process URL in the frontmatter
+const getVideoUrl = (url: string) => {
+  const youtubeRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+  const youtubeMatch = url.match(youtubeRegex)
+
+  if (youtubeMatch && youtubeMatch[2].length === 11) {
+    const videoId = youtubeMatch[2]
+    const siParam = Date.now().toString(36)
+
+    const params = new URLSearchParams({
+      si: siParam,
+      disablekb: '1',
+      rel: '0',
+      modestbranding: '1',
+      controls: '1',
+      playsinline: '1',
+      showinfo: '0',
+      iv_load_policy: '3',
+    })
+
+    return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`
+  }
+  return url
+}
+
+const videoUrl = getVideoUrl(src)
+---
+
+<div class:list={['video-wrapper', className]} data-video-wrapper data-ratio={ratio}>
+  <iframe
+    src={videoUrl}
+    title={title}
+    loading={loading}
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+    style={`aspect-ratio: ${aspectRatios[ratio]};`}></iframe>
+</div>
+
+<style>
+  :where(.video-wrapper) {
+    inline-size: 100%;
+  }
+
+  :where(iframe) {
+    border: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+</style>

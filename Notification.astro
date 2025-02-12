@@ -1,59 +1,95 @@
 ---
+/**
+ * Notification Component
+ *
+ * @description A versatile notification component with support for different types and ARIA roles
+ */
 interface Props {
+  /**
+   * Type of notification
+   */
   type?: 'info' | 'success' | 'warning' | 'error' | 'default'
+  /**
+   * ARIA role for the notification
+   */
   role?: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region'
+  /**
+   * ARIA live region behavior
+   */
   ariaLive?: 'off' | 'polite' | 'assertive'
-  children?: any
+  /**
+   * Notification message
+   */
+  message?: string
+  /**
+   * Additional classes to apply
+   */
+  class?: string
 }
 
-const { type = 'default', role = 'none', ariaLive = 'off' } = Astro.props
+const {
+  type = 'default',
+  role = 'none',
+  ariaLive = 'off',
+  message = 'This is a notification!',
+  class: className,
+} = Astro.props
 ---
 
-<div class={`notification type-${type}`} role={role} aria-live={ariaLive}>
+<aside class:list={['notification', `type-${type}`, className]} role={role} aria-live={ariaLive}>
   <slot>
-    <p><strong>Message:</strong> This is a notification!</p>
+    <p><strong>Message:</strong> {message}</p>
   </slot>
-</div>
+</aside>
 
-<style is:global>
-  .notification {
+<style>
+  :where(.notification) {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    border: 2px solid;
+    border-radius: 0.5rem;
     padding: 1rem;
-    color: var(--neutral-900, #202427);
-    background-color: var(--neutral-200, #f6f8f9);
-    border: 2px solid var(--neutral-600, #858d93);
-    border-radius: 0.25rem;
   }
 
-  .notification.type-info {
-    color: var(--info-900, #035486);
-    background-color: var(--info-100, #e0f7ff);
-    border-color: var(--info-600, #1a91d1);
+  /* Default */
+  :where(.notification) {
+    border-color: light-dark(hsl(204 8% 55%), hsl(215 15% 45%));
+    background-color: light-dark(hsl(200 20% 97%), hsl(215 25% 13%));
+    color: light-dark(hsl(204 8% 14%), hsl(0 0% 100%));
   }
 
-  .notification.type-success {
-    color: var(--success-900, #014b3e);
-    background-color: var(--success-100, #eefcf6);
-    border-color: var(--success-500, #28a980);
+  /* Info */
+  :where(.type-info) {
+    border-color: light-dark(hsl(200 78% 46%), hsl(234 100% 60%));
+    background-color: light-dark(hsl(198 100% 94%), hsl(234 54% 20%));
+    color: light-dark(hsl(200 96% 27%), hsl(0 0% 100%));
   }
 
-  .notification.type-warning {
-    color: var(--warning-900, #8e2a0b);
-    background-color: var(--warning-100, #fffbeb);
-    border-color: var(--warning-600, #dc901e);
+  /* Success */
+  :where(.type-success) {
+    border-color: light-dark(hsl(160 61% 41%), hsl(101 82% 63%));
+    background-color: light-dark(hsl(160 71% 96%), hsl(101 39% 22%));
+    color: light-dark(hsl(170 96% 15%), hsl(0 0% 100%));
   }
 
-  .notification.type-error {
-    color: var(--error-900, #5e0317);
-    background-color: var(--error-100, #ffe0e0);
-    border-color: var(--error-500, #df2a39);
+  /* Warning */
+  :where(.type-warning) {
+    border-color: light-dark(hsl(35 75% 49%), hsl(41 82% 63%));
+    background-color: light-dark(hsl(48 100% 96%), hsl(41 39% 22%));
+    color: light-dark(hsl(15 85% 30%), hsl(0 0% 100%));
   }
 
-  .notification [data-icon] {
+  /* Error */
+  :where(.type-error) {
+    border-color: light-dark(hsl(355 73% 51%), hsl(339 82% 63%));
+    background-color: light-dark(hsl(0 100% 94%), hsl(339 39% 22%));
+    color: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
+  }
+
+  :where(.notification [data-icon]) {
     flex-shrink: 0;
-    width: 40px;
-    height: auto;
+    inline-size: 2.5rem;
+    block-size: auto;
   }
 </style>

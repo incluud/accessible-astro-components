@@ -1,9 +1,10 @@
 {
   "name": "accessible-astro-components",
   "description": "A set of Accessible, easy to use, Front-end UI Components for Astro.",
-  "version": "3.0.1",
-  "author": "Mark Teekman",
-  "homepage": "https://accessible-astro.netlify.app/accessible-components/",
+  "version": "4.0.0",
+  "author": "Incluud",
+  "license": "MIT",
+  "homepage": "https://accessible-astro.incluud.dev/components/overview/",
   "type": "module",
   "exports": {
     ".": {
@@ -29,15 +30,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markteekman/accessible-astro-components.git"
+    "url": "git+https://github.com/incluud/accessible-astro-components.git"
   },
   "bugs": {
-    "url": "https://github.com/markteekman/accessible-astro-components/issues"
+    "url": "https://github.com/incluud/accessible-astro-components/issues"
   },
-  "license": "MIT",
   "devDependencies": {
     "astro": "^5.0.5",
     "prettier": "2.8.7",
-    "prettier-plugin-astro": "^0.8.0"
+    "prettier-plugin-astro": "^0.8.0",
+    "prettier-plugin-css-order": "^1.3.1"
   }
 }
