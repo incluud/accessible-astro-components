@@ -1,8 +1,16 @@
 {
-  "tabWidth": 2,
-  "semi": false,
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-css-order"],
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro"
+      }
+    }
+  ],
   "singleQuote": true,
-  "printWidth": 120,
-  "plugins": ["prettier-plugin-astro"],
-  "pluginSearchDirs": false
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": false
 }

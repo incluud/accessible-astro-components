@@ -1,28 +1,122 @@
 ---
+/**
+ * Breadcrumbs Item Component
+ *
+ * @description An individual breadcrumb item that can be a link or current page indicator
+ */
 interface Props {
+  /**
+   * URL for the breadcrumb link
+   */
   href?: string
+  /**
+   * Text label for the breadcrumb
+   */
   label: string
+  /**
+   * Whether this item represents the current page
+   */
   currentPage?: boolean
+  /**
+   * Whether this item has an icon
+   */
+  hasIcon?: boolean
+  /**
+   * Additional classes to apply to the item
+   */
+  class?: string
 }
 
-const { href = '#', label = 'Breadcrumb', currentPage = false } = Astro.props
+const {
+  href = '#',
+  label = 'Breadcrumb',
+  currentPage = false,
+  hasIcon = false,
+  class: classNames,
+} = Astro.props
 ---
 
-<li class="breadcrumbs__item">
-  {currentPage ? <span aria-current="page">{label}</span> : <a href={href}>{label}</a>}
+<li class:list={['item', classNames]}>
+  {
+    currentPage ? (
+      <span aria-current="page" class:list={[hasIcon ? 'has-icon' : '']}>
+        {hasIcon ? (
+          <>
+            <slot name="icon" />
+            <span class="sr-only">{label}</span>
+          </>
+        ) : (
+          label
+        )}
+      </span>
+    ) : (
+      <a href={href} class:list={[hasIcon ? 'has-icon' : '']}>
+        {hasIcon ? (
+          <>
+            <slot name="icon" />
+            <span class="sr-only">{label}</span>
+          </>
+        ) : (
+          label
+        )}
+      </a>
+    )
+  }
+  <slot name="separator">
+    <span class="separator" aria-hidden="true">/</span>
+  </slot>
 </li>
 
-<style is:global>
-  .breadcrumbs__item {
-    display: inline;
+<style>
+  :where(.item) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .breadcrumbs__item::after {
-    content: '/';
-    margin: 0 0.5rem;
+  .item :global(.separator) {
+    display: flex;
+    align-items: center;
   }
 
-  .breadcrumbs__item:last-child::after {
-    content: '';
+  .item :global(svg) {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+
+  li.item:last-child :global(.separator) {
+    display: none;
+  }
+
+  :where(.has-icon) :global(svg) {
+    display: flex;
+    align-items: center;
+  }
+
+  a {
+    color: currentColor;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  a:hover,
+  a:focus-visible {
+    text-decoration: none;
+  }
+
+  span[aria-current='page'] {
+    font-weight: 500;
+  }
+
+  .sr-only {
+    position: absolute;
+    margin: -1px;
+    padding: 0;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: clip;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
   }
 </style>

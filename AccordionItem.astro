@@ -1,134 +1,236 @@
 ---
+/**
+ * Accordion Item Component
+ *
+ * @description An individual accordion item that can be expanded/collapsed with smooth animations
+ */
 interface Props {
-  // Note: name attribute is valid HTML for <details> but not yet recognized by TypeScript
+  /**
+   * Optional name attribute for the details element
+   */
   name?: string
+  /**
+   * Title text displayed in the accordion header
+   */
   title: string
+  /**
+   * Additional classes to apply to the item
+   */
+  class?: string
+  /**
+   * Content to be rendered inside the accordion item
+   */
   children: any
+  /**
+   * HTML tag to use for the title (h2-h6)
+   * @default 'h3'
+   */
+  tagName?: string
+  /**
+   * Visual style variant of the accordion
+   * @default 'default'
+   */
+  variant?: 'default' | 'chevron'
+  /**
+   * Whether the accordion item is initially open
+   * @default false
+   */
+  open?: boolean
 }
 
-const { name, title } = Astro.props
+const {
+  name,
+  title,
+  class: classNames,
+  tagName = 'h3',
+  variant = 'default',
+  open = false,
+} = Astro.props
+
+const Tag = tagName
 ---
 
-<li class="accordion__item">
-  <details class="accordion__wrapper" name={name}>
-    <summary class="accordion__title">
-      <h3>
-        <span class="accordion__title-icon">
-          <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M20 .5v1H0v-1z"></path>
-          </svg>
-          <svg width="2" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M1.5 20h-1V0h1z"></path>
-          </svg>
-        </span>
-        {title}
-      </h3>
+<li class:list={['item', classNames]}>
+  <details class="wrapper" name={name} data-variant={variant} {...open ? { open } : {}}>
+    <summary class="title">
+      <Tag>
+        {
+          variant === 'chevron' ? (
+            <>
+              {title}
+              <span class="icon-chevron">
+                <svg
+                  aria-hidden="true"
+                  width="12"
+                  height="8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.4 1.6L6 6.2l4.6-4.6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </>
+          ) : (
+            <>
+              <span class="icon-plus">
+                <svg
+                  aria-hidden="true"
+                  width="20"
+                  height="2"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill="currentColor" d="M20 .5v1H0v-1z" />
+                </svg>
+                <svg width="2" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" d="M1.5 20h-1V0h1z" />
+                </svg>
+              </span>
+              {title}
+            </>
+          )
+        }
+      </Tag>
     </summary>
-    <div class="accordion__content">
+    <div class="content">
       <slot />
     </div>
   </details>
 </li>
 
-<style is:global>
-  .accordion__wrapper {
-    border-top: 2px solid light-dark(#202020, #dddddd);
-    interpolate-size: allow-keywords;
+<style>
+  :where(.wrapper) {
+    --transition-duration: 0.3s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
 
-    &::details-content {
-      opacity: 0;
-      block-size: 0;
-      overflow-y: clip;
-
-      @media (prefers-reduced-motion: no-preference) {
-        transition: content-visibility 0.2s allow-discrete, opacity 0.2s ease-in-out, block-size 0.2s ease-in-out;
-      }
-    }
-
-    &[open] {
-      &::details-content {
-        opacity: 1;
-        block-size: auto;
-      }
-
-      svg:last-of-type {
-        inset-block-start: 0;
-        transform: rotate(90deg);
-      }
-    }
+    border-block-start: 2px solid light-dark(hsl(0 0% 13%), hsl(0 0% 87%));
+    padding-block: 0;
   }
 
-  .accordion__title {
+  .title h2,
+  .title h3,
+  .title h4,
+  .title h5,
+  .title h6 {
     display: flex;
-    padding-block: 0.75rem;
-    cursor: pointer;
-    list-style: none;
+    align-items: center;
+    gap: 1rem;
+    min-inline-size: 100%;
+    font-weight: normal;
+    font-size: 1.25rem;
+  }
 
-    &::marker,
-    &::-webkit-details-marker {
-      display: none;
-      content: '';
-    }
-
-    &:where(:hover, :focus-visible) {
-      h3 {
-        text-decoration: underline;
-        text-underline-offset: 4px;
-      }
-    }
-
-    h3 {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.25rem;
-      font-weight: normal;
+  .wrapper {
+    @media (prefers-reduced-motion: no-preference) {
+      interpolate-size: allow-keywords;
     }
   }
 
-  .accordion__title-icon {
-    position: relative;
-    display: inline-block;
-    block-size: 20px;
-    aspect-ratio: 1;
-
-    svg {
-      position: absolute;
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
-      transform: translate(-50%, -50%);
-
-      &:first-of-type {
-        inset-inline-start: 0;
-        transform: translateY(-50%);
-      }
-
-      &:last-of-type {
-        --rotation: 0deg;
-        transform: translateY(-50%) rotate(var(--rotation));
-
-        @media (prefers-reduced-motion: no-preference) {
-          transition: transform 0.2s ease-in-out, inset-block-start 0.2s ease-in-out;
-        }
-      }
-    }
+  .wrapper::details-content {
+    opacity: 0;
+    transition: content-visibility var(--transition-duration) allow-discrete,
+      opacity var(--transition-duration) var(--transition-easing),
+      block-size var(--transition-duration) var(--transition-easing);
+    block-size: 0;
+    overflow-y: clip;
   }
 
-  .accordion__content {
+  .wrapper[open]::details-content {
+    opacity: 1;
+    block-size: auto;
+  }
+
+  :where(.wrapper[data-variant='default']) .content {
     padding: 0 0 1.5rem 2.2rem;
+  }
 
-    a {
-      display: inline-block;
+  :where(.wrapper[data-variant='chevron']) {
+    .title h2,
+    .title h3,
+    .title h4,
+    .title h5,
+    .title h6 {
+      justify-content: space-between;
     }
 
-    & > *:not(:first-child) {
-      margin-block-start: 0.75rem;
+    .content {
+      padding-block-end: 2.2rem;
     }
   }
 
-  .accordion__wrapper[open] {
-    .accordion__title-icon svg:last-of-type {
-      --rotation: 90deg;
+  .title {
+    display: flex;
+    cursor: pointer;
+    padding-block: 0.75rem;
+    list-style: none;
+  }
+
+  .title::marker,
+  .title::-webkit-details-marker {
+    display: none;
+    content: '';
+  }
+
+  .title:hover,
+  .title:focus-visible {
+    color: light-dark(hsl(215 25% 27%), hsl(215 25% 89%));
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  :where(.icon-plus) {
+    display: inline-block;
+    position: relative;
+    aspect-ratio: 1;
+    block-size: 20px;
+  }
+
+  :where(.icon-plus svg) {
+    position: absolute;
+  }
+
+  :where(.icon-plus svg:first-of-type) {
+    transform: translateY(-50%);
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+  }
+
+  :where(.icon-plus svg:last-of-type) {
+    transform: translateY(-50%);
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: all var(--transition-duration) var(--transition-easing);
     }
+  }
+
+  :where(.icon-chevron svg) {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform var(--transition-duration) var(--transition-easing);
+    }
+  }
+
+  :where(.content a) {
+    display: inline-block;
+  }
+
+  :where(.content > *:not(:first-child)) {
+    margin-block-start: 0.75rem;
+  }
+
+  :where(.wrapper[open]) .icon-plus svg:last-of-type {
+    transform: rotate(90deg);
+    inset-block-start: 0;
+  }
+
+  :where(.wrapper[open]) .icon-chevron svg {
+    transform: scaleY(-1);
   }
 </style>

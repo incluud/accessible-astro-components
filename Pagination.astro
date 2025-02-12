@@ -1,16 +1,83 @@
 ---
+/**
+ * Pagination Component
+ *
+ * @description A fully accessible pagination component with first/last and previous/next navigation
+ */
+
 // Pagination Props type helpers
 export type NumericalString = `${number}`
 export type RouteString = string | null | undefined
 
 interface Props {
+  /**
+   * URL for the first page
+   */
   firstPage?: RouteString
+  /**
+   * URL for the previous page
+   */
   previousPage?: RouteString
+  /**
+   * URL for the next page
+   */
   nextPage?: RouteString
+  /**
+   * URL for the last page
+   */
   lastPage?: RouteString
+  /**
+   * Current page number
+   */
   currentPage?: string | number
+  /**
+   * Total number of pages
+   */
   totalPages?: NumericalString | number
-  renderProgress?: ({ currentPage, totalPages }: { currentPage: string | number; totalPages: string | number }) => string
+  /**
+   * Function to render the progress text
+   */
+  renderProgress?: ({
+    currentPage,
+    totalPages,
+  }: {
+    currentPage: string | number
+    totalPages: string | number
+  }) => string
+  /**
+   * Additional classes to apply
+   */
+  class?: string
+  /**
+   * Accessible label for the navigation
+   */
+  ariaLabel?: string
+  /**
+   * Accessible label for the first page button
+   */
+  firstPageLabel?: string
+  /**
+   * Accessible label for the previous page button
+   */
+  previousPageLabel?: string
+  /**
+   * Accessible label for the next page button
+   */
+  nextPageLabel?: string
+  /**
+   * Accessible label for the last page button
+   */
+  lastPageLabel?: string
+  /**
+   * Function to generate the aria-label for page links
+   */
+  renderPageLabel?: ({
+    type,
+    page,
+  }: {
+    type: 'first' | 'previous' | 'next' | 'last'
+    page: string | number
+  }) => string
 }
 
 const {
@@ -20,18 +87,38 @@ const {
   lastPage = '#',
   currentPage = '1',
   totalPages = '12',
-  renderProgress = ({ currentPage, totalPages }) => `Page ${currentPage} of ${totalPages}`
+  renderProgress = ({ currentPage, totalPages }) => `Page ${currentPage} of ${totalPages}`,
+  class: className,
+  ariaLabel = 'Pagination',
+  firstPageLabel = 'Go to the first page',
+  previousPageLabel = 'Go to the previous page',
+  nextPageLabel = 'Go to the next page',
+  lastPageLabel = 'Go to the last page',
+  renderPageLabel = ({ type, page }) => {
+    switch (type) {
+      case 'first':
+        return `Go to first page (page 1)`
+      case 'previous':
+        return `Go to previous page (page ${page})`
+      case 'next':
+        return `Go to next page (page ${page})`
+      case 'last':
+        return `Go to last page (page ${page})`
+      default:
+        return `Go to page ${page}`
+    }
+  },
 } = Astro.props
 
-const progress = renderProgress({ currentPage, totalPages });
+const progress = renderProgress({ currentPage, totalPages })
 ---
 
-<nav class="pagination" aria-label="Pagination">
-  <ul class="pagination__list">
+<nav class:list={['pagination', className]} aria-label={ariaLabel}>
+  <ul class="list">
     <li>
       {
         firstPage ? (
-          <a href={firstPage} aria-label="Go to the first page">
+          <a href={firstPage} aria-label={renderPageLabel({ type: 'first', page: 1 })}>
             <svg
               aria-hidden="true"
               width="32"
@@ -88,8 +175,20 @@ const progress = renderProgress({ currentPage, totalPages });
     <li>
       {
         previousPage ? (
-          <a href={previousPage} aria-label={`Go back to ${previousPage}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24">
+          <a
+            href={previousPage}
+            aria-label={renderPageLabel({
+              type: 'previous',
+              page: Number(currentPage) - 1,
+            })}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
               <path
                 fill="none"
                 stroke="currentColor"
@@ -102,7 +201,13 @@ const progress = renderProgress({ currentPage, totalPages });
           </a>
         ) : (
           <span class="disabled">
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
               <path
                 fill="none"
                 stroke="currentColor"
@@ -122,8 +227,20 @@ const progress = renderProgress({ currentPage, totalPages });
     <li>
       {
         nextPage ? (
-          <a href={nextPage} aria-label={`Go to ${nextPage}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24">
+          <a
+            href={nextPage}
+            aria-label={renderPageLabel({
+              type: 'next',
+              page: Number(currentPage) + 1,
+            })}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
               <path
                 fill="none"
                 stroke="currentColor"
@@ -136,7 +253,13 @@ const progress = renderProgress({ currentPage, totalPages });
           </a>
         ) : (
           <span class="disabled">
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
               <path
                 fill="none"
                 stroke="currentColor"
@@ -153,7 +276,13 @@ const progress = renderProgress({ currentPage, totalPages });
     <li>
       {
         lastPage ? (
-          <a href={lastPage} aria-label="Go to the last page">
+          <a
+            href={lastPage}
+            aria-label={renderPageLabel({
+              type: 'last',
+              page: totalPages,
+            })}
+          >
             <svg
               aria-hidden="true"
               width="32"
@@ -210,37 +339,56 @@ const progress = renderProgress({ currentPage, totalPages });
   </ul>
 </nav>
 
-<style is:global>
-  .pagination .pagination__list {
+<style>
+  :where(.pagination .list) {
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .pagination a,
-  .pagination .disabled {
-    display: block;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 3px;
+  :where(.pagination .list li) {
+    margin: 0;
+    padding: 0;
   }
 
-  .pagination a {
-    border-color: currentColor;
-    transition: background-color 0.15s ease-in-out;
+  :where(.pagination a),
+  :where(.pagination .disabled) {
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: box-shadow var(--transition-duration) var(--transition-easing);
+    }
   }
 
-  .pagination a:hover,
-  .pagination a:focus-visible {
-    background-color: orange;
+  :where(.pagination a),
+  :where(.pagination a:visited) {
+    border-color: light-dark(hsl(0 0% 10%), hsl(0 0% 90%));
+    color: currentColor;
   }
 
-  .pagination a:focus-visible svg path {
-    stroke: #222;
+  :where(.pagination a:hover),
+  :where(.pagination a:focus-visible) {
+    box-shadow: 0 0 0 0.25rem;
   }
 
-  .pagination .disabled {
-    border-color: grey;
+  :where(.pagination a:focus-visible) {
+    outline: none;
+  }
+
+  :where(.pagination .disabled) {
     opacity: 0.5;
+    border-color: light-dark(hsl(0 0% 13% / 0.3), hsl(0 0% 87% / 0.3));
   }
 </style>

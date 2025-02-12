@@ -1,23 +1,62 @@
 ---
-interface Props {
+/**
+ * Card Component
+ *
+ * @description A versatile card component with image, title, and content areas
+ */
+interface Props extends astroHTML.JSX.HTMLAttributes {
+  /**
+   * URL for the card's link
+   */
   url?: string
+  /**
+   * URL for the card's image
+   */
   img?: string
+  /**
+   * Card's title
+   */
   title?: string
-  footer: string
-  children?: string | HTMLElement | HTMLElement[]
+  /**
+   * Footer content
+   */
+  footer?: string
+  /**
+   * Additional classes to apply to the card
+   */
+  class?: string
+  /**
+   * HTML tag to use for the title
+   */
+  tagName?: string
 }
 
-const { url = '#', img = 'https://fakeimg.pl/640x360', title = 'Default title', footer = 'Your name' } = Astro.props
+const {
+  url = '#',
+  img = 'https://fakeimg.pl/640x360',
+  title = 'Default title',
+  footer = 'Meta info like author, date, etc.',
+  class: className,
+  tagName = 'h3',
+  ...rest
+} = Astro.props
+
+const Tag = tagName
 ---
 
-<div class="card">
-  <div class="card__image">
+<article class:list={['card', className]} {...rest}>
+  <div class="image">
     <img src={img} alt="" />
   </div>
-  <div class="card__content">
-    <h3>
-      <a href={url}>{title}</a>
-    </h3>
+  <div class="content">
+    <div class="title">
+      <Tag>
+        <a href={url}>{title}</a>
+      </Tag>
+    </div>
+    <div class="meta">
+      <slot name="meta" />
+    </div>
     <p>
       <slot>Default description.</slot>
     </p>
@@ -25,65 +64,103 @@ const { url = '#', img = 'https://fakeimg.pl/640x360', title = 'Default title', 
       {footer}
     </small>
   </div>
-</div>
+</article>
 
-<style is:global>
-  .card {
+<style>
+  :where(.card) {
+    --transition-duration: 0.3s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
     display: flex;
-    flex-direction: column;
-    border: 2px solid black;
-    border-radius: 0.5rem;
-    max-width: 60ch;
-    min-height: 100%;
     position: relative;
+    flex-direction: column;
+    border: 2px solid light-dark(hsl(0 0% 10%), hsl(0 0% 90%));
+    border-radius: 0.5rem;
+    max-inline-size: 60ch;
+    block-size: 100%;
     overflow: hidden;
-    transition: box-shadow 0.15s ease-in-out;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: box-shadow var(--transition-duration) var(--transition-easing);
+    }
   }
 
-  .card:hover,
-  .card:focus-within {
+  :where(.card:hover),
+  :where(.card:focus-within) {
     box-shadow: 0 0 0 0.25rem;
   }
 
-  .card:focus-within a:focus {
-    text-decoration: none;
-    box-shadow: none;
+  :where(.card:focus-within) a:focus {
     outline: none;
-  }
-
-  .card__image {
-    height: 10rem;
-  }
-
-  .card__image img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  .card__content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: 1rem;
-  }
-
-  .card__content a {
+    box-shadow: none;
     text-decoration: none;
   }
 
-  .card__content a:focus {
-    text-decoration: underline;
+  :where(.image) {
+    block-size: 250px;
   }
 
-  .card__content a::after {
-    content: '';
+  :where(.image img) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform var(--transition-duration) var(--transition-easing);
+    }
+  }
+
+  :where(.content) {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    padding-block: 1rem;
+  }
+
+  a {
+    color: currentColor;
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+
+  a:where(:hover, :focus-visible) {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  :where(.card:has(a:hover, a:focus-visible)) .image img {
+    transform: scale(1.05);
+  }
+
+  a::after {
     position: absolute;
     inset: 0;
+    content: '';
   }
 
-  .card__content:last-child {
-    margin-top: auto;
-    padding-top: 2rem;
+  :where(.meta) {
+    order: -1;
+    margin-block-start: 0.5rem;
+  }
+
+  .meta :global(span) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .meta:empty {
+    display: none;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  small {
+    margin-block-start: auto;
+    padding-block-start: 1rem;
   }
 </style>
