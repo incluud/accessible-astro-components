@@ -68,7 +68,7 @@ yarn add accessible-astro-components
 
 ```astro
 ---
-import { Accordion, Card, Modal } from 'accessible-astro-components'
+import { Accordion, AccordionItem } from 'accessible-astro-components'
 ---
 
 <Accordion>
