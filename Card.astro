@@ -35,7 +35,7 @@ const {
   url = '#',
   img = 'https://fakeimg.pl/640x360',
   title = 'Default title',
-  footer = 'Meta info like author, date, etc.',
+  footer = '',
   class: className,
   tagName = 'h3',
   ...rest
@@ -54,15 +54,9 @@ const Tag = tagName
         <a href={url}>{title}</a>
       </Tag>
     </div>
-    <div class="meta">
-      <slot name="meta" />
-    </div>
-    <p>
-      <slot>Default description.</slot>
-    </p>
-    <small>
-      {footer}
-    </small>
+    <div class="meta"><slot name="meta" /></div>
+    <p class="description"><slot /></p>
+    {footer && <small class="footer">{footer}</small>}
   </div>
 </article>
 
@@ -98,6 +92,7 @@ const Tag = tagName
 
   :where(.image) {
     block-size: 250px;
+    overflow: clip;
   }
 
   :where(.image img) {
@@ -148,6 +143,7 @@ const Tag = tagName
   .meta :global(span) {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -155,11 +151,15 @@ const Tag = tagName
     display: none;
   }
 
-  p {
+  .description {
     font-size: 1rem;
   }
 
-  small {
+  .description:empty {
+    display: none;
+  }
+
+  .footer {
     margin-block-start: auto;
     padding-block-start: 1rem;
   }
