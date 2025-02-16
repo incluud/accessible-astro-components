@@ -18,15 +18,16 @@ interface Props {
   children: BreadcrumbsItem | BreadcrumbsItem[]
   /**
    * Accessible label for the breadcrumb navigation
+   * @default 'Breadcrumbs'
    */
-  ariaLabel: string
+  ariaLabel?: string
 }
 
 const { class: classNames, ariaLabel = 'Breadcrumbs' } = Astro.props
 ---
 
 <nav class:list={['breadcrumbs', classNames]} aria-label={ariaLabel}>
-  <ol>
+  <ol class="list">
     <slot />
   </ol>
 </nav>

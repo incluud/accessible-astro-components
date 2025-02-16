@@ -78,10 +78,10 @@ import { Accordion, AccordionItem } from 'accessible-astro-components'
 
 ## Accessible Astro projects
 
-- [Accessible Astro Starter](https://github.com/incluud/accessible-astro-starter): A fully accessible boilerplate for kickstarting Astro projects, with Tailwind CSS support.
-- [Accessible Astro Components](https://github.com/incluud/accessible-astro-components/): A library of reusable, accessible components designed for Astro, build in TypeScript.
-- [Accessible Astro Dashboard](https://github.com/incluud/accessible-astro-dashboard/): A user-friendly dashboard interface with a login screen, built with accessibility in mind.
-- [Accessible Astro Docs](https://github.com/incluud/accessible-astro-docs): Comprehensive documentation for all Accessible Astro projects, built with Astro's Starlight theme.
+- [Accessible Astro Starter](https://github.com/incluud/accessible-astro-starter): Fully accessible starter for kickstarting Astro projects, with Tailwind.
+- [Accessible Astro Components](https://github.com/incluud/accessible-astro-components/): Library of reusable, accessible components build for Astro.
+- [Accessible Astro Dashboard](https://github.com/incluud/accessible-astro-dashboard/): User-friendly dashboard interface with a login screen and widgets.
+- [Accessible Astro Docs](https://github.com/incluud/accessible-astro-docs): Comprehensive documentation for all Accessible Astro projects.
 
 Check out our [roadmap](https://github.com/orgs/incluud/projects/4) to see what's coming next!
 

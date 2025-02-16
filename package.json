@@ -1,7 +1,7 @@
 {
   "name": "accessible-astro-components",
   "description": "A set of Accessible, easy to use, Front-end UI Components for Astro.",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "author": "Incluud",
   "license": "MIT",
   "homepage": "https://accessible-astro.incluud.dev/components/overview/",
@@ -36,7 +36,7 @@
     "url": "https://github.com/incluud/accessible-astro-components/issues"
   },
   "devDependencies": {
-    "astro": "^5.0.5",
+    "astro": "^5.3.0",
     "prettier": "2.8.7",
     "prettier-plugin-astro": "^0.8.0",
     "prettier-plugin-css-order": "^1.3.1"
