@@ -172,8 +172,8 @@ export const Pagination: Pagination
  * @param _props - Record<string, any>
  * @param _props.class - Optional CSS class names
  */
-type SkipLinks = typeof import('../index.js').SkipLinks
-export const SkipLinks: SkipLinks
+type SkipLink = typeof import('../index.js').SkipLink
+export const SkipLink: SkipLink
 
 /**
  * Tabs parent component
