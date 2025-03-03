@@ -52,7 +52,7 @@ const { class: className, triggerId, title, closeText = 'Close', closeIcon = tru
             </span>
           )
         }
-        <span class="sr-only">{closeText}</span>
+        <span class="visually-hidden">{closeText}</span>
       </button>
     </div>
   </div>
@@ -313,17 +313,5 @@ const { class: className, triggerId, title, closeText = 'Close', closeIcon = tru
 
   :global(body:has(dialog[open])) {
     overflow-y: clip;
-  }
-
-  .sr-only {
-    position: absolute;
-    margin: -1px;
-    padding: 0;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: clip;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-    white-space: nowrap;
   }
 </style>
