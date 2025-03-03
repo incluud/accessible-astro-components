@@ -36,9 +36,8 @@ export const Accordion: Accordion
  * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bounce' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
  * @param _props.isCircular - Whether to display the badge as a circle - default: false
- * @param _props.pulse - Whether to apply a pulsating animation - default: false
- * @param _props.pulseDuration - Duration of the pulse animation in seconds - default: 2
- * @param _props.pulseInfinite - Whether the pulse animation should play infinitely - default: true
+ * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses three times) - default: false
  * @param _props.class - Optional CSS class names
  * @param _props.children - Any HTML elements. Parent element: `<span>` or `<button>`
  */
