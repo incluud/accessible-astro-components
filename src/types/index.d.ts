@@ -35,9 +35,10 @@ export const Accordion: Accordion
  * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
  * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bounce' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
- * @param _props.isCircular - Whether to display the badge as a circle - default: false
+ * @param _props.isCircular - Whether to display the badge as a circle (best for single numbers/characters) - default: false
  * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false
- * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses three times) - default: false
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.srLabel - Additional text for screen readers (e.g., "New messages: " for a count badge) - default: undefined
  * @param _props.class - Optional CSS class names
  * @param _props.children - Any HTML elements. Parent element: `<span>` or `<button>`
  */

@@ -46,6 +46,10 @@ interface Props {
    */
   pulse?: boolean
   /**
+   * Additional text for screen readers (e.g., "New messages: " for a count badge)
+   */
+  srLabel?: string
+  /**
    * Rest of props to spread
    */
   [key: string]: any
@@ -62,6 +66,7 @@ const {
   isCircular = false,
   isPill = false,
   pulse = false,
+  srLabel,
   ...rest
 } = Astro.props
 
@@ -100,6 +105,7 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
+      {srLabel && <span class="visually-hidden">{srLabel}</span>}
       <slot />
     </button>
   ) : (
@@ -115,6 +121,7 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
+      {srLabel && <span class="visually-hidden">{srLabel}</span>}
       <slot />
     </span>
   )
