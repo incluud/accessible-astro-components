@@ -1,0 +1,17 @@
+/**
+ * Accessible Astro Components - Core Styles
+ * Essential utility classes used across components
+ */
+
+/* Visually hidden class for screen readers */
+.sr-only {
+  position: absolute;
+  margin: -1px;
+  padding: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border-width: 0;
+  white-space: nowrap;
+}

@@ -40,6 +40,7 @@ A comprehensive library of accessible, easy-to-use UI Components for [Astro](htt
 The Accessible Astro Components library provides a collection of pre-built, accessible components that you can easily integrate into your Astro projects:
 
 - **Accordion**: Expandable/collapsible sections for progressive disclosure
+- **Badge**: Versatile label component with button variant, animations, and pulse effects
 - **Breadcrumbs**: Navigation aid showing the current page's location
 - **Card**: Content container with flexible layout options
 - **DarkMode**: Theme toggle with system preference support
