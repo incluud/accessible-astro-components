@@ -4,7 +4,7 @@
  */
 
 /* Visually hidden class for screen readers */
-.visually-hidden {
+.sr-only {
   position: absolute;
   margin: -1px;
   padding: 0;

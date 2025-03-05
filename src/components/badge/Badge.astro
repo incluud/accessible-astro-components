@@ -105,7 +105,7 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
-      {srLabel && <span class="visually-hidden">{srLabel}</span>}
+      {srLabel && <span class="sr-only">{srLabel}</span>}
       <slot />
     </button>
   ) : (
@@ -121,7 +121,7 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
-      {srLabel && <span class="visually-hidden">{srLabel}</span>}
+      {srLabel && <span class="sr-only">{srLabel}</span>}
       <slot />
     </span>
   )
