@@ -10,7 +10,7 @@
  * @param _props.class - Optional CSS class names
  * @param _props.children - Any HTML elements. Parent element: `<div>`
  */
-export type AccordionItem = typeof import('../index.js').AccordionItem
+export type AccordionItem = typeof import('../../index.js').AccordionItem
 export const AccordionItem: AccordionItem
 
 /**
@@ -22,8 +22,28 @@ export const AccordionItem: AccordionItem
  *  - Expects one or more AccordionItem components. Parent element: `<ul>`
  *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
  */
-type Accordion = typeof import('../index.js').Accordion
+type Accordion = typeof import('../../index.js').Accordion
 export const Accordion: Accordion
+
+/**
+ * Badge component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.size - Size of the badge ('small' | 'medium' | 'large') - default: 'medium'
+ * @param _props.type - Type/color variant ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
+ * @param _props.isButton - Whether to render as a button element - default: false
+ * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bounce' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.isCircular - Whether to display the badge as a circle (best for single numbers/characters) - default: false
+ * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.srLabel - Additional text for screen readers (e.g., "New messages: " for a count badge) - default: undefined
+ * @param _props.class - Optional CSS class names
+ * @param _props.children - Any HTML elements. Parent element: `<span>` or `<button>`
+ */
+type Badge = typeof import('../../index.js').Badge
+export const Badge: Badge
 
 /**
  * Breadcrumbs item child component
@@ -35,7 +55,7 @@ export const Accordion: Accordion
  * @param _props.hasIcon - Whether this item has an icon - default: false
  * @param _props.class - Optional CSS class names
  */
-export type BreadcrumbsItem = typeof import('../index.js').BreadcrumbsItem
+export type BreadcrumbsItem = typeof import('../../index.js').BreadcrumbsItem
 export const BreadcrumbsItem: BreadcrumbsItem
 
 /**
@@ -48,7 +68,7 @@ export const BreadcrumbsItem: BreadcrumbsItem
  *  - Expects one or more BreadcrumbsItem components. Parent element: `<ol>`
  *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
  */
-type Breadcrumbs = typeof import('../index.js').Breadcrumbs
+type Breadcrumbs = typeof import('../../index.js').Breadcrumbs
 export const Breadcrumbs: Breadcrumbs
 
 /**
@@ -63,7 +83,7 @@ export const Breadcrumbs: Breadcrumbs
  * @param _props.class - Optional CSS class names
  * @param _props.children - textContent or any legal `<p>` tag innerHTML such as inline HTML elements. Parent element: `<p>`
  */
-type Card = typeof import('../index.js').Card
+type Card = typeof import('../../index.js').Card
 export const Card: Card
 
 /**
@@ -87,7 +107,7 @@ export const Card: Card
  * </style>
  * ```
  */
-type DarkMode = typeof import('../index.js').DarkMode
+type DarkMode = typeof import('../../index.js').DarkMode
 export const DarkMode: DarkMode
 
 /**
@@ -102,7 +122,7 @@ export const DarkMode: DarkMode
  * @param _props.decoding - Optional: decoding strategy ('async' | 'sync' | 'auto') - default: 'async'
  * @param _props.fetchpriority - Optional: fetch priority ('high' | 'low' | 'auto') - default: 'auto'
  */
-export type Media = typeof import('../index.js').Media
+export type Media = typeof import('../../index.js').Media
 export const Media: Media
 
 /**
@@ -116,7 +136,7 @@ export const Media: Media
  * @param _props.class - Optional CSS class names
  * @param _props.children - Any HTML elements. Parent element: `<div>`
  */
-type Modal = typeof import('../index.js').Modal
+type Modal = typeof import('../../index.js').Modal
 export const Modal: Modal
 
 /**
@@ -139,7 +159,7 @@ declare global {
  * @param _props.class - Optional CSS class names
  * @param _props.children - Any HTML elements. Parent element: `<aside>`
  */
-type Notification = typeof import('../index.js').Notification
+type Notification = typeof import('../../index.js').Notification
 export const Notification: Notification
 
 /**
@@ -162,7 +182,7 @@ export const Notification: Notification
  * @param _props.renderPageLabel - Function to generate aria-labels for page links. Takes type ('first' | 'previous' | 'next' | 'last') and page number
  * @param _props.class - Optional CSS class names
  */
-type Pagination = typeof import('../index.js').Pagination
+type Pagination = typeof import('../../index.js').Pagination
 export const Pagination: Pagination
 
 /**
@@ -172,7 +192,7 @@ export const Pagination: Pagination
  * @param _props - Record<string, any>
  * @param _props.class - Optional CSS class names
  */
-type SkipLink = typeof import('../index.js').SkipLink
+type SkipLink = typeof import('../../index.js').SkipLink
 export const SkipLink: SkipLink
 
 /**
@@ -184,7 +204,7 @@ export const SkipLink: SkipLink
  *  - Expects TabsList and TabsPanel components. Parent element: `<div>`
  *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
  */
-type Tabs = typeof import('../index.js').Tabs
+type Tabs = typeof import('../../index.js').Tabs
 export const Tabs: Tabs
 
 /**
@@ -196,7 +216,7 @@ export const Tabs: Tabs
  *  - Expects TabsTab components. Parent element: `<div role="tablist">`
  *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
  */
-type TabsList = typeof import('../index.js').TabsList
+type TabsList = typeof import('../../index.js').TabsList
 export const TabsList: TabsList
 
 /**
@@ -209,7 +229,7 @@ export const TabsList: TabsList
  * @param _props.class - Optional CSS class names
  * @param _props.children - Tab label content
  */
-type TabsTab = typeof import('../index.js').TabsTab
+type TabsTab = typeof import('../../index.js').TabsTab
 export const TabsTab: TabsTab
 
 /**
@@ -222,7 +242,7 @@ export const TabsTab: TabsTab
  * @param _props.class - Optional CSS class names
  * @param _props.children - Panel content
  */
-type TabsPanel = typeof import('../index.js').TabsPanel
+type TabsPanel = typeof import('../../index.js').TabsPanel
 export const TabsPanel: TabsPanel
 
 /**
@@ -235,5 +255,5 @@ export const TabsPanel: TabsPanel
  * @param _props.loading - Loading strategy for the iframe ('lazy' | 'eager') - default: 'lazy'
  * @param _props.class - Optional CSS class names
  */
-type Video = typeof import('../index.js').Video
+type Video = typeof import('../../index.js').Video
 export const Video: Video
