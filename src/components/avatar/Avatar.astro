@@ -1,0 +1,256 @@
+---
+/**
+ * Avatar Component
+ *
+ * @description A versatile avatar component that can display user images, initials, or placeholders
+ * with optional text content. Supports various sizes and shapes with accessibility features built-in.
+ */
+// Base props that are always the same
+type BaseProps = {
+  /**
+   * Additional classes to apply to the Avatar
+   */
+  class?: string
+  /**
+   * Image source URL for the avatar
+   */
+  img?: string
+  /**
+   * Initials to display when no image is available
+   */
+  initials?: string
+  /**
+   * Type of the avatar (affects color scheme)
+   * @default "default"
+   */
+  type?: 'default' | 'info' | 'success' | 'warning' | 'error'
+  /**
+   * Shape of the avatar
+   * @default "round"
+   */
+  shape?: 'round' | 'square'
+  /**
+   * Size of the avatar
+   * @default "md"
+   */
+  size?: 'sm' | 'md' | 'lg' | string
+  /**
+   * Rest of props to spread
+   */
+  [key: string]: any
+}
+
+// Props when title is provided (label is optional)
+type PropsWithTitle = BaseProps & {
+  /**
+   * Primary text to display next to the avatar (e.g., name)
+   */
+  title: string
+  /**
+   * Secondary text to display next to the avatar (e.g., role)
+   */
+  subtitle?: string
+  /**
+   * Accessible label for screen readers (optional when title is provided)
+   */
+  label?: string
+}
+
+// Props when title is not provided (label is required)
+type PropsWithoutTitle = BaseProps & {
+  /**
+   * Primary text to display next to the avatar (e.g., name)
+   */
+  title?: undefined
+  /**
+   * Secondary text to display next to the avatar (e.g., role)
+   */
+  subtitle?: string
+  /**
+   * Accessible label for screen readers (required when no title is provided)
+   */
+  label: string
+}
+
+// Union type that enforces the conditional requirement
+type Props = PropsWithTitle | PropsWithoutTitle
+
+const {
+  class: className,
+  img,
+  initials,
+  type = 'default',
+  shape = 'round',
+  size = 'md',
+  label,
+  title,
+  subtitle,
+  ...rest
+} = Astro.props
+
+// Convert size to actual value if using predefined sizes
+const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg' ? '7rem' : size
+---
+
+<div
+  class:list={['avatar', `shape-${shape}`, `type-${type}`, className]}
+  {...label && { 'aria-label': label }}
+  {...rest}
+>
+  {
+    img && (
+      <div class="image">
+        <img src={img} alt="" />
+      </div>
+    )
+  }
+  {initials && !img && <span class="initials">{initials}</span>}
+  {
+    !initials && !img && (
+      <span class="icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="60%"
+          height="60%"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </span>
+    )
+  }
+  {
+    (title || subtitle) && (
+      <div class="content">
+        {title && <p class="title">{title}</p>}
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+      </div>
+    )
+  }
+</div>
+
+<style
+  define:vars={{
+    size: `${sizeValue}`,
+  }}
+>
+  :where(.avatar) {
+    display: inline-flex;
+    aspect-ratio: 1;
+    inline-size: var(--size);
+    block-size: var(--size);
+
+    &.shape-round {
+      border-radius: 50%;
+    }
+
+    &.shape-square {
+      border-radius: 0.25rem;
+    }
+
+    &:has(.initials) {
+      display: grid;
+      place-items: center;
+    }
+
+    &:has(.title, .subtitle) {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      inline-size: auto;
+    }
+  }
+
+  /* Default type */
+  :where(.avatar:has(.initials), .avatar:has(.icon)) {
+    border: 2px solid;
+    border-color: light-dark(hsl(204 8% 55%), hsl(215 15% 45%));
+    background-color: light-dark(hsl(200 20% 97%), hsl(215 25% 13%));
+    color: light-dark(hsl(204 8% 14%), hsl(0 0% 100%));
+  }
+
+  /* Info type */
+  :where(.type-info:has(.initials), .type-info:has(.icon)) {
+    border-color: light-dark(hsl(200 78% 46%), hsl(234 100% 60%));
+    background-color: light-dark(hsl(198 100% 94%), hsl(234 54% 20%));
+    color: light-dark(hsl(200 96% 27%), hsl(0 0% 100%));
+  }
+
+  /* Success type */
+  :where(.type-success:has(.initials), .type-success:has(.icon)) {
+    border-color: light-dark(hsl(160 61% 41%), hsl(101 82% 63%));
+    background-color: light-dark(hsl(160 71% 96%), hsl(101 39% 22%));
+    color: light-dark(hsl(170 96% 15%), hsl(0 0% 100%));
+  }
+
+  /* Warning type */
+  :where(.type-warning:has(.initials), .type-warning:has(.icon)) {
+    border-color: light-dark(hsl(35 75% 49%), hsl(41 82% 63%));
+    background-color: light-dark(hsl(48 100% 96%), hsl(41 39% 22%));
+    color: light-dark(hsl(15 85% 30%), hsl(0 0% 100%));
+  }
+
+  /* Error type */
+  :where(.type-error:has(.initials), .type-error:has(.icon)) {
+    border-color: light-dark(hsl(355 73% 51%), hsl(339 82% 63%));
+    background-color: light-dark(hsl(0 100% 94%), hsl(339 39% 22%));
+    color: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
+  }
+
+  :where(.image) {
+    inline-size: var(--size);
+    block-size: var(--size);
+    overflow: clip;
+
+    .shape-round & {
+      border-radius: 50%;
+    }
+
+    .shape-square & {
+      border-radius: 0.25rem;
+    }
+  }
+
+  :where(img) {
+    inline-size: inherit;
+    block-size: inherit;
+    object-fit: cover;
+  }
+
+  :where(.initials) {
+    font-weight: bold;
+    font-size: calc(var(--size) * 0.4);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  :where(.icon) {
+    display: grid;
+    place-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  :where(.title) {
+    margin: 0;
+    font-weight: 500;
+    font-size: calc(var(--size) * 0.25);
+  }
+
+  :where(.subtitle) {
+    opacity: 0.8;
+    margin-block-start: -4px;
+    margin: 0;
+    font-size: calc(var(--size) * 0.2);
+  }
+
+  :where(p) {
+    overflow-wrap: break-word;
+  }
+</style>
