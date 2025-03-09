@@ -170,37 +170,37 @@ const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg
   /* Default type */
   :where(.avatar:has(.initials), .avatar:has(.icon)) {
     border: 2px solid;
-    border-color: light-dark(hsl(204 8% 55%), hsl(215 15% 45%));
-    background-color: light-dark(hsl(200 20% 97%), hsl(215 25% 13%));
-    color: light-dark(hsl(204 8% 14%), hsl(0 0% 100%));
+    border-color: var(--color-default-border);
+    background-color: var(--color-default-bg);
+    color: var(--color-default-text);
   }
 
   /* Info type */
   :where(.type-info:has(.initials), .type-info:has(.icon)) {
-    border-color: light-dark(hsl(200 78% 46%), hsl(234 100% 60%));
-    background-color: light-dark(hsl(198 100% 94%), hsl(234 54% 20%));
-    color: light-dark(hsl(200 96% 27%), hsl(0 0% 100%));
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
   }
 
   /* Success type */
   :where(.type-success:has(.initials), .type-success:has(.icon)) {
-    border-color: light-dark(hsl(160 61% 41%), hsl(101 82% 63%));
-    background-color: light-dark(hsl(160 71% 96%), hsl(101 39% 22%));
-    color: light-dark(hsl(170 96% 15%), hsl(0 0% 100%));
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
   }
 
   /* Warning type */
   :where(.type-warning:has(.initials), .type-warning:has(.icon)) {
-    border-color: light-dark(hsl(35 75% 49%), hsl(41 82% 63%));
-    background-color: light-dark(hsl(48 100% 96%), hsl(41 39% 22%));
-    color: light-dark(hsl(15 85% 30%), hsl(0 0% 100%));
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
   }
 
   /* Error type */
   :where(.type-error:has(.initials), .type-error:has(.icon)) {
-    border-color: light-dark(hsl(355 73% 51%), hsl(339 82% 63%));
-    background-color: light-dark(hsl(0 100% 94%), hsl(339 39% 22%));
-    color: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
   }
 
   :where(.image) {
