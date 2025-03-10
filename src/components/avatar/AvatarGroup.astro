@@ -1,0 +1,72 @@
+---
+/**
+ * AvatarGroup Component
+ *
+ * @description A component for displaying multiple avatars in a group, either condensed or in a grid layout
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the AvatarGroup
+   */
+  class?: string
+  /**
+   * Display mode for the avatar group
+   * @default "condensed"
+   */
+  display?: 'condensed' | 'grid'
+  /**
+   * Size of the grid items (used for grid display mode)
+   * @default "5rem"
+   */
+  gridItemsSize?: string
+  /**
+   * Gap between grid items (used for grid display mode)
+   * @default "1rem"
+   */
+  gridGap?: string
+  /**
+   * Overlap amount for condensed mode (negative margin)
+   * @default "-1rem"
+   */
+  overlapAmount?: string
+  /**
+   * Rest of props to spread
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  display = 'condensed',
+  gridItemsSize = '250px',
+  gridGap = '1rem',
+  overlapAmount = '-1rem',
+  ...rest
+} = Astro.props
+---
+
+<div class:list={['avatar-group', `display-${display}`, className]} {...rest}>
+  <slot />
+</div>
+
+<style define:vars={{ gridItemsSize, gridGap, overlapAmount }}>
+  :where(.avatar-group) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  :where(.display-condensed) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  :where(.display-condensed) :global(.avatar:not(:first-child)) {
+    margin-inline-start: var(--overlapAmount);
+  }
+
+  :where(.display-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--gridItemsSize)), 1fr));
+    gap: var(--gridGap);
+  }
+</style>
