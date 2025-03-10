@@ -166,6 +166,10 @@ const sizeClass = size === 'sm' ? 'size-small' : size === 'md' ? 'size-medium' :
     font: inherit;
   }
 
+  :where(button.badge):where(:hover, :focus-visible) {
+    text-decoration: underline;
+  }
+
   /* Default */
   :where(.badge) {
     border-color: var(--color-default-border);
