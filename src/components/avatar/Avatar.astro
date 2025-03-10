@@ -104,25 +104,33 @@ const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg
       </div>
     )
   }
-  {initials && !img && <span class="initials">{initials}</span>}
+  {
+    initials && !img && (
+      <div class="initials-container">
+        <span class="initials">{initials}</span>
+      </div>
+    )
+  }
   {
     !initials && !img && (
-      <span class="icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="60%"
-          height="60%"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      </span>
+      <div class="icon-container">
+        <span class="icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60%"
+            height="60%"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </span>
+      </div>
     )
   }
   {
@@ -142,33 +150,48 @@ const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg
 >
   :where(.avatar) {
     display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &:has(.initials-container):not(:has(.content)),
+    &:has(.icon-container):not(:has(.content)) {
+      aspect-ratio: 1;
+      inline-size: var(--size);
+      block-size: var(--size);
+    }
+  }
+
+  :where(.initials-container),
+  :where(.icon-container),
+  :where(.image) {
+    display: grid;
+    place-items: center;
     aspect-ratio: 1;
     inline-size: var(--size);
     block-size: var(--size);
+    overflow: clip;
+  }
 
-    &.shape-round {
+  /* Shape styles */
+  .shape-round {
+    .initials-container,
+    .icon-container,
+    .image {
       border-radius: 50%;
     }
+  }
 
-    &.shape-square {
+  .shape-square {
+    .initials-container,
+    .icon-container,
+    .image {
       border-radius: 0.25rem;
-    }
-
-    &:has(.initials) {
-      display: grid;
-      place-items: center;
-    }
-
-    &:has(.title, .subtitle) {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      inline-size: auto;
     }
   }
 
   /* Default type */
-  :where(.avatar:has(.initials), .avatar:has(.icon)) {
+  :where(.initials-container),
+  :where(.icon-container) {
     border: 2px solid;
     border-color: var(--color-default-border);
     background-color: var(--color-default-bg);
@@ -176,45 +199,35 @@ const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg
   }
 
   /* Info type */
-  :where(.type-info:has(.initials), .type-info:has(.icon)) {
+  :where(.type-info .initials-container),
+  :where(.type-info .icon-container) {
     border-color: var(--color-info-border);
     background-color: var(--color-info-bg);
     color: var(--color-info-text);
   }
 
   /* Success type */
-  :where(.type-success:has(.initials), .type-success:has(.icon)) {
+  :where(.type-success .initials-container),
+  :where(.type-success .icon-container) {
     border-color: var(--color-success-border);
     background-color: var(--color-success-bg);
     color: var(--color-success-text);
   }
 
   /* Warning type */
-  :where(.type-warning:has(.initials), .type-warning:has(.icon)) {
+  :where(.type-warning .initials-container),
+  :where(.type-warning .icon-container) {
     border-color: var(--color-warning-border);
     background-color: var(--color-warning-bg);
     color: var(--color-warning-text);
   }
 
   /* Error type */
-  :where(.type-error:has(.initials), .type-error:has(.icon)) {
+  :where(.type-error .initials-container),
+  :where(.type-error .icon-container) {
     border-color: var(--color-error-border);
     background-color: var(--color-error-bg);
     color: var(--color-error-text);
-  }
-
-  :where(.image) {
-    inline-size: var(--size);
-    block-size: var(--size);
-    overflow: clip;
-
-    .shape-round & {
-      border-radius: 50%;
-    }
-
-    .shape-square & {
-      border-radius: 0.25rem;
-    }
   }
 
   :where(img) {
