@@ -6,37 +6,45 @@
  */
 interface Props {
   /**
-   * URL for the breadcrumb link
+   * Additional classes to apply to the item
    */
-  href?: string
+  class?: string
   /**
    * Text label for the breadcrumb
    */
   label: string
   /**
+   * URL for the breadcrumb link
+   * @default "#"
+   */
+  href?: string
+  /**
    * Whether this item represents the current page
+   * @default false
    */
   currentPage?: boolean
   /**
    * Whether this item has an icon
+   * @default false
    */
   hasIcon?: boolean
   /**
-   * Additional classes to apply to the item
+   * Rest of props to spread
    */
-  class?: string
+  [key: string]: any
 }
 
 const {
-  href = '#',
+  class: className,
   label = 'Breadcrumb',
+  href = '#',
   currentPage = false,
   hasIcon = false,
-  class: classNames,
+  ...rest
 } = Astro.props
 ---
 
-<li class:list={['item', classNames]}>
+<li class:list={['item', className]} {...rest}>
   {
     currentPage ? (
       <span aria-current="page" class:list={[hasIcon ? 'has-icon' : '']}>

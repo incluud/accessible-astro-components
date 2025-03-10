@@ -16,12 +16,16 @@ interface Props {
    * Accordion items to render
    */
   children: AccordionItem | AccordionItem[]
+  /**
+   * Rest of props to spread
+   */
+  [key: string]: any
 }
 
-const { class: classNames } = Astro.props
+const { class: className, ...rest } = Astro.props
 ---
 
-<ul class:list={['accordion', classNames]}>
+<ul class:list={['accordion', className]} {...rest}>
   <slot />
 </ul>
 

@@ -6,6 +6,10 @@
  */
 interface Props {
   /**
+   * Additional classes to apply to the panel
+   */
+  class?: string
+  /**
    * Unique identifier for the panel
    */
   id: string
@@ -15,15 +19,16 @@ interface Props {
   labelledby: string
   /**
    * Whether this panel is currently selected
+   * @default false
    */
   selected?: boolean
   /**
-   * Additional classes to apply to the panel
+   * Rest of props to spread
    */
-  class?: string
+  [key: string]: any
 }
 
-const { id, labelledby, selected = false, class: className } = Astro.props
+const { class: className, id, labelledby, selected = false, ...rest } = Astro.props
 ---
 
 <div
@@ -32,6 +37,7 @@ const { id, labelledby, selected = false, class: className } = Astro.props
   id={id}
   aria-labelledby={labelledby}
   aria-hidden={!selected}
+  {...rest}
 >
   <slot />
 </div>
