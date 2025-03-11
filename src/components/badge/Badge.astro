@@ -6,49 +6,60 @@
  */
 interface Props {
   /**
-   * Size of the badge
+   * Additional classes to apply to the Badge
    */
-  size?: 'small' | 'medium' | 'large'
+  class?: string
   /**
    * Type of the badge
+   * @default "default"
    */
   type?: 'info' | 'success' | 'warning' | 'error' | 'default'
   /**
+   * Size of the badge
+   * @default "md"
+   */
+  size?: 'sm' | 'md' | 'lg'
+  /**
    * Whether to render as a button element
+   * @default false
    */
   isButton?: boolean
   /**
    * Whether to animate the icon on hover (only works with isButton)
+   * @default false
    */
   animateOnHover?: boolean
   /**
-   * Additional classes to apply
-   */
-  class?: string
-  /**
    * Type of animation to apply on hover (when isButton is true)
+   * @default "boop"
    */
   animationType?: 'rotate' | 'boop' | 'bounce' | 'none'
   /**
    * Animation intensity (1-10)
+   * @default 5
    */
   animationIntensity?: number
   /**
    * Whether to display the badge as a circle (best for single numbers/characters)
+   * @default false
    */
   isCircular?: boolean
   /**
    * Whether to display the badge with fully rounded corners (pill style)
+   * @default false
    */
   isPill?: boolean
   /**
    * Whether to apply a pulsating animation to draw attention (pulses 3 times)
+   * @default false
    */
   pulse?: boolean
   /**
-   * Additional text for screen readers (e.g., "New messages: " for a count badge)
+   * Accessible label for screen readers
+   * This should be provided when the badge contains only icons or non-textual content
+   * for proper accessibility. For badges with clear text content, this is optional.
    */
-  srLabel?: string
+  label?: string
   /**
    * Rest of props to spread
    */
@@ -56,17 +67,17 @@ interface Props {
 }
 
 const {
-  size = 'medium',
+  class: className,
   type = 'default',
+  size = 'md',
   isButton = false,
   animateOnHover = false,
-  class: className,
   animationType = 'boop',
   animationIntensity = 5,
   isCircular = false,
   isPill = false,
   pulse = false,
-  srLabel,
+  label,
   ...rest
 } = Astro.props
 
@@ -88,6 +99,9 @@ const pillClass = isPill ? 'pill' : ''
 
 // Determine if we should apply the pulse class
 const pulseClass = pulse ? 'pulse' : ''
+
+// Map logical size values to CSS class names
+const sizeClass = `size-${size}`
 ---
 
 {
@@ -95,7 +109,7 @@ const pulseClass = pulse ? 'pulse' : ''
     <button
       class:list={[
         'badge',
-        `size-${size}`,
+        sizeClass,
         `type-${type}`,
         animationClass,
         circularClass,
@@ -105,14 +119,14 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
-      {srLabel && <span class="sr-only">{srLabel}</span>}
+      {label && <span class="sr-only">{label}</span>}
       <slot />
     </button>
   ) : (
     <span
       class:list={[
         'badge',
-        `size-${size}`,
+        sizeClass,
         `type-${type}`,
         circularClass,
         pillClass,
@@ -121,7 +135,7 @@ const pulseClass = pulse ? 'pulse' : ''
       ]}
       {...rest}
     >
-      {srLabel && <span class="sr-only">{srLabel}</span>}
+      {label && <span class="sr-only">{label}</span>}
       <slot />
     </span>
   )
@@ -152,57 +166,61 @@ const pulseClass = pulse ? 'pulse' : ''
     font: inherit;
   }
 
+  :where(button.badge):where(:hover, :focus-visible) {
+    text-decoration: underline;
+  }
+
   /* Default */
   :where(.badge) {
-    border-color: light-dark(hsl(204 8% 55%), hsl(215 15% 45%));
-    background-color: light-dark(hsl(200 20% 97%), hsl(215 25% 13%));
-    color: light-dark(hsl(204 8% 14%), hsl(0 0% 100%));
+    border-color: var(--color-default-border);
+    background-color: var(--color-default-bg);
+    color: var(--color-default-text);
   }
 
   /* Info */
   :where(.type-info) {
-    border-color: light-dark(hsl(200 78% 46%), hsl(234 100% 60%));
-    background-color: light-dark(hsl(198 100% 94%), hsl(234 54% 20%));
-    color: light-dark(hsl(200 96% 27%), hsl(0 0% 100%));
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
   }
 
   /* Success */
   :where(.type-success) {
-    border-color: light-dark(hsl(160 61% 41%), hsl(101 82% 63%));
-    background-color: light-dark(hsl(160 71% 96%), hsl(101 39% 22%));
-    color: light-dark(hsl(170 96% 15%), hsl(0 0% 100%));
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
   }
 
   /* Warning */
   :where(.type-warning) {
-    border-color: light-dark(hsl(35 75% 49%), hsl(41 82% 63%));
-    background-color: light-dark(hsl(48 100% 96%), hsl(41 39% 22%));
-    color: light-dark(hsl(15 85% 30%), hsl(0 0% 100%));
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
   }
 
   /* Error */
   :where(.type-error) {
-    border-color: light-dark(hsl(355 73% 51%), hsl(339 82% 63%));
-    background-color: light-dark(hsl(0 100% 94%), hsl(339 39% 22%));
-    color: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
   }
 
   /* Small */
-  :where(.size-small) {
+  :where(.size-sm) {
     gap: 0.15rem;
     padding: 0.05rem 0.2rem;
     font-size: 0.75rem;
   }
 
   /* Medium */
-  :where(.size-medium) {
+  :where(.size-md) {
     gap: 0.3rem;
     padding: 0.05rem 0.35rem;
     font-size: 0.875rem;
   }
 
   /* Large */
-  :where(.size-large) {
+  :where(.size-lg) {
     gap: 0.4rem;
     padding: 0.05rem 0.45rem;
     font-size: 1rem;
@@ -230,17 +248,17 @@ const pulseClass = pulse ? 'pulse' : ''
     text-align: center;
   }
 
-  :where(.size-small.circular) {
+  :where(.size-sm.circular) {
     min-inline-size: 1.5em;
     min-block-size: 1.5em;
   }
 
-  :where(.size-medium.circular) {
+  :where(.size-md.circular) {
     min-inline-size: 1.75em;
     min-block-size: 1.75em;
   }
 
-  :where(.size-large.circular) {
+  :where(.size-lg.circular) {
     min-inline-size: 2em;
     min-block-size: 2em;
   }
@@ -252,23 +270,23 @@ const pulseClass = pulse ? 'pulse' : ''
 
   /* Set pulse colors based on badge type */
   :where(.pulse.type-default) {
-    --pulse-color: 100, 100, 100;
+    --pulse-color: var(--color-pulse-default);
   }
 
   :where(.pulse.type-info) {
-    --pulse-color: 0, 122, 255;
+    --pulse-color: var(--color-pulse-info);
   }
 
   :where(.pulse.type-success) {
-    --pulse-color: 52, 199, 89;
+    --pulse-color: var(--color-pulse-success);
   }
 
   :where(.pulse.type-warning) {
-    --pulse-color: 255, 149, 0;
+    --pulse-color: var(--color-pulse-warning);
   }
 
   :where(.pulse.type-error) {
-    --pulse-color: 255, 59, 48;
+    --pulse-color: var(--color-pulse-error);
   }
 
   /* Apply pulse animation */

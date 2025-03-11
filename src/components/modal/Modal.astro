@@ -10,27 +10,40 @@ interface Props {
    */
   class?: string
   /**
-   * ID of the trigger element
-   */
-  triggerId: string
-  /**
    * Modal title
    */
   title: string
   /**
+   * ID of the trigger element
+   */
+  triggerId: string
+  /**
    * Close button text
+   * @default "Close"
    */
   closeText?: string
   /**
    * Whether to show close icon
+   * @default true
    */
   closeIcon?: boolean
+  /**
+   * Rest of props to spread
+   */
+  [key: string]: any
 }
 
-const { class: className, triggerId, title, closeText = 'Close', closeIcon = true } = Astro.props
+const {
+  class: className,
+  title,
+  triggerId,
+  closeText = 'Close',
+  closeIcon = true,
+  ...rest
+} = Astro.props
 ---
 
-<dialog class:list={['modal', className]} aria-labelledby={triggerId}>
+<dialog class:list={['modal', className]} aria-labelledby={triggerId} {...rest}>
   <div class="modal-inner">
     <div class="modal-content">
       <h3 tabindex="-1" autofocus>

@@ -6,38 +6,43 @@
  */
 interface Props extends astroHTML.JSX.HTMLAttributes {
   /**
-   * URL for the card's link
-   */
-  url?: string
-  /**
-   * URL for the card's image
-   */
-  img?: string
-  /**
-   * Card's title
-   */
-  title?: string
-  /**
-   * Footer content
-   */
-  footer?: string
-  /**
    * Additional classes to apply to the card
    */
   class?: string
   /**
+   * Card's title
+   * @default "Default title"
+   */
+  title?: string
+  /**
+   * URL for the card's image
+   * @default "https://fakeimg.pl/640x360"
+   */
+  img?: string
+  /**
+   * URL for the card's link
+   * @default "#"
+   */
+  url?: string
+  /**
    * HTML tag to use for the title
+   * @default "h3"
    */
   tagName?: string
+  /**
+   * Footer content
+   * @default ""
+   */
+  footer?: string
 }
 
 const {
-  url = '#',
-  img = 'https://fakeimg.pl/640x360',
-  title = 'Default title',
-  footer = '',
   class: className,
+  title = 'Default title',
+  img = 'https://fakeimg.pl/640x360',
+  url = '#',
   tagName = 'h3',
+  footer = '',
   ...rest
 } = Astro.props
 

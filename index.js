@@ -1,10 +1,11 @@
 // Import shared styles
-import './src/styles/core.css'
-import './src/styles/animations.css'
+import './src/styles/index.css'
 
 // Export components
 export { default as Accordion } from './src/components/accordion/Accordion.astro'
 export { default as AccordionItem } from './src/components/accordion/AccordionItem.astro'
+export { default as Avatar } from './src/components/avatar/Avatar.astro'
+export { default as AvatarGroup } from './src/components/avatar/AvatarGroup.astro'
 export { default as Badge } from './src/components/badge/Badge.astro'
 export { default as Breadcrumbs } from './src/components/breadcrumbs/Breadcrumbs.astro'
 export { default as BreadcrumbsItem } from './src/components/breadcrumbs/BreadcrumbsItem.astro'

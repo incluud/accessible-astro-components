@@ -26,6 +26,39 @@ type Accordion = typeof import('../../index.js').Accordion
 export const Accordion: Accordion
 
 /**
+ * Avatar component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.img - Image source URL for the avatar
+ * @param _props.initials - Initials to display when no image is available
+ * @param _props.type - Type of the avatar ('default' | 'info' | 'success' | 'warning' | 'error') - default: 'default'
+ * @param _props.shape - Shape of the avatar ('round' | 'square') - default: 'round'
+ * @param _props.size - Size of the avatar ('sm' | 'md' | 'lg' | string) - default: 'md'
+ * @param _props.title - Primary text to display next to the avatar (e.g., name)
+ * @param _props.subtitle - Secondary text to display next to the avatar (e.g., role)
+ * @param _props.label - Accessible label for screen readers (required when no title is provided)
+ */
+type Avatar = typeof import('../../index.js').Avatar
+export const Avatar: Avatar
+
+/**
+ * AvatarGroup component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.display - Display mode for the avatar group ('condensed' | 'grid') - default: 'condensed'
+ * @param _props.gridItemsSize - Size of the grid items (used for grid display mode) - default: '5rem'
+ * @param _props.gridGap - Gap between grid items (used for grid display mode) - default: '1rem'
+ * @param _props.overlapAmount - Overlap amount for condensed mode (negative margin) - default: '-1rem'
+ * @param _props.children -
+ *  - Expects one or more Avatar components. Parent element: `<div>`
+ *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
+ */
+type AvatarGroup = typeof import('../../index.js').AvatarGroup
+export const AvatarGroup: AvatarGroup
+
+/**
  * Badge component
  *
  * @param _props - Record<string, any>

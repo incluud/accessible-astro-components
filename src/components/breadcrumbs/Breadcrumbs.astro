@@ -21,12 +21,16 @@ interface Props {
    * @default 'Breadcrumbs'
    */
   ariaLabel?: string
+  /**
+   * Rest of props to spread
+   */
+  [key: string]: any
 }
 
-const { class: classNames, ariaLabel = 'Breadcrumbs' } = Astro.props
+const { class: className, ariaLabel = 'Breadcrumbs', ...rest } = Astro.props
 ---
 
-<nav class:list={['breadcrumbs', classNames]} aria-label={ariaLabel}>
+<nav class:list={['breadcrumbs', className]} aria-label={ariaLabel} {...rest}>
   <ol class="list">
     <slot />
   </ol>

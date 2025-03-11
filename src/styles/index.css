@@ -1,0 +1,14 @@
+/**
+ * Main Stylesheet
+ *
+ * This file imports all other stylesheets and can be used as a single entry point.
+ */
+
+/* Core styles */
+@import './core.css';
+
+/* Color system */
+@import './colors.css';
+
+/* Animations */
+@import './animations.css';
