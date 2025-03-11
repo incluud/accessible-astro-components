@@ -101,7 +101,7 @@ const pillClass = isPill ? 'pill' : ''
 const pulseClass = pulse ? 'pulse' : ''
 
 // Map logical size values to CSS class names
-const sizeClass = size === 'sm' ? 'size-small' : size === 'md' ? 'size-medium' : 'size-large'
+const sizeClass = `size-${size}`
 ---
 
 {
@@ -206,21 +206,21 @@ const sizeClass = size === 'sm' ? 'size-small' : size === 'md' ? 'size-medium' :
   }
 
   /* Small */
-  :where(.size-small) {
+  :where(.size-sm) {
     gap: 0.15rem;
     padding: 0.05rem 0.2rem;
     font-size: 0.75rem;
   }
 
   /* Medium */
-  :where(.size-medium) {
+  :where(.size-md) {
     gap: 0.3rem;
     padding: 0.05rem 0.35rem;
     font-size: 0.875rem;
   }
 
   /* Large */
-  :where(.size-large) {
+  :where(.size-lg) {
     gap: 0.4rem;
     padding: 0.05rem 0.45rem;
     font-size: 1rem;
@@ -248,17 +248,17 @@ const sizeClass = size === 'sm' ? 'size-small' : size === 'md' ? 'size-medium' :
     text-align: center;
   }
 
-  :where(.size-small.circular) {
+  :where(.size-sm.circular) {
     min-inline-size: 1.5em;
     min-block-size: 1.5em;
   }
 
-  :where(.size-medium.circular) {
+  :where(.size-md.circular) {
     min-inline-size: 1.75em;
     min-block-size: 1.75em;
   }
 
-  :where(.size-large.circular) {
+  :where(.size-lg.circular) {
     min-inline-size: 2em;
     min-block-size: 2em;
   }

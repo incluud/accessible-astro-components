@@ -32,6 +32,7 @@
   --color-error-text: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
 
   /* Pulse animation colors (RGB format for rgba usage) */
+  /* Example usage: rgba(var(--color-pulse-info), 0.5) */
   --color-pulse-default: 100, 100, 100;
   --color-pulse-info: 0, 122, 255;
   --color-pulse-success: 52, 199, 89;

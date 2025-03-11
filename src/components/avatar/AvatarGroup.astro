@@ -16,7 +16,7 @@ interface Props {
   display?: 'condensed' | 'grid'
   /**
    * Size of the grid items (used for grid display mode)
-   * @default "5rem"
+   * @default "200px"
    */
   gridItemsSize?: string
   /**
@@ -27,6 +27,7 @@ interface Props {
   /**
    * Overlap amount for condensed mode (negative margin)
    * @default "-1rem"
+   * @note Should be a negative value to create overlap effect
    */
   overlapAmount?: string
   /**
@@ -38,7 +39,7 @@ interface Props {
 const {
   class: className,
   display = 'condensed',
-  gridItemsSize = '250px',
+  gridItemsSize = '200px',
   gridGap = '1rem',
   overlapAmount = '-1rem',
   ...rest
