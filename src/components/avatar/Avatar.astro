@@ -257,9 +257,7 @@ const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg
   }
 
   :where(.subtitle) {
-    opacity: 0.8;
-    margin-block-start: -4px;
-    margin: 0;
+    margin-block-start: calc(var(--size) * -0.1);
     font-size: calc(var(--size) * 0.2);
   }
 
