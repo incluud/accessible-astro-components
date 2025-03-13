@@ -23,9 +23,9 @@ interface Props {
    */
   selected?: boolean
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the panel
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, id, labelledby, selected = false, ...rest } = Astro.props

@@ -1,5 +1,5 @@
 ---
-import type { BreadcrumbsItem } from '.'
+import type { BreadcrumbsItem } from '../../types/index'
 
 /**
  * Breadcrumbs Component
@@ -22,9 +22,9 @@ interface Props {
    */
   ariaLabel?: string
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the breadcrumbs
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined | BreadcrumbsItem | BreadcrumbsItem[]
 }
 
 const { class: className, ariaLabel = 'Breadcrumbs', ...rest } = Astro.props

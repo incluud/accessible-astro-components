@@ -20,9 +20,9 @@ interface Props {
    */
   initialMode?: 'light' | 'dark' | 'auto'
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the dark mode toggle
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...rest } = Astro.props

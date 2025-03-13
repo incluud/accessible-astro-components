@@ -29,9 +29,9 @@ interface Props {
    */
   loading?: 'lazy' | 'eager'
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the video wrapper
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined
 }
 
 const {

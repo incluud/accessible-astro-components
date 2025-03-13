@@ -31,9 +31,9 @@ interface Props {
    */
   overlapAmount?: string
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the avatar group
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined
 }
 
 const {
@@ -44,13 +44,17 @@ const {
   overlapAmount = '-1rem',
   ...rest
 } = Astro.props
+
+// Ensure overlapAmount is negative for condensed mode
+const validatedOverlapAmount =
+  display === 'condensed' && !overlapAmount.startsWith('-') ? `-${overlapAmount}` : overlapAmount
 ---
 
 <div class:list={['avatar-group', `display-${display}`, className]} {...rest}>
   <slot />
 </div>
 
-<style define:vars={{ gridItemsSize, gridGap, overlapAmount }}>
+<style define:vars={{ gridItemsSize, gridGap, overlapAmount: validatedOverlapAmount }}>
   :where(.avatar-group) {
     display: flex;
     flex-wrap: wrap;

@@ -5,7 +5,8 @@
     "allowJs": true,
     "rootDir": ".",
     "paths": {
-      "*": ["./src/types/*"]
+      "@components/*": ["./src/components/*"],
+      "@types/*": ["./src/types/*"]
     }
   }
 }

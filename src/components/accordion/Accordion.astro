@@ -1,5 +1,5 @@
 ---
-import type { AccordionItem } from '.'
+import type { AccordionItem } from '../../types/index'
 
 /**
  * Accordion Component
@@ -17,9 +17,9 @@ interface Props {
    */
   children: AccordionItem | AccordionItem[]
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the accordion
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined | AccordionItem | AccordionItem[]
 }
 
 const { class: className, ...rest } = Astro.props

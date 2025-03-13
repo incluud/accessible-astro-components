@@ -10,9 +10,9 @@ interface Props {
    */
   class?: string
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the tabs container
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, ...rest } = Astro.props

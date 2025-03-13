@@ -90,9 +90,9 @@ interface Props {
     page: string | number
   }) => string
   /**
-   * Rest of props to spread
+   * HTML attributes to spread on the pagination
    */
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined | Function
 }
 
 const {
