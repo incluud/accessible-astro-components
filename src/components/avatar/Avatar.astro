@@ -89,7 +89,20 @@ const {
 } = Astro.props
 
 // Convert size to actual value if using predefined sizes
-const sizeValue = size === 'sm' ? '3rem' : size === 'md' ? '5rem' : size === 'lg' ? '7rem' : size
+const getSizeValue = (size: string): string => {
+  switch (size) {
+    case 'sm':
+      return '3rem'
+    case 'md':
+      return '5rem'
+    case 'lg':
+      return '7rem'
+    default:
+      return size
+  }
+}
+
+const sizeValue = getSizeValue(size)
 ---
 
 <div
