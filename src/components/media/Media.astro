@@ -11,28 +11,38 @@ interface Props {
   class?: string
   /**
    * Source URL for the media
+   * @default "https://fakeimg.pl/640x360"
    */
   src?: string
   /**
    * Alt text for the media
+   * @default ""
    */
   alt?: string
   /**
    * Aspect ratio of the media
+   * @default "auto"
    */
   ratio?: '1:1' | '4:3' | '16:9' | '21:9' | 'auto'
   /**
    * Loading strategy
+   * @default "lazy"
    */
   loading?: 'lazy' | 'eager'
   /**
    * Decoding strategy
+   * @default "async"
    */
   decoding?: 'async' | 'sync' | 'auto'
   /**
    * Fetch priority
+   * @default "auto"
    */
   fetchpriority?: 'high' | 'low' | 'auto'
+  /**
+   * HTML attributes to spread on the media wrapper
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
 const {
@@ -43,6 +53,7 @@ const {
   loading = 'lazy',
   decoding = 'async',
   fetchpriority = 'auto',
+  ...rest
 } = Astro.props
 
 const aspectRatios = {
@@ -54,7 +65,7 @@ const aspectRatios = {
 }
 ---
 
-<div class:list={['media-wrapper', className]} data-ratio={ratio}>
+<div class:list={['media-wrapper', className]} data-ratio={ratio} {...rest}>
   <img
     src={src}
     alt={alt}

@@ -1,0 +1,41 @@
+/**
+ * Color System
+ *
+ * This file defines the color system used across components.
+ * Colors are organized by type and include light/dark mode variants.
+ */
+
+:root {
+  /* Default type */
+  --color-default-border: light-dark(hsl(204 8% 55%), hsl(215 15% 45%));
+  --color-default-bg: light-dark(hsl(200 20% 97%), hsl(215 25% 13%));
+  --color-default-text: light-dark(hsl(204 8% 14%), hsl(0 0% 100%));
+
+  /* Info type */
+  --color-info-border: light-dark(hsl(200 78% 46%), hsl(234 100% 60%));
+  --color-info-bg: light-dark(hsl(198 100% 94%), hsl(234 54% 20%));
+  --color-info-text: light-dark(hsl(200 96% 27%), hsl(0 0% 100%));
+
+  /* Success type */
+  --color-success-border: light-dark(hsl(160 61% 41%), hsl(101 82% 63%));
+  --color-success-bg: light-dark(hsl(160 71% 96%), hsl(101 39% 22%));
+  --color-success-text: light-dark(hsl(170 96% 15%), hsl(0 0% 100%));
+
+  /* Warning type */
+  --color-warning-border: light-dark(hsl(35 75% 49%), hsl(41 82% 63%));
+  --color-warning-bg: light-dark(hsl(48 100% 96%), hsl(41 39% 22%));
+  --color-warning-text: light-dark(hsl(15 85% 30%), hsl(0 0% 100%));
+
+  /* Error type */
+  --color-error-border: light-dark(hsl(355 73% 51%), hsl(339 82% 63%));
+  --color-error-bg: light-dark(hsl(0 100% 94%), hsl(339 39% 22%));
+  --color-error-text: light-dark(hsl(350 94% 19%), hsl(0 0% 100%));
+
+  /* Pulse animation colors (RGB format for rgba usage) */
+  /* Example usage: rgba(var(--color-pulse-info), 0.5) */
+  --color-pulse-default: 100, 100, 100;
+  --color-pulse-info: 0, 122, 255;
+  --color-pulse-success: 52, 199, 89;
+  --color-pulse-warning: 255, 149, 0;
+  --color-pulse-error: 255, 59, 48;
+}

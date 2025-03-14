@@ -11,29 +11,64 @@ export type RouteString = string | null | undefined
 
 interface Props {
   /**
-   * URL for the first page
+   * Additional classes to apply
    */
-  firstPage?: RouteString
-  /**
-   * URL for the previous page
-   */
-  previousPage?: RouteString
-  /**
-   * URL for the next page
-   */
-  nextPage?: RouteString
-  /**
-   * URL for the last page
-   */
-  lastPage?: RouteString
+  class?: string
   /**
    * Current page number
+   * @default "1"
    */
   currentPage?: string | number
   /**
    * Total number of pages
+   * @default "12"
    */
   totalPages?: NumericalString | number
+  /**
+   * URL for the first page
+   * @default "#"
+   */
+  firstPage?: RouteString
+  /**
+   * URL for the previous page
+   * @default "#"
+   */
+  previousPage?: RouteString
+  /**
+   * URL for the next page
+   * @default "#"
+   */
+  nextPage?: RouteString
+  /**
+   * URL for the last page
+   * @default "#"
+   */
+  lastPage?: RouteString
+  /**
+   * Accessible label for the navigation
+   * @default "Pagination"
+   */
+  ariaLabel?: string
+  /**
+   * Accessible label for the first page button
+   * @default "Go to the first page"
+   */
+  firstPageLabel?: string
+  /**
+   * Accessible label for the previous page button
+   * @default "Go to the previous page"
+   */
+  previousPageLabel?: string
+  /**
+   * Accessible label for the next page button
+   * @default "Go to the next page"
+   */
+  nextPageLabel?: string
+  /**
+   * Accessible label for the last page button
+   * @default "Go to the last page"
+   */
+  lastPageLabel?: string
   /**
    * Function to render the progress text
    */
@@ -45,30 +80,6 @@ interface Props {
     totalPages: string | number
   }) => string
   /**
-   * Additional classes to apply
-   */
-  class?: string
-  /**
-   * Accessible label for the navigation
-   */
-  ariaLabel?: string
-  /**
-   * Accessible label for the first page button
-   */
-  firstPageLabel?: string
-  /**
-   * Accessible label for the previous page button
-   */
-  previousPageLabel?: string
-  /**
-   * Accessible label for the next page button
-   */
-  nextPageLabel?: string
-  /**
-   * Accessible label for the last page button
-   */
-  lastPageLabel?: string
-  /**
    * Function to generate the aria-label for page links
    */
   renderPageLabel?: ({
@@ -78,22 +89,26 @@ interface Props {
     type: 'first' | 'previous' | 'next' | 'last'
     page: string | number
   }) => string
+  /**
+   * HTML attributes to spread on the pagination
+   */
+  [key: string]: string | number | boolean | undefined | Function
 }
 
 const {
+  class: className,
+  currentPage = '1',
+  totalPages = '12',
   firstPage = '#',
   previousPage = '#',
   nextPage = '#',
   lastPage = '#',
-  currentPage = '1',
-  totalPages = '12',
-  renderProgress = ({ currentPage, totalPages }) => `Page ${currentPage} of ${totalPages}`,
-  class: className,
   ariaLabel = 'Pagination',
   firstPageLabel = 'Go to the first page',
   previousPageLabel = 'Go to the previous page',
   nextPageLabel = 'Go to the next page',
   lastPageLabel = 'Go to the last page',
+  renderProgress = ({ currentPage, totalPages }) => `Page ${currentPage} of ${totalPages}`,
   renderPageLabel = ({ type, page }) => {
     switch (type) {
       case 'first':
@@ -108,12 +123,13 @@ const {
         return `Go to page ${page}`
     }
   },
+  ...rest
 } = Astro.props
 
 const progress = renderProgress({ currentPage, totalPages })
 ---
 
-<nav class:list={['pagination', className]} aria-label={ariaLabel}>
+<nav class:list={['pagination', className]} aria-label={ariaLabel} {...rest}>
   <ul class="list">
     <li>
       {

@@ -9,12 +9,16 @@ interface Props {
    * Additional classes to apply to the tabs list container
    */
   class?: string
+  /**
+   * HTML attributes to spread on the tabs list
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
-const { class: className } = Astro.props
+const { class: className, ...rest } = Astro.props
 ---
 
-<div class:list={['tabs-list', className]} role="tablist">
+<div class:list={['tabs-list', className]} role="tablist" {...rest}>
   <slot />
 </div>
 

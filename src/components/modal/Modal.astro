@@ -10,27 +10,40 @@ interface Props {
    */
   class?: string
   /**
-   * ID of the trigger element
-   */
-  triggerId: string
-  /**
    * Modal title
    */
   title: string
   /**
+   * ID of the trigger element
+   */
+  triggerId: string
+  /**
    * Close button text
+   * @default "Close"
    */
   closeText?: string
   /**
    * Whether to show close icon
+   * @default true
    */
   closeIcon?: boolean
+  /**
+   * HTML attributes to spread on the modal
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
-const { class: className, triggerId, title, closeText = 'Close', closeIcon = true } = Astro.props
+const {
+  class: className,
+  title,
+  triggerId,
+  closeText = 'Close',
+  closeIcon = true,
+  ...rest
+} = Astro.props
 ---
 
-<dialog class:list={['modal', className]} aria-labelledby={triggerId}>
+<dialog class:list={['modal', className]} aria-labelledby={triggerId} {...rest}>
   <div class="modal-inner">
     <div class="modal-content">
       <h3 tabindex="-1" autofocus>
@@ -313,17 +326,5 @@ const { class: className, triggerId, title, closeText = 'Close', closeIcon = tru
 
   :global(body:has(dialog[open])) {
     overflow-y: clip;
-  }
-
-  .sr-only {
-    position: absolute;
-    margin: -1px;
-    padding: 0;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: clip;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-    white-space: nowrap;
   }
 </style>

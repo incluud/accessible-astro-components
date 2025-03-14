@@ -1,5 +1,5 @@
 ---
-import type { AccordionItem } from '.'
+import type { AccordionItem } from '../../types/index'
 
 /**
  * Accordion Component
@@ -16,12 +16,16 @@ interface Props {
    * Accordion items to render
    */
   children: AccordionItem | AccordionItem[]
+  /**
+   * HTML attributes to spread on the accordion
+   */
+  [key: string]: string | number | boolean | undefined | AccordionItem | AccordionItem[]
 }
 
-const { class: classNames } = Astro.props
+const { class: className, ...rest } = Astro.props
 ---
 
-<ul class:list={['accordion', classNames]}>
+<ul class:list={['accordion', className]} {...rest}>
   <slot />
 </ul>
 

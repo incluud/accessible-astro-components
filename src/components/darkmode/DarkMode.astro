@@ -6,20 +6,26 @@
  */
 interface Props {
   /**
-   * Initial color scheme mode
-   */
-  initialMode?: 'light' | 'dark' | 'auto'
-  /**
-   * Accessible label for the toggle button
-   */
-  label?: string
-  /**
    * Additional classes to apply to the button
    */
   class?: string
+  /**
+   * Accessible label for the toggle button
+   * @default "Toggle Dark Mode"
+   */
+  label?: string
+  /**
+   * Initial color scheme mode
+   * @default "auto"
+   */
+  initialMode?: 'light' | 'dark' | 'auto'
+  /**
+   * HTML attributes to spread on the dark mode toggle
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
-const { initialMode = 'auto', label = 'Toggle Dark Mode', class: className } = Astro.props
+const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...rest } = Astro.props
 ---
 
 <button
@@ -28,6 +34,7 @@ const { initialMode = 'auto', label = 'Toggle Dark Mode', class: className } = A
   aria-label={label}
   data-initial-mode={initialMode}
   transition:persist
+  {...rest}
 >
   <span class="icon icon-light">
     <slot name="light">

@@ -3,6 +3,10 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "allowJs": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@types/*": ["./src/types/*"]
+    }
   }
 }

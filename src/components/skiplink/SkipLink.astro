@@ -6,23 +6,34 @@
  */
 interface Props {
   /**
+   * Additional classes to apply
+   */
+  class?: string
+  /**
    * Text for the skip link
+   * @default "Skip to main content"
    */
   text?: string
   /**
    * Target selector to skip to
+   * @default "#main-content"
    */
   target?: string
   /**
-   * Additional classes to apply
+   * HTML attributes to spread on the skip link
    */
-  class?: string
+  [key: string]: string | number | boolean | undefined
 }
 
-const { text = 'Skip to main content', target = '#main-content', class: className } = Astro.props
+const {
+  class: className,
+  text = 'Skip to main content',
+  target = '#main-content',
+  ...rest
+} = Astro.props
 ---
 
-<div class:list={['skip-link', className]}>
+<div class:list={['skip-link', className]} {...rest}>
   <a href={target}>{text}</a>
 </div>
 

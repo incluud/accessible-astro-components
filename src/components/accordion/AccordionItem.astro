@@ -6,21 +6,17 @@
  */
 interface Props {
   /**
-   * Optional name attribute for the details element
+   * Additional classes to apply to the item
    */
-  name?: string
+  class?: string
   /**
    * Title text displayed in the accordion header
    */
   title: string
   /**
-   * Additional classes to apply to the item
+   * Optional name attribute for the details element
    */
-  class?: string
-  /**
-   * Content to be rendered inside the accordion item
-   */
-  children: any
+  name?: string
   /**
    * HTML tag to use for the title (h2-h6)
    * @default 'h3'
@@ -36,21 +32,26 @@ interface Props {
    * @default false
    */
   open?: boolean
+  /**
+   * HTML attributes to spread on the accordion item
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
 const {
-  name,
+  class: className,
   title,
-  class: classNames,
+  name,
   tagName = 'h3',
   variant = 'default',
   open = false,
+  ...rest
 } = Astro.props
 
 const Tag = tagName
 ---
 
-<li class:list={['item', classNames]}>
+<li class:list={['item', className]} {...rest}>
   <details class="wrapper" name={name} data-variant={variant} {...open ? { open } : {}}>
     <summary class="title">
       <Tag>

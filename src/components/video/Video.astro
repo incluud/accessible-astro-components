@@ -15,16 +15,23 @@ interface Props {
   src: string
   /**
    * Accessible title for the video
+   * @default "YouTube video player"
    */
   title: string
   /**
    * Aspect ratio of the video
+   * @default "16:9"
    */
   ratio?: '1:1' | '4:3' | '16:9' | '21:9'
   /**
    * Loading strategy for the iframe
+   * @default "lazy"
    */
   loading?: 'lazy' | 'eager'
+  /**
+   * HTML attributes to spread on the video wrapper
+   */
+  [key: string]: string | number | boolean | undefined
 }
 
 const {
@@ -33,6 +40,7 @@ const {
   title = 'YouTube video player',
   ratio = '16:9',
   loading = 'lazy',
+  ...rest
 } = Astro.props
 
 const aspectRatios = {
@@ -70,7 +78,7 @@ const getVideoUrl = (url: string) => {
 const videoUrl = getVideoUrl(src)
 ---
 
-<div class:list={['video-wrapper', className]} data-video-wrapper data-ratio={ratio}>
+<div class:list={['video-wrapper', className]} data-video-wrapper data-ratio={ratio} {...rest}>
   <iframe
     src={videoUrl}
     title={title}

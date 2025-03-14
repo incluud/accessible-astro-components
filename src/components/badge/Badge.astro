@@ -1,0 +1,324 @@
+---
+/**
+ * Badge Component
+ *
+ * @description A badge component with support for different types and button variant
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the Badge
+   */
+  class?: string
+  /**
+   * Type of the badge
+   * @default "default"
+   */
+  type?: 'info' | 'success' | 'warning' | 'error' | 'default'
+  /**
+   * Size of the badge
+   * @default "md"
+   */
+  size?: 'sm' | 'md' | 'lg'
+  /**
+   * Whether to render as a button element
+   * @default false
+   */
+  isButton?: boolean
+  /**
+   * Whether to animate the icon on hover (only works with isButton)
+   * @default false
+   */
+  animateOnHover?: boolean
+  /**
+   * Type of animation to apply on hover (when isButton is true)
+   * @default "boop"
+   */
+  animationType?: 'rotate' | 'boop' | 'bounce' | 'none'
+  /**
+   * Animation intensity (1-10)
+   * @default 5
+   */
+  animationIntensity?: number
+  /**
+   * Whether to display the badge as a circle (best for single numbers/characters)
+   * @default false
+   */
+  isCircular?: boolean
+  /**
+   * Whether to display the badge with fully rounded corners (pill style)
+   * @default false
+   */
+  isPill?: boolean
+  /**
+   * Whether to apply a pulsating animation to draw attention (pulses 3 times)
+   * @default false
+   */
+  pulse?: boolean
+  /**
+   * Accessible label for screen readers
+   * This should be provided when the badge contains only icons or non-textual content
+   * for proper accessibility. For badges with clear text content, this is optional.
+   */
+  label?: string
+  /**
+   * HTML attributes to spread on the badge
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+const {
+  class: className,
+  type = 'default',
+  size = 'md',
+  isButton = false,
+  animateOnHover = false,
+  animationType = 'boop',
+  animationIntensity = 5,
+  isCircular = false,
+  isPill = false,
+  pulse = false,
+  label,
+  ...rest
+} = Astro.props
+
+// Calculate animation values based on intensity
+const scaleAmount = 1 + animationIntensity * 0.02 // 1.02 to 1.2
+const rotateAmount = animationIntensity * 2 // 2deg to 20deg
+
+// Only apply animation class if it's a button
+const shouldAnimate = isButton && animateOnHover
+
+// Determine animation class based on type
+const animationClass = shouldAnimate ? `animate-${animationType}` : ''
+
+// Determine if we should apply the circular class
+const circularClass = isCircular ? 'circular' : ''
+
+// Determine if we should apply the pill class
+const pillClass = isPill ? 'pill' : ''
+
+// Determine if we should apply the pulse class
+const pulseClass = pulse ? 'pulse' : ''
+
+// Map logical size values to CSS class names
+const sizeClass = `size-${size}`
+---
+
+{
+  isButton ? (
+    <button
+      class:list={[
+        'badge',
+        sizeClass,
+        `type-${type}`,
+        animationClass,
+        circularClass,
+        pillClass,
+        pulseClass,
+        className,
+      ]}
+      {...rest}
+    >
+      {label && <span class="sr-only">{label}</span>}
+      <slot />
+    </button>
+  ) : (
+    <span
+      class:list={[
+        'badge',
+        sizeClass,
+        `type-${type}`,
+        circularClass,
+        pillClass,
+        pulseClass,
+        className,
+      ]}
+      {...rest}
+    >
+      {label && <span class="sr-only">{label}</span>}
+      <slot />
+    </span>
+  )
+}
+
+<style
+  define:vars={{
+    scaleAmount,
+    rotateAmount: `${rotateAmount}deg`,
+  }}
+>
+  :where(.badge) {
+    --transition-duration: 0.3s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    border: 2px solid;
+    border-radius: 0.5rem;
+  }
+
+  /* Button reset styles */
+  :where(button.badge) {
+    cursor: pointer;
+    background: none;
+    padding: inherit;
+    font: inherit;
+  }
+
+  :where(button.badge):where(:hover, :focus-visible) {
+    text-decoration: underline;
+  }
+
+  /* Default */
+  :where(.badge) {
+    border-color: var(--color-default-border, #ccc);
+    background-color: var(--color-default-bg, #f8f8f8);
+    color: var(--color-default-text, #333);
+  }
+
+  /* Info */
+  :where(.type-info) {
+    border-color: var(--color-info-border, #0077ff);
+    background-color: var(--color-info-bg, #e6f2ff);
+    color: var(--color-info-text, #004c99);
+  }
+
+  /* Success */
+  :where(.type-success) {
+    border-color: var(--color-success-border, #34c759);
+    background-color: var(--color-success-bg, #e6f9ed);
+    color: var(--color-success-text, #0d6124);
+  }
+
+  /* Warning */
+  :where(.type-warning) {
+    border-color: var(--color-warning-border, #ff9500);
+    background-color: var(--color-warning-bg, #fff8e6);
+    color: var(--color-warning-text, #7d4900);
+  }
+
+  /* Error */
+  :where(.type-error) {
+    border-color: var(--color-error-border, #ff3b30);
+    background-color: var(--color-error-bg, #ffe6e6);
+    color: var(--color-error-text, #990c00);
+  }
+
+  /* Small */
+  :where(.size-sm) {
+    gap: 0.15rem;
+    padding: 0.05rem 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  /* Medium */
+  :where(.size-md) {
+    gap: 0.3rem;
+    padding: 0.05rem 0.35rem;
+    font-size: 0.875rem;
+  }
+
+  /* Large */
+  :where(.size-lg) {
+    gap: 0.4rem;
+    padding: 0.05rem 0.45rem;
+    font-size: 1rem;
+  }
+
+  :where(button.badge) {
+    gap: 0;
+  }
+
+  /* Pill badge styles */
+  :where(.pill) {
+    border-radius: 9999px;
+    padding-inline: 0.5em;
+  }
+
+  /* Circular badge styles */
+  :where(.circular) {
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 0;
+    aspect-ratio: 1 / 1;
+    min-inline-size: 1.5em;
+    min-block-size: 1.5em;
+    text-align: center;
+  }
+
+  :where(.size-sm.circular) {
+    min-inline-size: 1.5em;
+    min-block-size: 1.5em;
+  }
+
+  :where(.size-md.circular) {
+    min-inline-size: 1.75em;
+    min-block-size: 1.75em;
+  }
+
+  :where(.size-lg.circular) {
+    min-inline-size: 2em;
+    min-block-size: 2em;
+  }
+
+  :where(.badge) :global(svg) {
+    flex-shrink: 0;
+    transition: transform var(--transition-duration) var(--transition-easing);
+  }
+
+  /* Set pulse colors based on badge type */
+  :where(.pulse.type-default) {
+    --pulse-color: var(--color-pulse-default);
+  }
+
+  :where(.pulse.type-info) {
+    --pulse-color: var(--color-pulse-info);
+  }
+
+  :where(.pulse.type-success) {
+    --pulse-color: var(--color-pulse-success);
+  }
+
+  :where(.pulse.type-warning) {
+    --pulse-color: var(--color-pulse-warning);
+  }
+
+  :where(.pulse.type-error) {
+    --pulse-color: var(--color-pulse-error);
+  }
+
+  /* Apply pulse animation */
+  :where(.pulse) {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 3;
+  }
+
+  /* Animation classes - apply only to SVG icons */
+  button.animate-boop:where(:hover, :focus-visible) :global(svg) {
+    animation: boop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  button.animate-bounce:where(:hover, :focus-visible) :global(svg) {
+    animation: bounce 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  button.animate-rotate:where(:hover, :focus-visible) :global(svg) {
+    animation: rotate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  /* Respect user preferences */
+  @media (prefers-reduced-motion: reduce) {
+    button.animate-boop:where(:hover, :focus-visible) :global(svg),
+    button.animate-bounce:where(:hover, :focus-visible) :global(svg),
+    button.animate-rotate:where(:hover, :focus-visible) :global(svg) {
+      transform: none;
+      animation: none;
+    }
+
+    :where(.pulse) {
+      animation: none;
+      box-shadow: 0 0 0 2px rgba(var(--pulse-color, 0, 0, 0), 0.3);
+    }
+  }
+</style>

@@ -1,0 +1,280 @@
+---
+/**
+ * Avatar Component
+ *
+ * @description A versatile avatar component that can display user images, initials, or placeholders
+ * with optional text content. Supports various sizes and shapes with accessibility features built-in.
+ */
+
+// Base props that are always the same
+type BaseProps = {
+  /**
+   * Additional classes to apply to the Avatar
+   */
+  class?: string
+  /**
+   * Image source URL for the avatar
+   */
+  img?: string
+  /**
+   * Initials to display when no image is available
+   */
+  initials?: string
+  /**
+   * Type of the avatar (affects color scheme)
+   * @default "default"
+   */
+  type?: 'default' | 'info' | 'success' | 'warning' | 'error'
+  /**
+   * Shape of the avatar
+   * @default "round"
+   */
+  shape?: 'round' | 'square'
+  /**
+   * Size of the avatar
+   * @default "md"
+   */
+  size?: 'sm' | 'md' | 'lg' | string
+  /**
+   * HTML attributes to spread on the avatar
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+// Props when title is provided (label is optional)
+type PropsWithTitle = BaseProps & {
+  /**
+   * Primary text to display next to the avatar (e.g., name)
+   */
+  title: string
+  /**
+   * Secondary text to display next to the avatar (e.g., role)
+   */
+  subtitle?: string
+  /**
+   * Accessible label for screen readers (optional when title is provided)
+   */
+  label?: string
+}
+
+// Props when title is not provided (label is required)
+type PropsWithoutTitle = BaseProps & {
+  /**
+   * Primary text to display next to the avatar (e.g., name)
+   */
+  title?: undefined
+  /**
+   * Secondary text to display next to the avatar (e.g., role)
+   */
+  subtitle?: string
+  /**
+   * Accessible label for screen readers (required when no title is provided)
+   */
+  label: string
+}
+
+// Union type that enforces the conditional requirement
+type Props = PropsWithTitle | PropsWithoutTitle
+
+const {
+  class: className,
+  img,
+  initials,
+  type = 'default',
+  shape = 'round',
+  size = 'md',
+  label,
+  title,
+  subtitle,
+  ...rest
+} = Astro.props
+
+// Convert size to actual value if using predefined sizes
+const getSizeValue = (size: string): string => {
+  switch (size) {
+    case 'sm':
+      return '3rem'
+    case 'md':
+      return '5rem'
+    case 'lg':
+      return '7rem'
+    default:
+      return size
+  }
+}
+
+const sizeValue = getSizeValue(size)
+---
+
+<div
+  class:list={['avatar', `shape-${shape}`, `type-${type}`, className]}
+  {...label && { 'aria-label': label }}
+  {...rest}
+>
+  {
+    img && (
+      <div class="image">
+        <img src={img} alt="" loading="lazy" decoding="async" />
+      </div>
+    )
+  }
+  {
+    initials && !img && (
+      <div class="initials-container">
+        <span class="initials">{initials}</span>
+      </div>
+    )
+  }
+  {
+    !initials && !img && (
+      <div class="icon-container">
+        <span class="icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60%"
+            height="60%"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </span>
+      </div>
+    )
+  }
+  {
+    (title || subtitle) && (
+      <div class="content">
+        {title && <p class="title">{title}</p>}
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+      </div>
+    )
+  }
+</div>
+
+<style
+  define:vars={{
+    size: `${sizeValue}`,
+  }}
+>
+  :where(.avatar) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &:has(.initials-container):not(:has(.content)),
+    &:has(.icon-container):not(:has(.content)) {
+      aspect-ratio: 1;
+      inline-size: var(--size);
+      block-size: var(--size);
+    }
+  }
+
+  :where(.initials-container),
+  :where(.icon-container),
+  :where(.image) {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    inline-size: var(--size);
+    block-size: var(--size);
+    overflow: clip;
+  }
+
+  /* Shape styles */
+  .shape-round {
+    .initials-container,
+    .icon-container,
+    .image {
+      border-radius: 50%;
+    }
+  }
+
+  .shape-square {
+    .initials-container,
+    .icon-container,
+    .image {
+      border-radius: 0.25rem;
+    }
+  }
+
+  /* Default type */
+  :where(.initials-container),
+  :where(.icon-container) {
+    border: 2px solid;
+    border-color: var(--color-default-border, #ccc);
+    background-color: var(--color-default-bg, #f8f8f8);
+    color: var(--color-default-text, #333);
+  }
+
+  /* Info type */
+  :where(.type-info .initials-container),
+  :where(.type-info .icon-container) {
+    border-color: var(--color-info-border, #0077ff);
+    background-color: var(--color-info-bg, #e6f2ff);
+    color: var(--color-info-text, #004c99);
+  }
+
+  /* Success type */
+  :where(.type-success .initials-container),
+  :where(.type-success .icon-container) {
+    border-color: var(--color-success-border, #34c759);
+    background-color: var(--color-success-bg, #e6f9ed);
+    color: var(--color-success-text, #0d6124);
+  }
+
+  /* Warning type */
+  :where(.type-warning .initials-container),
+  :where(.type-warning .icon-container) {
+    border-color: var(--color-warning-border, #ff9500);
+    background-color: var(--color-warning-bg, #fff8e6);
+    color: var(--color-warning-text, #7d4900);
+  }
+
+  /* Error type */
+  :where(.type-error .initials-container),
+  :where(.type-error .icon-container) {
+    border-color: var(--color-error-border, #ff3b30);
+    background-color: var(--color-error-bg, #ffe6e6);
+    color: var(--color-error-text, #990c00);
+  }
+
+  :where(img) {
+    inline-size: inherit;
+    block-size: inherit;
+    object-fit: cover;
+  }
+
+  :where(.initials) {
+    font-weight: bold;
+    font-size: clamp(1rem, calc(var(--size) * 0.4), calc(var(--size) * 0.6));
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  :where(.icon) {
+    display: grid;
+    place-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  :where(.title) {
+    margin: 0;
+    font-weight: 500;
+    font-size: clamp(0.875rem, calc(var(--size) * 0.25), 1.5rem);
+  }
+
+  :where(.subtitle) {
+    font-size: clamp(0.75rem, calc(var(--size) * 0.2), 1.25rem);
+  }
+
+  :where(p) {
+    overflow-wrap: break-word;
+  }
+</style>

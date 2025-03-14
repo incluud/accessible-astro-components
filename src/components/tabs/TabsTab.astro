@@ -6,6 +6,10 @@
  */
 interface Props {
   /**
+   * Additional classes to apply to the tab
+   */
+  class?: string
+  /**
    * Unique identifier for the tab
    */
   id: string
@@ -15,15 +19,16 @@ interface Props {
   controls: string
   /**
    * Whether this tab is currently selected
+   * @default false
    */
   selected?: boolean
   /**
-   * Additional classes to apply to the tab
+   * HTML attributes to spread on the tab
    */
-  class?: string
+  [key: string]: string | number | boolean | undefined
 }
 
-const { id, controls, selected = false, class: className } = Astro.props
+const { class: className, id, controls, selected = false, ...rest } = Astro.props
 ---
 
 <button
@@ -33,6 +38,7 @@ const { id, controls, selected = false, class: className } = Astro.props
   aria-controls={controls}
   aria-selected={selected}
   tabindex={selected ? 0 : -1}
+  {...rest}
 >
   <slot />
 </button>

@@ -1,0 +1,108 @@
+---
+/**
+ * Notification Component
+ *
+ * @description A versatile notification component with support for different types and ARIA roles
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the Notification
+   */
+  class?: string
+  /**
+   * Notification message
+   */
+  message?: string
+  /**
+   * Type of notification
+   * @default "default"
+   */
+  type?: 'info' | 'success' | 'warning' | 'error' | 'default'
+  /**
+   * ARIA role for the notification
+   * @default "none"
+   */
+  role?: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region'
+  /**
+   * ARIA live region behavior
+   * @default "off"
+   */
+  ariaLive?: 'off' | 'polite' | 'assertive'
+  /**
+   * HTML attributes to spread on the notification
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+const {
+  class: className,
+  message = 'This is a notification!',
+  type = 'default',
+  role = 'none',
+  ariaLive = 'off',
+  ...rest
+} = Astro.props
+---
+
+<aside
+  class:list={['notification', `type-${type}`, className]}
+  role={role}
+  aria-live={ariaLive}
+  {...rest}
+>
+  <slot>
+    <p><strong>Message:</strong> {message}</p>
+  </slot>
+</aside>
+
+<style>
+  :where(.notification) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  /* Default */
+  :where(.notification) {
+    border-color: var(--color-default-border, #ccc);
+    background-color: var(--color-default-bg, #f8f8f8);
+    color: var(--color-default-text, #333);
+  }
+
+  /* Info */
+  :where(.type-info) {
+    border-color: var(--color-info-border, #0077ff);
+    background-color: var(--color-info-bg, #e6f2ff);
+    color: var(--color-info-text, #004c99);
+  }
+
+  /* Success */
+  :where(.type-success) {
+    border-color: var(--color-success-border, #34c759);
+    background-color: var(--color-success-bg, #e6f9ed);
+    color: var(--color-success-text, #0d6124);
+  }
+
+  /* Warning */
+  :where(.type-warning) {
+    border-color: var(--color-warning-border, #ff9500);
+    background-color: var(--color-warning-bg, #fff8e6);
+    color: var(--color-warning-text, #7d4900);
+  }
+
+  /* Error */
+  :where(.type-error) {
+    border-color: var(--color-error-border, #ff3b30);
+    background-color: var(--color-error-bg, #ffe6e6);
+    color: var(--color-error-text, #990c00);
+  }
+
+  :where(.notification) :global(svg) {
+    flex-shrink: 0;
+    inline-size: 1.5rem;
+    block-size: auto;
+  }
+</style>
