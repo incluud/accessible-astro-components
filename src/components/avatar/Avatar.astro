@@ -5,6 +5,7 @@
  * @description A versatile avatar component that can display user images, initials, or placeholders
  * with optional text content. Supports various sizes and shapes with accessibility features built-in.
  */
+
 // Base props that are always the same
 type BaseProps = {
   /**
@@ -113,7 +114,7 @@ const sizeValue = getSizeValue(size)
   {
     img && (
       <div class="image">
-        <img src={img} alt="" />
+        <img src={img} alt="" loading="lazy" decoding="async" />
       </div>
     )
   }
@@ -251,7 +252,7 @@ const sizeValue = getSizeValue(size)
 
   :where(.initials) {
     font-weight: bold;
-    font-size: calc(var(--size) * 0.4);
+    font-size: clamp(1rem, calc(var(--size) * 0.4), calc(var(--size) * 0.6));
     line-height: 1;
     text-transform: uppercase;
   }
@@ -266,11 +267,11 @@ const sizeValue = getSizeValue(size)
   :where(.title) {
     margin: 0;
     font-weight: 500;
-    font-size: calc(var(--size) * 0.25);
+    font-size: clamp(0.875rem, calc(var(--size) * 0.25), 1.5rem);
   }
 
   :where(.subtitle) {
-    font-size: calc(var(--size) * 0.2);
+    font-size: clamp(0.75rem, calc(var(--size) * 0.2), 1.25rem);
   }
 
   :where(p) {
