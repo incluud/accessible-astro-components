@@ -8,13 +8,9 @@ A comprehensive library of accessible, easy-to-use UI Components for [Astro](htt
 
 [![LIVE DEMO](https://img.shields.io/badge/LIVE_DEMO-4ECCA3?style=for-the-badge&logo=astro&logoColor=black)](https://accessible-astro.netlify.app/accessible-components/) &nbsp;
 [![DOCUMENTATION](https://img.shields.io/badge/DOCUMENTATION-A682FF?style=for-the-badge&logo=astro&logoColor=black)](https://accessible-astro.incluud.dev/) &nbsp;
-[![NPM Version](https://img.shields.io/npm/v/accessible-astro-components?style=for-the-badge&logo=npm&logoColor=black&color=A682FF)](https://www.npmjs.com/package/accessible-astro-components) &nbsp;
 [![NPM Downloads](https://img.shields.io/npm/dt/accessible-astro-components?style=for-the-badge&color=4ECCA3&logo=npm&logoColor=black)](https://www.npmjs.com/package/accessible-astro-components) &nbsp;
-
-[![Follow on X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://twitter.com/incluud) &nbsp;
-[![Follow on BlueSky](https://img.shields.io/badge/BlueSky-0285FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/incluud.dev) &nbsp;
+[![NPM Version](https://img.shields.io/npm/v/accessible-astro-components?style=for-the-badge&logo=npm&logoColor=black&color=A682FF)](https://www.npmjs.com/package/accessible-astro-components) &nbsp;
 [![Sponsor on Open Collective](https://img.shields.io/badge/Open%20Collective-7FADF2?style=for-the-badge&logo=opencollective&logoColor=white)](https://opencollective.com/incluud) &nbsp;
-[![Sponsor on GitHub](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=EA4AAA)](https://github.com/sponsors/incluud)
 
 ## Our mission
 
@@ -107,20 +103,16 @@ Your support helps us cover basic costs and continue building accessible solutio
 
 We want to express our heartfelt gratitude to everyone who contributes to making the web more accessible:
 
-<a href="https://github.com/incluud/accessible-astro-components/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=incluud/accessible-astro-components" />
-</a>
-
 - **The Astro team** for creating an amazing static site generator and the wonderful Starlight theme
 - **Our contributors** who dedicate their time and expertise to improve these tools
 - **Our sponsors** who help make this project sustainable
 - **The web community** for embracing and promoting web accessibility
 - **You, the developer** for choosing to make your projects more accessible
 
+<a href="https://github.com/incluud/accessible-astro-components/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=incluud/accessible-astro-components" />
+</a><br /><br />
+
 Together, we're not just building documentation or components – we're creating a more inclusive and accessible web for everyone. Every contribution, whether it's code, documentation, bug reports, or feedback, helps move us closer to this goal. ✨
 
 Remember: Accessibility is not a feature, it's a fundamental right. Thank you for being part of this journey!
-
-## The story behind Accessible Astro
-
-Accessible Astro started as a personal project by [Mark Teekman](https://github.com/markteekman) in 2021 when Astro was in its early stages, born from a passion for web accessibility and the Astro framework. What began as a single starter template grew into a family of accessible solutions, leading to the creation of [Incluud](https://github.com/incluud), an initiative with [Peter Padberg](https://github.com/peterpadberg) to make the web more inclusive. Today, these projects continue to grow and evolve with the help of our amazing community, staying true to their original purpose: making web accessibility easier for developers and better for everyone.
