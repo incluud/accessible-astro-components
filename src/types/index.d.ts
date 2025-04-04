@@ -138,6 +138,8 @@ export const Card: Card
  * @param _props.initialMode - Optional: Sets initial theme mode ('light' | 'dark' | 'auto') - default: 'auto'
  * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle Dark Mode'
  * @param _props.class - Optional CSS class names
+ * @param _props.children - Optional: Custom elements for light/dark mode icons using named slots
+ * @note Supports named slots: "light" for light mode icon and "dark" for dark mode icon
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * ```
  * <style>
