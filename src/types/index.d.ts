@@ -72,7 +72,7 @@ export const AvatarGroup: AvatarGroup
  * @param _props.type - Type/color variant ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
  * @param _props.isButton - Whether to render as a button element - default: false
  * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
- * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bounce' | 'none') - default: 'boop'
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
  * @param _props.isCircular - Whether to display the badge as a circle (best for single numbers/characters) - default: false
  * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false
@@ -119,6 +119,11 @@ export const Breadcrumbs: Breadcrumbs
  * @param _props - astroHTML.JSX.HTMLAttributes
  * @param _props.url - `<a href={url}>` - default: "#"
  * @param _props.img - `<img src={img}>` - default value = placeholder
+ * @param _props.imageComponent - Optional Astro Image component (supports both ImageMetadata and dynamic import)
+ * @param _props.imageAlt - Alt text for the image - default: ""
+ * @param _props.width - Width of the image (required for remote images) - default: 640
+ * @param _props.height - Height of the image (required for remote images) - default: 360
+ * @param _props.inferSize - Whether to infer the image size (for remote images) - default: false
  * @param _props.title - `<h3>` header > `<a>` text content
  * @param _props.footer - `<small>` text content
  * @param _props.tagName - HTML tag to use for the title - default: 'h3'
@@ -138,6 +143,8 @@ export const Card: Card
  * @param _props.initialMode - Optional: Sets initial theme mode ('light' | 'dark' | 'auto') - default: 'auto'
  * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle Dark Mode'
  * @param _props.class - Optional CSS class names
+ * @param _props.children - Optional: Custom elements for light/dark mode icons using named slots
+ * @note Supports named slots: "light" for light mode icon and "dark" for dark mode icon
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * ```
  * <style>

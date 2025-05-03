@@ -4,6 +4,9 @@
  *
  * @description A versatile card component with image, title, and content areas
  */
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
 interface Props extends astroHTML.JSX.HTMLAttributes {
   /**
    * Additional classes to apply to the card
@@ -19,6 +22,32 @@ interface Props extends astroHTML.JSX.HTMLAttributes {
    * @default "https://fakeimg.pl/640x360"
    */
   img?: string
+  /**
+   * Optional Astro Image component to use instead of a regular img
+   * Can be a direct ImageMetadata object or a Promise from import()
+   * @default undefined
+   */
+  imageComponent?: ImageMetadata | Promise<{ default: ImageMetadata }>
+  /**
+   * Alt text for the image
+   * @default ""
+   */
+  imageAlt?: string
+  /**
+   * Width of the image (required for remote images with Image component)
+   * @default 640
+   */
+  width?: number
+  /**
+   * Height of the image (required for remote images with Image component)
+   * @default 360
+   */
+  height?: number
+  /**
+   * Whether to infer the image size (for remote images)
+   * @default false
+   */
+  inferSize?: boolean
   /**
    * URL for the card's link
    * @default "#"
@@ -40,6 +69,11 @@ const {
   class: className,
   title = 'Default title',
   img = 'https://fakeimg.pl/640x360',
+  imageComponent,
+  imageAlt = '',
+  width = 640,
+  height = 360,
+  inferSize = false,
   url = '#',
   tagName = 'h3',
   footer = '',
@@ -51,7 +85,13 @@ const Tag = tagName
 
 <article class:list={['card', className]} {...rest}>
   <div class="image">
-    <img src={img} alt="" />
+    {
+      imageComponent ? (
+        <Image src={imageComponent} alt={imageAlt} width={width} height={height} />
+      ) : (
+        <img src={img} alt={imageAlt} width={width} height={height} />
+      )
+    }
   </div>
   <div class="content">
     <div class="title">

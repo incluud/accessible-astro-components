@@ -3,6 +3,13 @@
  * Common animations used across components
  */
 
+/* Common animation variables */
+:root {
+  --animation-timing: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --animation-duration-hover: 0.5s;
+  --animation-duration-pulse: 2s;
+}
+
 /* Pulse animation for badges and notifications */
 @keyframes pulse {
   0% {
@@ -37,8 +44,8 @@
   }
 }
 
-/* Bounce animation for buttons and interactive elements */
-@keyframes bounce {
+/* Bouncing animation for buttons and interactive elements */
+@keyframes bouncing {
   0% {
     transform: translateY(0);
   }
@@ -69,16 +76,54 @@
   }
 }
 
+/* Animation utility classes */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-boop:where(:hover, :focus-visible) {
+    animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-bouncing:where(:hover, :focus-visible) {
+    animation: bouncing var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-rotate:where(:hover, :focus-visible) {
+    animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  /* Classes specifically for SVG animation */
+  .animate-boop-svg:where(:hover, :focus-visible) svg {
+    animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-bouncing-svg:where(:hover, :focus-visible) svg {
+    animation: bouncing var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-rotate-svg:where(:hover, :focus-visible) svg {
+    animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  /* Pulse animation */
+  .animation-pulse {
+    --pulse-iteration-count: var(--pulse-iterations, 3);
+    animation: pulse var(--animation-duration-pulse) var(--animation-timing)
+      var(--pulse-iteration-count);
+  }
+}
+
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
-  .animate-boop:where(:hover, :focus-visible) svg,
-  .animate-bounce:where(:hover, :focus-visible) svg,
-  .animate-rotate:where(:hover, :focus-visible) svg {
+  .animate-boop:where(:hover, :focus-visible),
+  .animate-bouncing:where(:hover, :focus-visible),
+  .animate-rotate:where(:hover, :focus-visible),
+  .animate-boop-svg:where(:hover, :focus-visible) svg,
+  .animate-bouncing-svg:where(:hover, :focus-visible) svg,
+  .animate-rotate-svg:where(:hover, :focus-visible) svg {
     transform: none;
     animation: none;
   }
 
-  .pulse {
+  .animation-pulse {
     animation: none;
     box-shadow: 0 0 0 2px rgba(var(--pulse-color, 0, 0, 0), 0.3);
   }
