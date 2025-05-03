@@ -119,6 +119,11 @@ export const Breadcrumbs: Breadcrumbs
  * @param _props - astroHTML.JSX.HTMLAttributes
  * @param _props.url - `<a href={url}>` - default: "#"
  * @param _props.img - `<img src={img}>` - default value = placeholder
+ * @param _props.imageComponent - Optional Astro Image component (supports both ImageMetadata and dynamic import)
+ * @param _props.imageAlt - Alt text for the image - default: ""
+ * @param _props.width - Width of the image (required for remote images) - default: 640
+ * @param _props.height - Height of the image (required for remote images) - default: 360
+ * @param _props.inferSize - Whether to infer the image size (for remote images) - default: false
  * @param _props.title - `<h3>` header > `<a>` text content
  * @param _props.footer - `<small>` text content
  * @param _props.tagName - HTML tag to use for the title - default: 'h3'
