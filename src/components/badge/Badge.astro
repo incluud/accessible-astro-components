@@ -81,12 +81,15 @@ const {
   ...rest
 } = Astro.props
 
-// Calculate animation values based on intensity
-const scaleAmount = 1 + animationIntensity * 0.02 // 1.02 to 1.2
-const rotateAmount = animationIntensity * 2 // 2deg to 20deg
+// Clamp animation intensity between 1-10
+const clampedIntensity = Math.max(1, Math.min(10, animationIntensity))
 
-// Only apply animation class if it's a button
-const shouldAnimate = isButton && animateOnHover
+// Calculate animation values based on intensity
+const scaleAmount = 1 + clampedIntensity * 0.02 // 1.02 to 1.2
+const rotateAmount = clampedIntensity * 2 // 2deg to 20deg
+
+// Only apply animation class if it's a button and not 'none' type
+const shouldAnimate = isButton && animateOnHover && animationType !== 'none'
 
 // Determine animation class based on type
 const animationClass = shouldAnimate ? `animate-${animationType}-svg` : ''

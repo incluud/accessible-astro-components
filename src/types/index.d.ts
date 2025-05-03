@@ -72,7 +72,7 @@ export const AvatarGroup: AvatarGroup
  * @param _props.type - Type/color variant ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
  * @param _props.isButton - Whether to render as a button element - default: false
  * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
- * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bounce' | 'none') - default: 'boop'
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
  * @param _props.isCircular - Whether to display the badge as a circle (best for single numbers/characters) - default: false
  * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false

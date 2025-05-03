@@ -3,6 +3,13 @@
  * Common animations used across components
  */
 
+/* Common animation variables */
+:root {
+  --animation-timing: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --animation-duration-hover: 0.5s;
+  --animation-duration-pulse: 2s;
+}
+
 /* Pulse animation for badges and notifications */
 @keyframes pulse {
   0% {
@@ -72,33 +79,35 @@
 /* Animation utility classes */
 @media (prefers-reduced-motion: no-preference) {
   .animate-boop:where(:hover, :focus-visible) {
-    animation: boop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   .animate-bouncing:where(:hover, :focus-visible) {
-    animation: bouncing 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: bouncing var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   .animate-rotate:where(:hover, :focus-visible) {
-    animation: rotate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   /* Classes specifically for SVG animation */
   .animate-boop-svg:where(:hover, :focus-visible) svg {
-    animation: boop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   .animate-bouncing-svg:where(:hover, :focus-visible) svg {
-    animation: bouncing 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: bouncing var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   .animate-rotate-svg:where(:hover, :focus-visible) svg {
-    animation: rotate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   /* Pulse animation */
   .animation-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 3;
+    --pulse-iteration-count: var(--pulse-iterations, 3);
+    animation: pulse var(--animation-duration-pulse) var(--animation-timing)
+      var(--pulse-iteration-count);
   }
 }
 
