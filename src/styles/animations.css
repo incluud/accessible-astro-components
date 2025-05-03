@@ -37,8 +37,8 @@
   }
 }
 
-/* Bounce animation for buttons and interactive elements */
-@keyframes bounce {
+/* Bouncing animation for buttons and interactive elements */
+@keyframes bouncing {
   0% {
     transform: translateY(0);
   }
@@ -69,16 +69,52 @@
   }
 }
 
+/* Animation utility classes */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-boop:where(:hover, :focus-visible) {
+    animation: boop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  .animate-bouncing:where(:hover, :focus-visible) {
+    animation: bouncing 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  .animate-rotate:where(:hover, :focus-visible) {
+    animation: rotate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  /* Classes specifically for SVG animation */
+  .animate-boop-svg:where(:hover, :focus-visible) svg {
+    animation: boop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  .animate-bouncing-svg:where(:hover, :focus-visible) svg {
+    animation: bouncing 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  .animate-rotate-svg:where(:hover, :focus-visible) svg {
+    animation: rotate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  /* Pulse animation */
+  .animation-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 3;
+  }
+}
+
 /* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
-  .animate-boop:where(:hover, :focus-visible) svg,
-  .animate-bounce:where(:hover, :focus-visible) svg,
-  .animate-rotate:where(:hover, :focus-visible) svg {
+  .animate-boop:where(:hover, :focus-visible),
+  .animate-bouncing:where(:hover, :focus-visible),
+  .animate-rotate:where(:hover, :focus-visible),
+  .animate-boop-svg:where(:hover, :focus-visible) svg,
+  .animate-bouncing-svg:where(:hover, :focus-visible) svg,
+  .animate-rotate-svg:where(:hover, :focus-visible) svg {
     transform: none;
     animation: none;
   }
 
-  .pulse {
+  .animation-pulse {
     animation: none;
     box-shadow: 0 0 0 2px rgba(var(--pulse-color, 0, 0, 0), 0.3);
   }
