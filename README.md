@@ -6,7 +6,7 @@
 
 A comprehensive library of accessible, easy-to-use UI Components for [Astro](https://astro.build). Each component is built with accessibility in mind, following WCAG guidelines and ARIA best practices, providing a solid foundation for building inclusive web applications. The components are designed to be customizable, performant, and developer-friendly, with full TypeScript support.
 
-[![LIVE DEMO](https://img.shields.io/badge/LIVE_DEMO-4ECCA3?style=for-the-badge&logo=astro&logoColor=black)](https://accessible-astro.netlify.app/accessible-components/) &nbsp;
+[![LIVE DEMO](https://img.shields.io/badge/LIVE_DEMO-4ECCA3?style=for-the-badge&logo=astro&logoColor=black)](https://accessible-astro-starter.incluud.dev/accessible-components/) &nbsp;
 [![DOCUMENTATION](https://img.shields.io/badge/DOCUMENTATION-A682FF?style=for-the-badge&logo=astro&logoColor=black)](https://accessible-astro.incluud.dev/) &nbsp;
 [![NPM Downloads](https://img.shields.io/npm/dt/accessible-astro-components?style=for-the-badge&color=4ECCA3&logo=npm&logoColor=black)](https://www.npmjs.com/package/accessible-astro-components) &nbsp;
 [![NPM Version](https://img.shields.io/npm/v/accessible-astro-components?style=for-the-badge&logo=npm&logoColor=black&color=A682FF)](https://www.npmjs.com/package/accessible-astro-components) &nbsp;
