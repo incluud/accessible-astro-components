@@ -242,8 +242,10 @@ const {
     opacity: 0;
     backdrop-filter: blur(5px);
     background-color: rgba(0 0 0 / 0.5);
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    .modal::backdrop {
       transition-behavior: allow-discrete;
       transition-duration: 0.3s;
       transition-property: display, opacity, overlay;
@@ -278,8 +280,10 @@ const {
     border-radius: 0.5rem;
     background-color: transparent;
     padding: 0.5rem;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.modal-close button) {
       transition: box-shadow var(--transition-duration) var(--transition-easing);
     }
   }
@@ -293,35 +297,36 @@ const {
     position: relative;
     aspect-ratio: 1;
     block-size: 20px;
+  }
 
-    svg {
-      position: absolute;
-      margin: auto;
-      inset: 0;
+  :where(.modal-close-icon svg) {
+    position: absolute;
+    margin: auto;
+    inset: 0;
+  }
 
-      &:first-of-type {
-        transform: rotate(45deg);
-      }
+  :where(.modal-close-icon svg:first-of-type) {
+    transform: rotate(45deg);
+  }
 
-      &:last-of-type {
-        transform: rotate(-45deg);
+  :where(.modal-close-icon svg:last-of-type) {
+    transform: rotate(-45deg);
+  }
 
-        @media (prefers-reduced-motion: no-preference) {
-          transition: transform var(--transition-duration) var(--transition-easing);
-        }
-      }
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.modal-close-icon svg:last-of-type) {
+      transition: transform var(--transition-duration) var(--transition-easing);
     }
   }
 
-  :where(.modal-close button:hover) .modal-close-icon,
-  :where(.modal-close button:focus-visible) .modal-close-icon {
-    svg:first-of-type {
-      transform: rotate(0deg);
-    }
+  :where(.modal-close button:hover) .modal-close-icon svg:first-of-type,
+  :where(.modal-close button:focus-visible) .modal-close-icon svg:first-of-type {
+    transform: rotate(0deg);
+  }
 
-    svg:last-of-type {
-      transform: rotate(180deg);
-    }
+  :where(.modal-close button:hover) .modal-close-icon svg:last-of-type,
+  :where(.modal-close button:focus-visible) .modal-close-icon svg:last-of-type {
+    transform: rotate(180deg);
   }
 
   :global(body:has(dialog[open])) {

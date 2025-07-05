@@ -212,6 +212,10 @@ const Tag = tagName
     }
   }
 
+  :where(.icon-chevron) {
+    flex-shrink: 0;
+  }
+
   :where(.icon-chevron svg) {
     @media (prefers-reduced-motion: no-preference) {
       transition: transform var(--transition-duration) var(--transition-easing);
