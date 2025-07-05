@@ -68,7 +68,7 @@ export const AvatarGroup: AvatarGroup
  * Badge component
  *
  * @param _props - Record<string, any>
- * @param _props.size - Size of the badge ('small' | 'medium' | 'large') - default: 'medium'
+ * @param _props.size - Size of the badge ('sm' | 'md' | 'lg') - default: 'md'
  * @param _props.type - Type/color variant ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
  * @param _props.isButton - Whether to render as a button element - default: false
  * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
