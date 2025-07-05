@@ -166,13 +166,13 @@ const sizeValue = getSizeValue(size)
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
+  }
 
-    &:has(.initials-container):not(:has(.content)),
-    &:has(.icon-container):not(:has(.content)) {
-      aspect-ratio: 1;
-      inline-size: var(--size);
-      block-size: var(--size);
-    }
+  :where(.avatar:has(.initials-container):not(:has(.content))),
+  :where(.avatar:has(.icon-container):not(:has(.content))) {
+    aspect-ratio: 1;
+    inline-size: var(--size);
+    block-size: var(--size);
   }
 
   :where(.initials-container),
@@ -187,20 +187,16 @@ const sizeValue = getSizeValue(size)
   }
 
   /* Shape styles */
-  .shape-round {
-    .initials-container,
-    .icon-container,
-    .image {
-      border-radius: 50%;
-    }
+  :where(.avatar.shape-round .initials-container),
+  :where(.avatar.shape-round .icon-container),
+  :where(.avatar.shape-round .image) {
+    border-radius: 50%;
   }
 
-  .shape-square {
-    .initials-container,
-    .icon-container,
-    .image {
-      border-radius: 0.25rem;
-    }
+  :where(.avatar.shape-square .initials-container),
+  :where(.avatar.shape-square .icon-container),
+  :where(.avatar.shape-square .image) {
+    border-radius: 0.25rem;
   }
 
   /* Default type */

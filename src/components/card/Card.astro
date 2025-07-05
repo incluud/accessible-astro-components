@@ -144,8 +144,10 @@ const Tag = tagName
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.image img) {
       transition: transform var(--transition-duration) var(--transition-easing);
     }
   }
