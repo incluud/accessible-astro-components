@@ -217,28 +217,28 @@ const {
     }
   }
 
-  :where(.modal[open]) {
+  .modal[open] {
     display: block;
     translate: 0 0;
     opacity: 1;
   }
 
   @starting-style {
-    :where(.modal[open]) {
+    .modal[open] {
       translate: 0 calc(var(--translate-offset-y) * -1);
       opacity: 0;
     }
 
-    :where(.modal[open])::backdrop {
+    .modal[open]::backdrop {
       opacity: 0;
     }
   }
 
-  :where(.modal[open])::backdrop {
+  .modal[open]::backdrop {
     opacity: 1;
   }
 
-  :where(.modal)::backdrop {
+  .modal::backdrop {
     opacity: 0;
     backdrop-filter: blur(5px);
     background-color: rgba(0 0 0 / 0.5);
