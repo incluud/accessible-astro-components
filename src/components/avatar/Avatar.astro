@@ -179,6 +179,7 @@ const sizeValue = getSizeValue(size)
   :where(.icon-container),
   :where(.image) {
     display: grid;
+    flex-shrink: 0;
     place-items: center;
     aspect-ratio: 1;
     inline-size: var(--size);
@@ -240,37 +241,37 @@ const sizeValue = getSizeValue(size)
     color: var(--color-error-text, #990c00);
   }
 
-  :where(img) {
+  :where(.avatar img) {
     inline-size: inherit;
     block-size: inherit;
     object-fit: cover;
   }
 
-  :where(.initials) {
+  :where(.avatar .initials) {
     font-weight: bold;
     font-size: clamp(1rem, calc(var(--size) * 0.4), calc(var(--size) * 0.6));
     line-height: 1;
     text-transform: uppercase;
   }
 
-  :where(.icon) {
+  :where(.avatar .icon) {
     display: grid;
     place-items: center;
     inline-size: 100%;
     block-size: 100%;
   }
 
-  :where(.title) {
+  :where(.avatar .title) {
     margin: 0;
     font-weight: 500;
     font-size: clamp(0.875rem, calc(var(--size) * 0.25), 1.5rem);
   }
 
-  :where(.subtitle) {
+  :where(.avatar .subtitle) {
     font-size: clamp(0.75rem, calc(var(--size) * 0.2), 1.25rem);
   }
 
-  :where(p) {
+  :where(.avatar p) {
     overflow-wrap: break-word;
   }
 </style>

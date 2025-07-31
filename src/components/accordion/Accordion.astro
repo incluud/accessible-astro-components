@@ -38,7 +38,7 @@ const { class: className, ...rest } = Astro.props
     list-style: none;
   }
 
-  :global(.accordion > .item:first-child .wrapper) {
+  :global(:where(.accordion > .item:first-child .wrapper)) {
     border-block-start: none;
   }
 </style>

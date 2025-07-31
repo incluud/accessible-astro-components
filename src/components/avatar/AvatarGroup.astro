@@ -60,16 +60,16 @@ const validatedOverlapAmount =
     flex-wrap: wrap;
   }
 
-  :where(.display-condensed) {
+  :where(.avatar-group.display-condensed) {
     flex-direction: row;
     align-items: center;
   }
 
-  :where(.display-condensed) :global(.avatar:not(:first-child)) {
+  :where(.avatar-group.display-condensed) :global(.avatar:not(:first-child)) {
     margin-inline-start: var(--overlapAmount);
   }
 
-  :where(.display-grid) {
+  :where(.avatar-group.display-grid) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--gridItemsSize)), 1fr));
     gap: var(--gridGap);

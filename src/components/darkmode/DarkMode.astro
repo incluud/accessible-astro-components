@@ -187,15 +187,15 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
   }
 
   /* Show/hide based on dark mode */
-  .icon-light {
+  :where(.darkmode-toggle .icon-light) {
     display: none;
   }
 
-  :global(.darkmode) .icon-light {
+  :global(.darkmode) :where(.darkmode-toggle .icon-light) {
     display: flex;
   }
 
-  :global(.darkmode) .icon-dark {
+  :global(.darkmode) :where(.darkmode-toggle .icon-dark) {
     display: none;
   }
 </style>

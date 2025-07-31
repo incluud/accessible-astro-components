@@ -382,8 +382,11 @@ const progress = renderProgress({ currentPage, totalPages })
     border-radius: 0.5rem;
     inline-size: 2.5rem;
     block-size: 2.5rem;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.pagination a),
+    :where(.pagination .disabled) {
       transition: box-shadow var(--transition-duration) var(--transition-easing);
     }
   }

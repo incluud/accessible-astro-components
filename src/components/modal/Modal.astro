@@ -217,35 +217,35 @@ const {
     }
   }
 
-  .modal[open] {
+  :where(.modal[open]) {
     display: block;
     translate: 0 0;
     opacity: 1;
   }
 
   @starting-style {
-    .modal[open] {
+    :where(.modal[open]) {
       translate: 0 calc(var(--translate-offset-y) * -1);
       opacity: 0;
     }
 
-    .modal[open]::backdrop {
+    :where(.modal[open])::backdrop {
       opacity: 0;
     }
   }
 
-  .modal[open]::backdrop {
+  :where(.modal[open])::backdrop {
     opacity: 1;
   }
 
-  .modal::backdrop {
+  :where(.modal)::backdrop {
     opacity: 0;
     backdrop-filter: blur(5px);
     background-color: rgba(0 0 0 / 0.5);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .modal::backdrop {
+    :where(.modal)::backdrop {
       transition-behavior: allow-discrete;
       transition-duration: 0.3s;
       transition-property: display, opacity, overlay;

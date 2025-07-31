@@ -127,13 +127,13 @@ const Tag = tagName
     font-size: 1.25rem;
   }
 
-  .wrapper {
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.wrapper) {
       interpolate-size: allow-keywords;
     }
   }
 
-  .wrapper::details-content {
+  :where(.wrapper)::details-content {
     opacity: 0;
     transition: content-visibility var(--transition-duration) allow-discrete,
       opacity var(--transition-duration) var(--transition-easing),
@@ -142,7 +142,7 @@ const Tag = tagName
     overflow-y: clip;
   }
 
-  .wrapper[open]::details-content {
+  :where(.wrapper[open])::details-content {
     opacity: 1;
     block-size: auto;
   }
@@ -151,35 +151,33 @@ const Tag = tagName
     padding: 0 0 1.5rem 2.2rem;
   }
 
-  :where(.wrapper[data-variant='chevron']) {
-    .title h2,
-    .title h3,
-    .title h4,
-    .title h5,
-    .title h6 {
-      justify-content: space-between;
-    }
-
-    .content {
-      padding-block-end: 2.2rem;
-    }
+  :where(.wrapper[data-variant='chevron']) .title h2,
+  :where(.wrapper[data-variant='chevron']) .title h3,
+  :where(.wrapper[data-variant='chevron']) .title h4,
+  :where(.wrapper[data-variant='chevron']) .title h5,
+  :where(.wrapper[data-variant='chevron']) .title h6 {
+    justify-content: space-between;
   }
 
-  .title {
+  :where(.wrapper[data-variant='chevron']) .content {
+    padding-block-end: 2.2rem;
+  }
+
+  :where(.title) {
     display: flex;
     cursor: pointer;
     padding-block: 0.75rem;
     list-style: none;
   }
 
-  .title::marker,
-  .title::-webkit-details-marker {
+  :where(.title)::marker,
+  :where(.title)::-webkit-details-marker {
     display: none;
     content: '';
   }
 
-  .title:hover,
-  .title:focus-visible {
+  :where(.title:hover),
+  :where(.title:focus-visible) {
     color: light-dark(hsl(215 25% 27%), hsl(215 25% 89%));
     text-decoration: underline;
     text-underline-offset: 4px;
@@ -206,8 +204,10 @@ const Tag = tagName
     transform: translateY(-50%);
     inset-block-start: 50%;
     inset-inline-start: 50%;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.icon-plus svg:last-of-type) {
       transition: all var(--transition-duration) var(--transition-easing);
     }
   }
@@ -216,8 +216,8 @@ const Tag = tagName
     flex-shrink: 0;
   }
 
-  :where(.icon-chevron svg) {
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.icon-chevron svg) {
       transition: transform var(--transition-duration) var(--transition-easing);
     }
   }
@@ -230,12 +230,12 @@ const Tag = tagName
     margin-block-start: 0.75rem;
   }
 
-  :where(.wrapper[open]) .icon-plus svg:last-of-type {
+  :where(.wrapper[open] .icon-plus svg:last-of-type) {
     transform: rotate(90deg);
     inset-block-start: 0;
   }
 
-  :where(.wrapper[open]) .icon-chevron svg {
+  :where(.wrapper[open] .icon-chevron svg) {
     transform: scaleY(-1);
   }
 </style>
