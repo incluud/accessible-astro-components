@@ -82,21 +82,21 @@ const {
     gap: 0.5rem;
   }
 
-  .item :global(.separator) {
+  :where(.item) :global(.separator) {
     display: flex;
     align-items: center;
   }
 
-  .item :global(.separator svg) {
+  :where(.item) :global(.separator svg) {
     margin-block-start: 3px;
   }
 
-  .item :global(svg) {
+  :where(.item) :global(svg) {
     inline-size: 1rem;
     block-size: 1rem;
   }
 
-  li.item:last-child :global(.separator) {
+  :where(li.item:last-child) :global(.separator) {
     display: none;
   }
 
@@ -105,18 +105,18 @@ const {
     align-items: center;
   }
 
-  a {
+  :where(.item a) {
     color: currentColor;
     text-decoration: underline;
     text-underline-offset: 4px;
   }
 
-  a:hover,
-  a:focus-visible {
+  :where(.item a:hover),
+  :where(.item a:focus-visible) {
     text-decoration: none;
   }
 
-  span[aria-current='page'] {
+  :where(.item span[aria-current='page']) {
     font-weight: 500;
   }
 </style>

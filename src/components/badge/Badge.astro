@@ -166,7 +166,8 @@ const sizeClass = `size-${size}`
     font: inherit;
   }
 
-  :where(button.badge):where(:hover, :focus-visible) {
+  :where(button.badge:hover),
+  :where(button.badge:focus-visible) {
     text-decoration: underline;
   }
 
@@ -178,49 +179,49 @@ const sizeClass = `size-${size}`
   }
 
   /* Info */
-  :where(.type-info) {
+  :where(.badge.type-info) {
     border-color: var(--color-info-border, #0077ff);
     background-color: var(--color-info-bg, #e6f2ff);
     color: var(--color-info-text, #004c99);
   }
 
   /* Success */
-  :where(.type-success) {
+  :where(.badge.type-success) {
     border-color: var(--color-success-border, #34c759);
     background-color: var(--color-success-bg, #e6f9ed);
     color: var(--color-success-text, #0d6124);
   }
 
   /* Warning */
-  :where(.type-warning) {
+  :where(.badge.type-warning) {
     border-color: var(--color-warning-border, #ff9500);
     background-color: var(--color-warning-bg, #fff8e6);
     color: var(--color-warning-text, #7d4900);
   }
 
   /* Error */
-  :where(.type-error) {
+  :where(.badge.type-error) {
     border-color: var(--color-error-border, #ff3b30);
     background-color: var(--color-error-bg, #ffe6e6);
     color: var(--color-error-text, #990c00);
   }
 
   /* Small */
-  :where(.size-sm) {
+  :where(.badge.size-sm) {
     gap: 0.15rem;
     padding: 0.05rem 0.2rem;
     font-size: 0.75rem;
   }
 
   /* Medium */
-  :where(.size-md) {
+  :where(.badge.size-md) {
     gap: 0.3rem;
     padding: 0.05rem 0.35rem;
     font-size: 0.875rem;
   }
 
   /* Large */
-  :where(.size-lg) {
+  :where(.badge.size-lg) {
     gap: 0.4rem;
     padding: 0.05rem 0.45rem;
     font-size: 1rem;
@@ -231,13 +232,13 @@ const sizeClass = `size-${size}`
   }
 
   /* Pill badge styles */
-  :where(.pill) {
+  :where(.badge.pill) {
     border-radius: 9999px;
     padding-inline: 0.5em;
   }
 
   /* Circular badge styles */
-  :where(.circular) {
+  :where(.badge.circular) {
     border-radius: 50%;
     padding: 0;
     aspect-ratio: 1 / 1;
@@ -246,17 +247,17 @@ const sizeClass = `size-${size}`
     text-align: center;
   }
 
-  :where(.size-sm.circular) {
+  :where(.badge.size-sm.circular) {
     min-inline-size: 1.5em;
     min-block-size: 1.5em;
   }
 
-  :where(.size-md.circular) {
+  :where(.badge.size-md.circular) {
     min-inline-size: 1.75em;
     min-block-size: 1.75em;
   }
 
-  :where(.size-lg.circular) {
+  :where(.badge.size-lg.circular) {
     min-inline-size: 2em;
     min-block-size: 2em;
   }
@@ -267,23 +268,23 @@ const sizeClass = `size-${size}`
   }
 
   /* Set pulse colors based on badge type */
-  :where(.animation-pulse.type-default) {
+  :where(.badge.animation-pulse.type-default) {
     --pulse-color: var(--color-pulse-default);
   }
 
-  :where(.animation-pulse.type-info) {
+  :where(.badge.animation-pulse.type-info) {
     --pulse-color: var(--color-pulse-info);
   }
 
-  :where(.animation-pulse.type-success) {
+  :where(.badge.animation-pulse.type-success) {
     --pulse-color: var(--color-pulse-success);
   }
 
-  :where(.animation-pulse.type-warning) {
+  :where(.badge.animation-pulse.type-warning) {
     --pulse-color: var(--color-pulse-warning);
   }
 
-  :where(.animation-pulse.type-error) {
+  :where(.badge.animation-pulse.type-error) {
     --pulse-color: var(--color-pulse-error);
   }
 </style>

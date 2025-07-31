@@ -161,18 +161,19 @@ const Tag = tagName
     padding-block: 1rem;
   }
 
-  a {
+  :where(.card a) {
     color: currentColor;
     font-size: 1.5rem;
     text-decoration: none;
   }
 
-  a:where(:hover, :focus-visible) {
+  :where(.card a:hover),
+  :where(.card a:focus-visible) {
     text-decoration: underline;
     text-underline-offset: 4px;
   }
 
-  :where(.card:has(a:hover, a:focus-visible)) .image img {
+  :where(.card:has(a:hover, a:focus-visible) .image img) {
     transform: scale(1.05);
   }
 
@@ -187,26 +188,26 @@ const Tag = tagName
     margin-block-start: 0.5rem;
   }
 
-  .meta :global(span) {
+  :where(.card .meta) :global(span) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
   }
 
-  .meta:empty {
+  :where(.card .meta:empty) {
     display: none;
   }
 
-  .description {
+  :where(.card .description) {
     font-size: 1rem;
   }
 
-  .description:empty {
+  :where(.card .description:empty) {
     display: none;
   }
 
-  .footer {
+  :where(.card .footer) {
     margin-block-start: auto;
     padding-block-start: 1rem;
   }

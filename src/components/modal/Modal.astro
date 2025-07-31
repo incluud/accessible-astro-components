@@ -245,7 +245,7 @@ const {
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .modal::backdrop {
+    :where(.modal)::backdrop {
       transition-behavior: allow-discrete;
       transition-duration: 0.3s;
       transition-property: display, opacity, overlay;
