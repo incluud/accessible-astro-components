@@ -1,11 +1,12 @@
 ---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+
 /**
  * Card Component
  *
  * @description A versatile card component with image, title, and content areas
  */
-import { Image } from 'astro:assets'
-import type { ImageMetadata } from 'astro'
 
 interface Props extends astroHTML.JSX.HTMLAttributes {
   /**
