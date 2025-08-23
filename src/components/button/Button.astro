@@ -1,0 +1,166 @@
+---
+/**
+ * Button Component
+ * @description A versatile button with variants and delightful animations
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the button
+   */
+  class?: string
+  /**
+   * The id attribute
+   */
+  id?: string
+  /**
+   * The type attribute
+   */
+  type?: 'button' | 'submit' | 'reset'
+  /**
+   * Whether the button is disabled
+   */
+  disabled?: boolean
+  /**
+   * The variant of the button
+   * @default 'normal'
+   */
+  variant?: 'normal' | 'ghost'
+  /**
+   * The color of the button
+   * @default 'default'
+   */
+  color?: 'default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error'
+  /**
+   * The size of the button
+   */
+  size?: 'small' | 'medium' | 'large'
+  /**
+   * The aria-label attribute
+   */
+  ariaLabel?: string
+  /**
+   * The aria-describedby attribute
+   */
+  ariaDescribedby?: string
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  type = 'button',
+  disabled = false,
+  variant = 'normal',
+  color = 'default',
+  size = 'medium',
+  ariaLabel,
+  ariaDescribedby,
+  ...rest
+} = Astro.props
+---
+
+<button
+  id={id}
+  type={type}
+  class:list={['button', `button--${variant}`, `button--${color}`, `button--${size}`, className]}
+  disabled={disabled}
+  aria-label={ariaLabel}
+  aria-describedby={ariaDescribedby}
+  {...rest}
+>
+  <slot />
+</button>
+
+<style>
+  :where(.button) {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2xs);
+    transition: all 0.2s var(--animation-timing);
+    cursor: pointer;
+    border: 3px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-default-bg);
+    padding: var(--space-xs) var(--space-s);
+    inline-size: fit-content;
+    color: var(--color-default-text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 4px;
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-color: currentColor;
+      text-underline-offset: 2px;
+
+      @media (prefers-reduced-motion: no-preference) {
+        translate: 0 -3px;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  :where(.button--small) {
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--font-size--1);
+  }
+
+  :where(.button--large) {
+    padding: var(--space-s) var(--space-l);
+    font-size: var(--font-size-1);
+  }
+
+  :where(.button--primary) {
+    border-color: var(--color-primary-border);
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary-text);
+  }
+
+  :where(.button--secondary) {
+    border-color: var(--color-secondary-border);
+    background-color: var(--color-secondary-bg);
+    color: var(--color-secondary-text);
+  }
+
+  :where(.button--info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  :where(.button--success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  :where(.button--warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  :where(.button--error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
+  :where(.button--ghost) {
+    background-color: transparent;
+    color: var(--color-default-text);
+  }
+</style>
