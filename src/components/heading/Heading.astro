@@ -32,3 +32,47 @@ const Tag = headingOptions[level]
 <Tag class:list={['heading', size]} {...rest}>
   <slot />
 </Tag>
+
+<style>
+  :where(.heading) {
+    text-wrap: balance;
+  }
+
+  :where(.h1, .h2) {
+    font-weight: 600;
+  }
+
+  :where(.h3, .h4, .h5, .h6) {
+    font-weight: 500;
+  }
+
+  :where(.h1) {
+    font-size: var(--font-size-6);
+    line-height: var(--font-size-7);
+  }
+
+  :where(.h2) {
+    font-size: var(--font-size-5);
+    line-height: var(--font-size-6);
+  }
+
+  :where(.h3) {
+    font-size: var(--font-size-4);
+    line-height: var(--font-size-5);
+  }
+
+  :where(.h4) {
+    font-size: var(--font-size-3);
+    line-height: var(--font-size-4);
+  }
+
+  :where(.h5) {
+    font-size: var(--font-size-2);
+    line-height: var(--font-size-3);
+  }
+
+  :where(.h6) {
+    font-size: var(--font-size-1);
+    line-height: var(--font-size-2);
+  }
+</style>
