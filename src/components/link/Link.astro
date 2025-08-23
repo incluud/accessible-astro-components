@@ -1,0 +1,218 @@
+---
+/**
+ * Link Component
+ * @description A versatile link component that handles both internal and external links with proper accessibility
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the link
+   */
+  class?: string
+  /**
+   * The URL to link to
+   */
+  href: string
+  /**
+   * Whether the link is external
+   */
+  external?: boolean
+  /**
+   * Style the link as a button
+   */
+  asButton?: boolean
+  /**
+   * The variant of the link
+   * @default 'normal'
+   */
+  variant?: 'normal' | 'ghost'
+  /**
+   * Button variant when styled as button
+   * @default 'default'
+   */
+  color?: 'default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost'
+  /**
+   * Button size when styled as button
+   */
+  size?: 'small' | 'medium' | 'large'
+  /**
+   * The aria-label attribute
+   */
+  ariaLabel?: string
+  /**
+   * The title attribute
+   */
+  title?: string
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  href,
+  external = false,
+  asButton = false,
+  variant = 'normal',
+  color = 'default',
+  size = 'medium',
+  ariaLabel,
+  title,
+  ...rest
+} = Astro.props
+
+const isExternal = external || href.startsWith('http') || href.startsWith('//')
+
+const externalAttrs = isExternal
+  ? {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+    }
+  : {}
+
+const buttonClasses = asButton
+  ? ['button', `button--${variant}`, `button--${color}`, `button--${size}`]
+  : []
+---
+
+<a
+  href={href}
+  class:list={[
+    className,
+    asButton ? buttonClasses : 'link',
+    { 'link--external': isExternal && !asButton },
+  ]}
+  aria-label={ariaLabel}
+  title={title}
+  {...externalAttrs}
+  {...rest}
+  ><slot />{
+    isExternal && (
+      <>
+        <>
+          <slot name="icon">
+            <svg
+              aria-hidden="true"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            </svg>
+          </slot>
+          <span class="sr-only">Opens in a new tab</span>
+        </>
+      </>
+    )
+  }</a
+><style>
+  :where(.link) {
+    color: var(--link-color, currentColor);
+  }
+
+  :where(.link--external) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.link--external svg) {
+    flex-shrink: 0;
+    inline-size: 1em;
+    block-size: 1em;
+  }
+
+  :where(.button) {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2xs);
+    transition: all 0.2s var(--animation-timing);
+    cursor: pointer;
+    border: 3px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-default-bg);
+    padding: var(--space-xs) var(--space-s);
+    inline-size: fit-content;
+    color: var(--color-default-text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 4px;
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-color: currentColor;
+      text-underline-offset: 2px;
+
+      @media (prefers-reduced-motion: no-preference) {
+        translate: 0 -3px;
+      }
+    }
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-color: currentColor;
+      text-underline-offset: 4px;
+    }
+  }
+
+  :where(.button--small) {
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--font-size--1);
+  }
+
+  :where(.button--large) {
+    padding: var(--space-s) var(--space-l);
+    font-size: var(--font-size-1);
+  }
+
+  :where(.button--primary) {
+    border-color: var(--color-primary-border);
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary-text);
+  }
+
+  :where(.button--secondary) {
+    border-color: var(--color-secondary-border);
+    background-color: var(--color-secondary-bg);
+    color: var(--color-secondary-text);
+  }
+
+  :where(.button--info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  :where(.button--success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  :where(.button--warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  :where(.button--error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
+  :where(.button--ghost) {
+    background-color: transparent;
+    color: var(--color-default-text);
+  }
+</style>
