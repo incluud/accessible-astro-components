@@ -1,0 +1,27 @@
+/**
+ * Layout Primitives
+ *
+ * This file defines reusable layout primitives for border radius and z-index scales,
+ * providing consistent values for component styling and stacking order across the system.
+ */
+
+:root {
+  --radius-xs: 0.125rem;
+  --radius-s: 0.25rem;
+  --radius-m: 0.5rem;
+  --radius-l: 0.75rem;
+  --radius-h: 1rem;
+
+  --z-index--1: -1;
+  --z-index-0: 0;
+  --z-index-1: 10;
+  --z-index-2: 20;
+  --z-index-3: 30;
+  --z-index-4: 40;
+  --z-index-5: 50;
+  --z-index-6: 60;
+  --z-index-7: 70;
+  --z-index-8: 80;
+  --z-index-9: 90;
+  --z-index-10: 100;
+}

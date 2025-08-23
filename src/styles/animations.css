@@ -1,16 +1,16 @@
 /**
- * Accessible Astro Components - Animation Styles
- * Common animations used across components
+ * Animation System
+ *
+ * This file defines the animation system used across components,
+ * providing consistent values for component styling and animation across the system.
  */
 
-/* Common animation variables */
 :root {
   --animation-timing: cubic-bezier(0.165, 0.84, 0.44, 1);
   --animation-duration-hover: 0.5s;
   --animation-duration-pulse: 2s;
 }
 
-/* Pulse animation for badges and notifications */
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(var(--pulse-color, 0, 0, 0), 0.7);
@@ -23,7 +23,6 @@
   }
 }
 
-/* Boop animation for icons and small elements */
 @keyframes boop {
   0% {
     transform: scale(1) rotate(0deg);
@@ -44,7 +43,6 @@
   }
 }
 
-/* Bouncing animation for buttons and interactive elements */
 @keyframes bouncing {
   0% {
     transform: translateY(0);
@@ -63,7 +61,6 @@
   }
 }
 
-/* Rotate animation for icons and loading indicators */
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
@@ -76,7 +73,6 @@
   }
 }
 
-/* Animation utility classes */
 @media (prefers-reduced-motion: no-preference) {
   .animate-boop:where(:hover, :focus-visible) {
     animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
@@ -90,7 +86,6 @@
     animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
-  /* Classes specifically for SVG animation */
   .animate-boop-svg:where(:hover, :focus-visible) svg {
     animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
   }
@@ -103,7 +98,6 @@
     animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
-  /* Pulse animation */
   .animation-pulse {
     --pulse-iteration-count: var(--pulse-iterations, 3);
     animation: pulse var(--animation-duration-pulse) var(--animation-timing)
@@ -111,7 +105,6 @@
   }
 }
 
-/* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
   .animate-boop:where(:hover, :focus-visible),
   .animate-bouncing:where(:hover, :focus-visible),

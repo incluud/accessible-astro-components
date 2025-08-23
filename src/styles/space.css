@@ -1,0 +1,22 @@
+/**
+ * Space System
+ *
+ * This file defines the space system used across components,
+ * providing consistent values for component styling and space across the system.
+ */
+
+:root {
+  --space-5xs: clamp(0.1rem, 0.0931rem + 0.1087vw, 0.125rem);
+  --space-4xs: clamp(0.125rem, 0.1131rem + 0.1087vw, 0.1563rem);
+  --space-3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
+  --space-2xs: clamp(0.5rem, 0.4783rem + 0.1087vw, 0.5625rem);
+  --space-xs: clamp(0.75rem, 0.7065rem + 0.2174vw, 0.875rem);
+  --space-s: clamp(1rem, 0.9565rem + 0.2174vw, 1.125rem);
+  --space-m: clamp(1.5rem, 1.4348rem + 0.3261vw, 1.6875rem);
+  --space-l: clamp(2rem, 1.913rem + 0.4348vw, 2.25rem);
+  --space-xl: clamp(3rem, 2.8696rem + 0.6522vw, 3.375rem);
+  --space-2xl: clamp(4rem, 3.8261rem + 0.8696vw, 4.5rem);
+  --space-3xl: clamp(6rem, 5.7391rem + 1.3043vw, 6.75rem);
+  --space-4xl: clamp(8rem, 7.6522rem + 1.7403vw, 8.25rem);
+  --space-5xl: clamp(10rem, 9.5652rem + 2.1741vw, 10.5rem);
+}

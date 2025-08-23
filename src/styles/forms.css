@@ -1,0 +1,23 @@
+/**
+ * Form System
+ *
+ * This file defines the form system used across components,
+ * providing consistent values for component styling and form across the system.
+ */
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  field-sizing: content;
+}
+
+input:not([type='checkbox'], [type='radio']) {
+  inline-size: 100%;
+}

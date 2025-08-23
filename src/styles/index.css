@@ -4,11 +4,11 @@
  * This file imports all other stylesheets and can be used as a single entry point.
  */
 
-/* Core styles */
-@import './core.css';
-
-/* Color system */
-@import './colors.css';
-
-/* Animations */
 @import './animations.css';
+@import './colors.css';
+@import './elevation.css';
+@import './font.css';
+@import './forms.css';
+@import './layout.css';
+@import './space.css';
+@import './utility.css';

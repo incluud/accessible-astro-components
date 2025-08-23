@@ -1,0 +1,20 @@
+/**
+ * Font System
+ *
+ * This file defines the font system used across components,
+ * providing consistent values for component styling and font across the system.
+ */
+
+:root {
+  --font-size--2: clamp(0.6944rem, 0.6855rem + 0.0446vw, 0.72rem);
+  --font-size--1: clamp(0.8331rem, 0.8099rem + 0.1163vw, 0.9rem);
+  --font-size-0: clamp(1rem, 0.9565rem + 0.2174vw, 1.125rem);
+  --font-size-1: clamp(1.2rem, 1.1283rem + 0.3587vw, 1.4063rem);
+  --font-size-2: clamp(1.44rem, 1.3293rem + 0.5533vw, 1.7581rem);
+  --font-size-3: clamp(1.7281rem, 1.5649rem + 0.8163vw, 2.1975rem);
+  --font-size-4: clamp(2.0738rem, 1.8396rem + 1.1707vw, 2.7469rem);
+  --font-size-5: clamp(2.4881rem, 2.1594rem + 1.6435vw, 3.4331rem);
+  --font-size-6: clamp(2.9863rem, 2.5323rem + 2.2696vw, 4.2913rem);
+  --font-size-7: clamp(3.5836rem, 2.9667rem + 3.0674vw, 5.3544rem);
+  --font-size-8: clamp(4.2999rem, 3.5601rem + 3.6935vw, 6.6856rem);
+}
