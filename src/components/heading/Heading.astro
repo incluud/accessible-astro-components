@@ -18,11 +18,11 @@ interface Props extends HTMLAttributes<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'> 
   /**
    * The tag name of the heading
    */
-  level: keyof typeof headingOptions
+  level?: keyof typeof headingOptions
   /**
    * The size of the heading
    */
-  size: keyof typeof headingOptions
+  size?: keyof typeof headingOptions
 }
 
 const { level = 'h2', size = level, ...rest } = Astro.props
