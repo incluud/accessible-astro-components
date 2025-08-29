@@ -86,6 +86,68 @@ type Badge = typeof import('../../index.js').Badge
 export const Badge: Badge
 
 /**
+ * Button component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - The id attribute
+ * @param _props.htmlType - The HTML button type attribute ('button' | 'submit' | 'reset') - default: 'button'
+ * @param _props.disabled - Whether the button is disabled - default: false
+ * @param _props.variant - The variant of the button ('filled' | 'outlined') - default: 'filled'
+ * @param _props.type - The type of the button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error') - default: 'default'
+ * @param _props.size - The size of the button ('sm' | 'md' | 'lg') - default: 'md'
+ * @param _props.ariaLabel - The aria-label attribute
+ * @param _props.ariaDescribedby - The aria-describedby attribute
+ * @param _props.animateOnHover - Whether to animate the icon on hover - default: false
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.children - Any HTML elements. Parent element: `<button>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Button = typeof import('../../index.js').Button
+export const Button: Button
+
+/**
+ * Heading component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.level - The tag name of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h2'
+ * @param _props.size - The size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: same as level
+ * @param _props.children - Text content or any legal heading innerHTML. Parent element: `<h1>` to `<h6>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note The component supports independent control of semantic level (level) and visual appearance (size)
+ */
+type Heading = typeof import('../../index.js').Heading
+export const Heading: Heading
+
+/**
+ * Link component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.href - The URL to link to (required)
+ * @param _props.isExternal - Whether the link is external - default: false (auto-detected for http/https URLs)
+ * @param _props.isButton - Style the link as a button - default: false
+ * @param _props.variant - The variant of the link when styled as button ('filled' | 'outlined') - default: 'filled'
+ * @param _props.type - Type of the link when styled as button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost') - default: 'default'
+ * @param _props.size - Button size when styled as button ('sm' | 'md' | 'lg') - default: 'md'
+ * @param _props.ariaLabel - The aria-label attribute
+ * @param _props.title - The title attribute
+ * @param _props.animateOnHover - Whether to animate the icon on hover (only when isButton is true) - default: false
+ * @param _props.animationType - Type of animation to apply on hover when isButton is true ('rotate' | 'boop' | 'bouncing' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.children - Text content or any legal anchor innerHTML. Parent element: `<a>`
+ * @note External links automatically display an icon and screen reader text "Opens in a new tab"
+ * @note Supports custom external link icons via the "icon" named slot
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Link = typeof import('../../index.js').Link
+export const Link: Link
+
+/**
  * Breadcrumbs item child component
  *
  * @param _props - Record<string, any>
