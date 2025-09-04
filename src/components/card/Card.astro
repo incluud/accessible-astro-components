@@ -1,6 +1,8 @@
 ---
 import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
+import Heading from '../heading/Heading.astro'
+import Link from '../link/Link.astro'
 
 /**
  * Card Component
@@ -55,15 +57,25 @@ interface Props extends astroHTML.JSX.HTMLAttributes {
    */
   url?: string
   /**
-   * HTML tag to use for the title
+   * Heading level for the title (h1-h6)
    * @default "h3"
    */
-  tagName?: string
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
+   * Visual size of the heading (can differ from semantic level)
+   * @default same as headingLevel
+   */
+  headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   /**
    * Footer content
    * @default ""
    */
   footer?: string
+  /**
+   * Whether the card should take full height (useful for equal height card grids)
+   * @default false
+   */
+  fullHeight?: boolean
 }
 
 const {
@@ -76,15 +88,15 @@ const {
   height = 360,
   inferSize = false,
   url = '#',
-  tagName = 'h3',
+  headingLevel = 'h3',
+  headingSize = 'h6',
   footer = '',
+  fullHeight = false,
   ...rest
 } = Astro.props
-
-const Tag = tagName
 ---
 
-<article class:list={['card', className]} {...rest}>
+<article class:list={['card', { 'card--full-height': fullHeight }, className]} {...rest}>
   <div class="image">
     {
       imageComponent ? (
@@ -96,9 +108,9 @@ const Tag = tagName
   </div>
   <div class="content">
     <div class="title">
-      <Tag>
-        <a href={url}>{title}</a>
-      </Tag>
+      <Heading level={headingLevel} size={headingSize}>
+        <Link href={url}>{title}</Link>
+      </Heading>
     </div>
     <div class="meta"><slot name="meta" /></div>
     <p class="description"><slot /></p>
@@ -117,12 +129,16 @@ const Tag = tagName
     border: 2px solid light-dark(hsl(0 0% 10%), hsl(0 0% 90%));
     border-radius: 0.5rem;
     max-inline-size: 60ch;
-    block-size: 100%;
+    max-block-size: 100%;
     overflow: hidden;
 
     @media (prefers-reduced-motion: no-preference) {
       transition: box-shadow var(--transition-duration) var(--transition-easing);
     }
+  }
+
+  :where(.card--full-height) {
+    block-size: 100%;
   }
 
   :where(.card:hover),
@@ -164,7 +180,6 @@ const Tag = tagName
 
   :where(.card a) {
     color: currentColor;
-    font-size: 1.5rem;
     text-decoration: none;
   }
 
