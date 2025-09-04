@@ -86,9 +86,7 @@ const {
   ...rest
 } = Astro.props
 
-const isExternalLink = isExternal || href.startsWith('http') || href.startsWith('//')
-
-const externalAttrs = isExternalLink
+const externalAttrs = isExternal
   ? {
       target: '_blank',
       rel: 'noopener noreferrer',
@@ -115,7 +113,7 @@ const buttonClasses = isButton
   class:list={[
     className,
     isButton ? buttonClasses : 'link',
-    { 'link--external': isExternalLink && !isButton },
+    { 'link--external': isExternal && !isButton },
   ]}
   style={shouldAnimate || pulse
     ? `--scaleAmount: ${scaleAmount}; --rotateAmount: ${rotateAmount}deg;`
@@ -125,7 +123,7 @@ const buttonClasses = isButton
   {...externalAttrs}
   {...rest}
   ><slot />{
-    isExternalLink && (
+    isExternal && (
       <>
         <>
           <slot name="icon">
