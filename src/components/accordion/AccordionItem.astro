@@ -1,4 +1,6 @@
 ---
+import Heading from '../heading/Heading.astro'
+
 /**
  * Accordion Item Component
  *
@@ -19,10 +21,15 @@ interface Props {
    */
   name?: string
   /**
-   * HTML tag to use for the title (h2-h6)
+   * Heading level for the title (h1-h6)
    * @default 'h3'
    */
-  tagName?: string
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
+   * Visual size of the heading (can differ from semantic level)
+   * @default same as headingLevel
+   */
+  headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   /**
    * Visual style variant of the accordion
    * @default 'default'
@@ -43,19 +50,18 @@ const {
   class: className,
   title,
   name,
-  tagName = 'h3',
+  headingLevel = 'h3',
+  headingSize = 'h6',
   variant = 'default',
   open = false,
   ...rest
 } = Astro.props
-
-const Tag = tagName
 ---
 
 <li class:list={['item', className]} {...rest}>
   <details class="wrapper" name={name} data-variant={variant} {...open ? { open } : {}}>
     <summary class="title">
-      <Tag>
+      <Heading level={headingLevel} size={headingSize}>
         {
           variant === 'chevron' ? (
             <>
@@ -98,7 +104,7 @@ const Tag = tagName
             </>
           )
         }
-      </Tag>
+      </Heading>
     </summary>
     <div class="content">
       <slot />
@@ -115,11 +121,7 @@ const Tag = tagName
     padding-block: 0;
   }
 
-  .title h2,
-  .title h3,
-  .title h4,
-  .title h5,
-  .title h6 {
+  .title :global(.heading) {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -152,11 +154,7 @@ const Tag = tagName
     padding: 0 0 1.5rem 2.2rem;
   }
 
-  :where(.wrapper[data-variant='chevron']) .title h2,
-  :where(.wrapper[data-variant='chevron']) .title h3,
-  :where(.wrapper[data-variant='chevron']) .title h4,
-  :where(.wrapper[data-variant='chevron']) .title h5,
-  :where(.wrapper[data-variant='chevron']) .title h6 {
+  :where(.wrapper[data-variant='chevron']) .title :global(.heading) {
     justify-content: space-between;
   }
 
