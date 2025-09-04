@@ -1,4 +1,6 @@
 ---
+import Heading from '../heading/Heading.astro'
+
 /**
  * Modal Component
  *
@@ -29,6 +31,16 @@ interface Props {
    */
   closeIcon?: boolean
   /**
+   * Heading level for the modal title (h1-h6)
+   * @default "h3"
+   */
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
+   * Visual size of the heading (can differ from semantic level)
+   * @default "h2" (maintains previous 1.5rem visual size)
+   */
+  headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
    * HTML attributes to spread on the modal
    */
   [key: string]: string | number | boolean | undefined
@@ -40,6 +52,8 @@ const {
   triggerId,
   closeText = 'Close',
   closeIcon = true,
+  headingLevel = 'h3',
+  headingSize = 'h4',
   ...rest
 } = Astro.props
 ---
@@ -47,9 +61,9 @@ const {
 <dialog class:list={['modal', className]} aria-labelledby={triggerId} {...rest}>
   <div class="modal-inner">
     <div class="modal-content">
-      <h3 tabindex="-1" autofocus>
+      <Heading level={headingLevel} size={headingSize} tabindex="-1" autofocus>
         {title}
-      </h3>
+      </Heading>
       <slot>Modal description.</slot>
     </div>
     <div class="modal-close">
@@ -264,7 +278,7 @@ const {
   }
 
   :where(.modal-content h3) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   :where(.modal-close) {
