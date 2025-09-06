@@ -110,7 +110,11 @@ const validationMessage = dataValidation || getDefaultValidationMessage(type, re
 ---
 
 <div class="input-group">
-  <label for={inputId} data-validation={validationMessage}>
+  <label
+    class:list={['input-group-label', className]}
+    for={inputId}
+    data-validation={validationMessage}
+  >
     <span>{label}</span>
     {required && <span>(required)</span>}
   </label>

@@ -31,11 +31,6 @@ interface Props {
    */
   closeIcon?: boolean
   /**
-   * Heading level for the modal title (h1-h6)
-   * @default "h3"
-   */
-  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  /**
    * Visual size of the heading (can differ from semantic level)
    * @default "h2" (maintains previous 1.5rem visual size)
    */
@@ -52,7 +47,6 @@ const {
   triggerId,
   closeText = 'Close',
   closeIcon = true,
-  headingLevel = 'h3',
   headingSize = 'h4',
   ...rest
 } = Astro.props
@@ -61,7 +55,7 @@ const {
 <dialog class:list={['modal', className]} aria-labelledby={triggerId} {...rest}>
   <div class="modal-inner">
     <div class="modal-content">
-      <Heading level={headingLevel} size={headingSize} tabindex="-1" autofocus>
+      <Heading level="h3" size={headingSize} tabindex="-1" autofocus>
         {title}
       </Heading>
       <slot>Modal description.</slot>

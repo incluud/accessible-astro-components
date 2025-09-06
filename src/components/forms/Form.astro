@@ -81,7 +81,7 @@ const {
 
       const requiredFields = form.querySelectorAll('[required]')
       const requiredFieldsets = form.querySelectorAll('fieldset[data-required="true"]')
-      const errorNotification = form.querySelector('.notification') as HTMLElement
+      const errorNotification = form.querySelector('.notification') as HTMLElement | null
 
       // Built-in validation rules
       const validateField = (field) => {
@@ -266,10 +266,10 @@ const {
 
   // Initialize on different events for better compatibility
   document.addEventListener('DOMContentLoaded', initializeFormValidation)
-  
+
   // For Astro View Transitions
   document.addEventListener('astro:page-load', initializeFormValidation)
-  
+
   // If DOM is already ready, initialize immediately
   if (document.readyState === 'loading') {
     // DOM still loading, listeners above will handle it

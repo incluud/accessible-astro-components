@@ -37,11 +37,6 @@ interface Props {
    */
   disabled?: boolean
   /**
-   * Whether the field is readonly
-   * @default false
-   */
-  readonly?: boolean
-  /**
    * HTML attributes
    */
   [key: string]: any
@@ -55,14 +50,13 @@ const {
   value,
   checked = false,
   disabled = false,
-  readonly = false,
   ...rest
 } = Astro.props
 
 const inputId = id || `checkbox-${name}`
 ---
 
-<div class="checkbox-group">
+<div class:list={['checkbox-group', className]}>
   <input
     type="checkbox"
     id={inputId}
@@ -70,7 +64,6 @@ const inputId = id || `checkbox-${name}`
     value={value}
     checked={checked}
     disabled={disabled}
-    readonly={readonly}
     {...rest}
   />
 

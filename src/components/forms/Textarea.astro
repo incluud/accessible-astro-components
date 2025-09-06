@@ -40,10 +40,6 @@ interface Props {
    */
   'data-validation-fn'?: string
   /**
-   * Default value for the textarea field
-   */
-  value?: string
-  /**
    * Whether the field is disabled
    * @default false
    */
@@ -115,7 +111,6 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
   <textarea
     id={inputId}
     name={name}
-    value={value}
     required={required}
     disabled={disabled}
     readonly={readonly}
@@ -129,25 +124,25 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
     data-validation-fn={dataValidationFn}
     {...rest}>{value}</textarea
   >
-
-  <small id={`${inputId}-validation`}>
-    <span class="icon">
-      <svg width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <g
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="m15 9l-6 6m0-6l6 6"></path>
-        </g>
-      </svg>
-    </span>
-    <span class="message"></span>
-  </small>
 </div>
+
+<small id={`${inputId}-validation`}>
+  <span class="icon">
+    <svg width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m15 9l-6 6m0-6l6 6"></path>
+      </g>
+    </svg>
+  </span>
+  <span class="message"></span>
+</small>
 
 <style>
   :where(.textarea-group) {
