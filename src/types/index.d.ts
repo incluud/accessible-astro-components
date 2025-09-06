@@ -213,7 +213,6 @@ export const Card: Card
  * @param _props.value - Value attribute for the checkbox
  * @param _props.checked - Whether the checkbox is checked by default - default: false
  * @param _props.disabled - Whether the field is disabled - default: false
- * @param _props.readonly - Whether the field is readonly - default: false
  * @param _props.children - Not applicable for checkbox components
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Uses grid layout with proper label association for accessibility
@@ -338,11 +337,10 @@ export const Media: Media
  * @param _props.triggerId - ID of the trigger element (required)
  * @param _props.closeText - Close button text - default: "Close"
  * @param _props.closeIcon - Whether to show close icon - default: true
- * @param _props.headingLevel - Heading level for the modal title ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h3'
  * @param _props.headingSize - Visual size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h4'
  * @param _props.children - Any HTML elements. Parent element: `<div>`
  * @note Additional HTML attributes can be passed and will be spread to the root element
- * @note The component supports independent control of semantic level (headingLevel) and visual appearance (headingSize)
+ * @note Modal title uses semantic h3 level with customizable visual appearance (headingSize)
  * @note Features full accessibility with focus management and keyboard interactions
  */
 type Modal = typeof import('../../index.js').Modal
@@ -407,7 +405,6 @@ export const Pagination: Pagination
  * @param _props.value - Value attribute for the radio button (required for radio groups)
  * @param _props.checked - Whether the radio button is checked by default - default: false
  * @param _props.disabled - Whether the field is disabled - default: false
- * @param _props.readonly - Whether the field is readonly - default: false
  * @param _props.children - Not applicable for radio components
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Uses grid layout with proper label association for accessibility
@@ -507,7 +504,6 @@ export const Video: Video
  * @param _props.required - Whether the field is required - default: false
  * @param _props.data-validation-pattern - Custom validation pattern (regex)
  * @param _props.data-validation-fn - Custom validation function name (must be available on window)
- * @param _props.value - Default value for the textarea field
  * @param _props.disabled - Whether the field is disabled - default: false
  * @param _props.readonly - Whether the field is readonly - default: false
  * @param _props.autocomplete - Autocomplete attribute value - default: 'on'
