@@ -18,6 +18,10 @@ interface Props {
    */
   isExternal?: boolean
   /**
+   * Whether to hide the external icon
+   */
+  hideIcon?: boolean
+  /**
    * Style the link as a button
    */
   isButton?: boolean
@@ -73,6 +77,7 @@ const {
   class: className,
   href,
   isExternal = false,
+  hideIcon = false,
   isButton = false,
   variant = 'filled',
   type = 'default',
@@ -123,7 +128,7 @@ const buttonClasses = isButton
   {...externalAttrs}
   {...rest}
   ><slot />{
-    isExternal && (
+    isExternal && !hideIcon && (
       <>
         <>
           <slot name="icon">
