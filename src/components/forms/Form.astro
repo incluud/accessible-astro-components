@@ -64,7 +64,7 @@ const {
   novalidate
   {...rest}
 >
-  <Notification type="error" ariaLive="polite" hidden />
+  <Notification type="error" ariaLive="polite" variant="accent" hidden />
   <slot />
 </form>
 
@@ -82,6 +82,7 @@ const {
       const requiredFields = form.querySelectorAll('[required]')
       const requiredFieldsets = form.querySelectorAll('fieldset[data-required="true"]')
       const errorNotification = form.querySelector('.notification') as HTMLElement | null
+      const errorNotificationContent = errorNotification?.querySelector('p') as HTMLElement | null
 
       // Built-in validation rules
       const validateField = (field) => {
@@ -164,8 +165,8 @@ const {
 
         // Remove existing summary
         if (errorNotification) {
-          errorNotification.innerHTML = ''
           errorNotification.hidden = true
+          errorNotificationContent.innerHTML = ''
         }
 
         if (invalidFields.length === 0 && invalidFieldsets.length === 0) {
@@ -182,7 +183,7 @@ const {
       const setSummary = (elements) => {
         errorNotification.setAttribute('tabindex', '-1')
 
-        errorNotification.innerHTML = `
+        errorNotificationContent.innerHTML = `
           <div class="space-content">
             <p>There was a problem with your submission. The following inputs need attention:</p>
             <ol class="incremented">
