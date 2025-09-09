@@ -11,18 +11,6 @@
   --animation-duration-pulse: 2s;
 }
 
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(var(--pulse-color, 0, 0, 0), 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 6px rgba(var(--pulse-color, 0, 0, 0), 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(var(--pulse-color, 0, 0, 0), 0);
-  }
-}
-
 @keyframes boop {
   0% {
     transform: scale(1) rotate(0deg);
@@ -61,6 +49,30 @@
   }
 }
 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--pulse-color, 0, 0, 0), 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(var(--pulse-color, 0, 0, 0), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--pulse-color, 0, 0, 0), 0);
+  }
+}
+
+@keyframes nudge {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
@@ -86,6 +98,14 @@
     animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
+  .animate-nudge:where(:hover, :focus-visible) {
+    animation: nudge var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-nudge-svg:where(:hover, :focus-visible) svg {
+    animation: nudge var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
   .animate-boop-svg:where(:hover, :focus-visible) svg {
     animation: boop var(--animation-duration-hover) var(--animation-timing) forwards;
   }
@@ -96,6 +116,10 @@
 
   .animate-rotate-svg:where(:hover, :focus-visible) svg {
     animation: rotate var(--animation-duration-hover) var(--animation-timing) forwards;
+  }
+
+  .animate-nudge-svg:where(:hover, :focus-visible) svg {
+    animation: nudge var(--animation-duration-hover) var(--animation-timing) forwards;
   }
 
   .animation-pulse {
@@ -109,6 +133,7 @@
   .animate-boop:where(:hover, :focus-visible),
   .animate-bouncing:where(:hover, :focus-visible),
   .animate-rotate:where(:hover, :focus-visible),
+  .animate-nudge:where(:hover, :focus-visible),
   .animate-boop-svg:where(:hover, :focus-visible) svg,
   .animate-bouncing-svg:where(:hover, :focus-visible) svg,
   .animate-rotate-svg:where(:hover, :focus-visible) svg {
