@@ -59,7 +59,7 @@ const {
 ---
 
 <li class:list={['item', className]} {...rest}>
-  <details class="wrapper" name={name} data-variant={variant} {...open ? { open } : {}}>
+  <details class:list={['wrapper', `variant-${variant}`]} name={name} {...open ? { open } : {}}>
     <summary class="title">
       <Heading level={headingLevel} size={headingSize}>
         {
@@ -150,15 +150,15 @@ const {
     block-size: auto;
   }
 
-  :where(.wrapper[data-variant='default']) .content {
+  .wrapper.variant-default .content {
     padding: 0 0 1.5rem 2.2rem;
   }
 
-  :where(.wrapper[data-variant='chevron']) .title :global(.heading) {
+  .wrapper.variant-chevron .title :global(.heading) {
     justify-content: space-between;
   }
 
-  :where(.wrapper[data-variant='chevron']) .content {
+  .wrapper.variant-chevron .content {
     padding-block-end: 2.2rem;
   }
 
