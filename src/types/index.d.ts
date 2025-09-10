@@ -361,10 +361,10 @@ declare global {
  * @param _props - Record<string, any>
  * @param _props.type - Specifies background color: 'info' | 'success' | 'warning' | 'error' | 'default' - default: 'default'
  * @param _props.role - Type of aria role: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region' - default: 'none'
- * @param _props.ariaLive - Defines urgency of live announcements: 'off' | 'polite' | 'assertive' - default: 'off'
  * @param _props.message - Optional text message
  * @param _props.class - Optional CSS class names
- * @param _props.children - Any HTML elements. Parent element: `<aside>`
+ * @param _props.children - Any HTML elements. Parent element: `<div>`
+ * @note 'status' role implies aria-live="polite", 'alert' role implies aria-live="assertive"
  * @note Additional HTML attributes can be passed and will be spread to the root element
  */
 type Notification = typeof import('../../index.js').Notification
