@@ -136,7 +136,7 @@ const {
     }
   }
 
-  :where(.wrapper)::details-content {
+  details::details-content {
     opacity: 0;
     transition: content-visibility var(--transition-duration) allow-discrete,
       opacity var(--transition-duration) var(--transition-easing),
@@ -145,7 +145,7 @@ const {
     overflow-y: clip;
   }
 
-  :where(.wrapper[open])::details-content {
+  details[open]::details-content {
     opacity: 1;
     block-size: auto;
   }
