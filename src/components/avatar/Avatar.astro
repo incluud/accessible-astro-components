@@ -106,29 +106,27 @@ const getSizeValue = (size: string): string => {
 const sizeValue = getSizeValue(size)
 ---
 
-<div
-  class:list={['avatar', `shape-${shape}`, `type-${type}`, className]}
-  {...label && { 'aria-label': label }}
-  {...rest}
->
+<div class:list={['avatar', `shape-${shape}`, `type-${type}`, className]} {...rest}>
   {
     img && (
       <div class="image">
-        <img src={img} alt="" loading="lazy" decoding="async" />
+        <img src={img} alt={label || title || ''} loading="lazy" decoding="async" />
       </div>
     )
   }
   {
     initials && !img && (
       <div class="initials-container">
-        <span class="initials">{initials}</span>
+        <span class="initials" role="img" aria-label={label || title || ''}>
+          {initials}
+        </span>
       </div>
     )
   }
   {
     !initials && !img && (
       <div class="icon-container">
-        <span class="icon">
+        <span class="icon" role="img" aria-label={label || title || 'User avatar'}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60%"
