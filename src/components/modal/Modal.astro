@@ -50,12 +50,20 @@ const {
   headingSize = 'h4',
   ...rest
 } = Astro.props
+
+// Create unique ID for modal title
+const titleId = `${triggerId}-title`
 ---
 
-<dialog class:list={['modal', className]} aria-labelledby={triggerId} {...rest}>
+<dialog
+  class:list={['modal', className]}
+  aria-labelledby={titleId}
+  data-trigger-id={triggerId}
+  {...rest}
+>
   <div class="modal-inner">
     <div class="modal-content">
-      <Heading level="h3" size={headingSize} tabindex="-1" autofocus>
+      <Heading level="h3" size={headingSize} id={titleId} tabindex="-1" autofocus>
         {title}
       </Heading>
       <slot>Modal description.</slot>
@@ -153,8 +161,8 @@ const {
 
   const closeModal = () => {
     modals.forEach((modal) => {
-      const modalId = modal.getAttribute('aria-labelledby')
-      const modalTrigger = document.querySelector(`#${modalId}`) as HTMLButtonElement
+      const triggerId = modal.getAttribute('data-trigger-id')
+      const modalTrigger = document.querySelector(`#${triggerId}`) as HTMLButtonElement
       modalTrigger.focus({ preventScroll: true })
       modal.close()
       trapFocusController?.abort()
@@ -164,13 +172,13 @@ const {
 
   // execution
   modals.forEach((modal) => {
-    const modalId = modal.getAttribute('aria-labelledby')
+    const triggerId = modal.getAttribute('data-trigger-id')
     const modalCloseButton = modal.querySelector('.modal-close button')
-    const modalTrigger = document.querySelector(`#${modalId}`)
+    const modalTrigger = document.querySelector(`#${triggerId}`)
 
     if (!modalTrigger) {
       throw new Error(`Trigger element not found. \n
-      Did you forget to add a trigger element with id: "${modalId}"?`)
+      Did you forget to add a trigger element with id: "${triggerId}"?`)
     }
 
     modalTrigger.addEventListener('click', () => openModal(modal))
@@ -186,13 +194,13 @@ const {
 
     // execution
     modals.forEach((modal) => {
-      const modalId = modal.getAttribute('aria-labelledby')
+      const triggerId = modal.getAttribute('data-trigger-id')
       const modalCloseButton = modal.querySelector('.modal-close button')
-      const modalTrigger = document.querySelector(`#${modalId}`)
+      const modalTrigger = document.querySelector(`#${triggerId}`)
 
       if (!modalTrigger) {
         throw new Error(`Trigger element not found. \n
-      Did you forget to add a trigger element with id: "${modalId}"?`)
+      Did you forget to add a trigger element with id: "${triggerId}"?`)
       }
 
       modalTrigger.addEventListener('click', () => openModal(modal))
