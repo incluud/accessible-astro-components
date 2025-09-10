@@ -159,8 +159,10 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
     background: transparent;
     padding-inline: 0.5rem;
     padding-block: 0.5rem;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.darkmode-toggle) {
       transition: box-shadow var(--transition-duration) var(--transition-easing);
     }
   }
@@ -180,14 +182,12 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
     block-size: 1.5rem;
   }
 
-  /* Target both default and slotted icons */
   :where(.icon svg),
   :where(.icon) :global(svg) {
     inline-size: 100%;
     block-size: 100%;
   }
 
-  /* Show/hide based on dark mode */
   :where(.darkmode-toggle .icon-light) {
     display: none;
   }

@@ -131,8 +131,10 @@ const {
     max-inline-size: 60ch;
     max-block-size: 100%;
     overflow: hidden;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.card) {
       transition: box-shadow var(--transition-duration) var(--transition-easing);
     }
   }
