@@ -51,7 +51,7 @@ const {
 } = Astro.props
 ---
 
-<aside
+<div
   class:list={['notification', `type-${type}`, `variant-${variant}`, className]}
   role={role}
   aria-live={ariaLive}
@@ -162,7 +162,7 @@ const {
   <slot>
     <p><strong>Message:</strong> {message}</p>
   </slot>
-</aside>
+</div>
 
 <style>
   :where(.notification) {
