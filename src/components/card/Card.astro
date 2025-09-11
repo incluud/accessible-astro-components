@@ -22,7 +22,7 @@ interface Props extends astroHTML.JSX.HTMLAttributes {
   title?: string
   /**
    * URL for the card's image
-   * @default "https://fakeimg.pl/640x360"
+   * @default "https://placehold.co/640x360"
    */
   img?: string
   /**
@@ -81,7 +81,7 @@ interface Props extends astroHTML.JSX.HTMLAttributes {
 const {
   class: className,
   title = 'Default title',
-  img = 'https://fakeimg.pl/640x360',
+  img = 'https://placehold.co/640x360',
   imageComponent,
   imageAlt = '',
   width = 640,
