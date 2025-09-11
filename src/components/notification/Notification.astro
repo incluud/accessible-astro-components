@@ -25,6 +25,35 @@ interface Props {
    */
   variant?: 'default' | 'accent'
   /**
+   * Semantic element to use for the notification
+   * @default "div"
+   *
+   * **When to use div (default):**
+   * - System feedback (errors, success, status messages)
+   * - User action responses
+   * - Dynamic notifications that appear/disappear
+   *
+   * **When to use aside:**
+   * - Educational content related to main content
+   * - Tips, explanations, or supplementary information
+   * - Content that enhances but isn't essential to understanding
+   *
+   * @example
+   * ```astro
+   * <!-- System notification (default) -->
+   * <Notification role="alert" type="error">
+   *   Please fix the validation errors
+   * </Notification>
+   *
+   * <!-- Educational callout -->
+   * <Notification element="aside" role="region">
+   *   <h3>Pro Tip</h3>
+   *   <p>This technique works especially well...</p>
+   * </Notification>
+   * ```
+   */
+  element?: 'div' | 'aside'
+  /**
    * ARIA role for the notification
    * @default "none"
    * Note: 'status' implies aria-live="polite", 'alert' implies aria-live="assertive"
@@ -41,12 +70,16 @@ const {
   message = 'This is a notification!',
   type = 'default',
   variant = 'default',
+  element = 'div',
   role = 'none',
   ...rest
 } = Astro.props
+
+// Dynamic element based on prop
+const Element = element as any
 ---
 
-<div
+<Element
   class:list={['notification', `type-${type}`, `variant-${variant}`, className]}
   role={role}
   {...rest}
@@ -156,7 +189,7 @@ const {
   <slot>
     <p><strong>Message:</strong> {message}</p>
   </slot>
-</div>
+</Element>
 
 <style>
   :where(.notification) {
