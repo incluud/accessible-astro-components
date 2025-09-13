@@ -40,8 +40,18 @@ The Accessible Astro Components library provides a collection of pre-built, acce
 - **AvatarGroup**: Display multiple avatars in condensed or grid layouts
 - **Badge**: Versatile label component with button variant, animations, and pulse effects
 - **Breadcrumbs**: Navigation aid showing the current page's location
+- **Button**: Versatile button with variants and delightful animations
 - **Card**: Content container with flexible layout options
 - **DarkMode**: Theme toggle with system preference support
+- **Forms**: Complete form components with validation, error handling, and accessibility features
+  - **Form**: Form wrapper with validation and error handling
+  - **Input**: Text, email, password, and other input types with validation
+  - **Textarea**: Multi-line text input with validation
+  - **Checkbox**: Accessible checkbox with proper labeling
+  - **Radio**: Radio button component with proper grouping
+  - **Fieldset**: Form field grouping with legend support
+- **Heading**: Versatile heading component with proper accessibility and hierarchy
+- **Link**: Link component for internal and external navigation with accessibility features
 - **Media**: Responsive image component
 - **Modal**: Accessible dialog windows
 - **Notification**: Info and alert messages
@@ -106,6 +116,7 @@ We want to express our heartfelt gratitude to everyone who contributes to making
 
 - **The Astro team** for creating an amazing static site generator and the wonderful Starlight theme
 - **Our contributors** who dedicate their time and expertise to improve these tools
+- [**Niek Derksen**](https://niekderksen.nl) for conducting comprehensive accessibility audits of our themes and components to ensure WCAG compliance
 - **Our sponsors** who help make this project sustainable
 - **The web community** for embracing and promoting web accessibility
 - **You, the developer** for choosing to make your projects more accessible
