@@ -294,7 +294,7 @@ export const Form: Form
  * @param _props.id - Unique identifier for the input field
  * @param _props.name - Name attribute for the input field (required for form submission)
  * @param _props.label - Label text for the input field (required)
- * @param _props.data-validation - Error message to display when validation fails (required)
+ * @param _props.data-validation - Optional custom error message to override automatically generated validation messages
  * @param _props.type - Input type determining built-in validation rules ('text' | 'email' | 'password' | 'tel' | 'url') - default: 'text'
  * @param _props.required - Whether the field is required - default: false
  * @param _props.data-validation-pattern - Custom validation pattern (regex)
@@ -306,7 +306,7 @@ export const Form: Form
  * @param _props.children - Not applicable for input components
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Progressive enhancement with built-in validation and accessibility features
- * @note Automatically generates validation messages based on input type
+ * @note Automatically generates validation messages based on input type; use data-validation to provide custom messages
  * @note Supports custom validation patterns and functions
  */
 type Input = typeof import('../../index.js').Input
