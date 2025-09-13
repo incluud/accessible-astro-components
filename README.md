@@ -116,7 +116,7 @@ We want to express our heartfelt gratitude to everyone who contributes to making
 
 - **The Astro team** for creating an amazing static site generator and the wonderful Starlight theme
 - **Our contributors** who dedicate their time and expertise to improve these tools
-- [**Niek Derksen**](https://niekderksen.nl) for conducting comprehensive accessibility audits of our themes and components to ensure WCAG compliance
+- [**Niek Derksen**](https://niekderksen.nl) for conducting comprehensive accessibility audits to ensure WCAG compliance
 - **Our sponsors** who help make this project sustainable
 - **The web community** for embracing and promoting web accessibility
 - **You, the developer** for choosing to make your projects more accessible
