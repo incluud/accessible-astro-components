@@ -84,6 +84,42 @@ const {
       const errorNotification = form.querySelector('.notification') as HTMLElement | null
       const errorNotificationContent = errorNotification?.querySelector('p') as HTMLElement | null
 
+      // Secure regex pattern validation helper
+      const validateCustomPattern = (pattern: string, value: string): boolean => {
+        // Enforce maximum pattern length to prevent ReDoS attacks
+        const MAX_PATTERN_LENGTH = 200
+        if (pattern.length > MAX_PATTERN_LENGTH) {
+          console.warn(
+            `Form validation: Pattern too long (${pattern.length} chars, max ${MAX_PATTERN_LENGTH}). Pattern rejected.`
+          )
+          return false
+        }
+
+        try {
+          // Compile regex with no flags to prevent untrusted flag injection
+          const regex = new RegExp(pattern)
+          return regex.test(value)
+        } catch (error) {
+          // Log invalid pattern attempt for debugging
+          console.warn('Form validation: Invalid regex pattern detected:', pattern, error.message)
+
+          // Fallback: treat pattern as literal string by escaping metacharacters
+          try {
+            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const literalRegex = new RegExp(escapedPattern)
+            return literalRegex.test(value)
+          } catch (fallbackError) {
+            // If even the escaped version fails, reject the pattern
+            console.error(
+              'Form validation: Failed to create literal regex from pattern:',
+              pattern,
+              fallbackError.message
+            )
+            return false
+          }
+        }
+      }
+
       // Built-in validation rules
       const validateField = (field) => {
         const value = field.value.trim()
@@ -101,9 +137,9 @@ const {
           return (window as any)[customFn](value)
         }
 
-        // Check custom pattern
+        // Check custom pattern with security validation
         if (customPattern) {
-          return new RegExp(customPattern).test(value)
+          return validateCustomPattern(customPattern, value)
         }
 
         // Built-in type validation
@@ -258,7 +294,9 @@ const {
 
         // Remove summary
         if (errorNotification) {
-          errorNotification.innerHTML = ''
+          if (errorNotificationContent) {
+            errorNotificationContent.innerHTML = ''
+          }
           errorNotification.hidden = true
         }
       })
