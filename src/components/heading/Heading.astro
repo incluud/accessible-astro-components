@@ -1,0 +1,78 @@
+---
+/**
+ * Heading Component
+ * @description A versatile heading component that handles all heading levels with proper accessibility
+ */
+const headingOptions = {
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+}
+
+import type { HTMLAttributes } from 'astro/types'
+
+interface Props extends HTMLAttributes<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'> {
+  /**
+   * The tag name of the heading
+   */
+  level?: keyof typeof headingOptions
+  /**
+   * The size of the heading
+   */
+  size?: keyof typeof headingOptions
+}
+
+const { level = 'h2', size = level, ...rest } = Astro.props
+const Tag = headingOptions[level]
+---
+
+<Tag class:list={['heading', size]} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  :where(.heading) {
+    text-wrap: balance;
+  }
+
+  :where(.h1, .h2) {
+    font-weight: 600;
+  }
+
+  :where(.h3, .h4, .h5, .h6) {
+    font-weight: 500;
+  }
+
+  :where(.h1) {
+    font-size: var(--font-size-6);
+    line-height: var(--font-size-7);
+  }
+
+  :where(.h2) {
+    font-size: var(--font-size-5);
+    line-height: var(--font-size-6);
+  }
+
+  :where(.h3) {
+    font-size: var(--font-size-4);
+    line-height: var(--font-size-5);
+  }
+
+  :where(.h4) {
+    font-size: var(--font-size-3);
+    line-height: var(--font-size-4);
+  }
+
+  :where(.h5) {
+    font-size: var(--font-size-2);
+    line-height: var(--font-size-3);
+  }
+
+  :where(.h6) {
+    font-size: var(--font-size-1);
+    line-height: var(--font-size-2);
+  }
+</style>

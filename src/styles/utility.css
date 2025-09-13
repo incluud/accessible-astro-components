@@ -1,9 +1,10 @@
 /**
- * Accessible Astro Components - Core Styles
- * Essential utility classes used across components
+ * Utility Mixins
+ *
+ * This file contains utility mixins for common styles and animations,
+ * providing consistent values for component styling and utility across the system.
  */
 
-/* Visually hidden class for screen readers */
 .sr-only {
   position: absolute;
   margin: -1px;

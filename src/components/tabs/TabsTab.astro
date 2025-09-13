@@ -4,6 +4,7 @@
  *
  * @description A tab within a Tabs component
  */
+
 interface Props {
   /**
    * Additional classes to apply to the tab
@@ -60,8 +61,10 @@ const { class: className, id, controls, selected = false, ...rest } = Astro.prop
     font-weight: 700;
     font-size: 1.125rem;
     text-align: center;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.tab) {
       transition: all var(--transition-duration) var(--transition-easing);
     }
   }

@@ -1,0 +1,326 @@
+---
+import Notification from '../notification/Notification.astro'
+
+/**
+ * Form Component
+ *
+ * @description A form wrapper with validation, error handling, and accessibility features
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the form
+   */
+  class?: string
+  /**
+   * Form action URL
+   */
+  action?: string
+  /**
+   * Form name attribute
+   */
+  name?: string
+  /**
+   * HTTP method for form submission
+   * @default "post"
+   */
+  method?: 'get' | 'post'
+  /**
+   * Encoding type for form data
+   * @default "application/x-www-form-urlencoded"
+   */
+  enctype?: 'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain'
+  /**
+   * Target for form submission
+   * @default "_self"
+   */
+  target?: '_self' | '_blank' | '_parent' | '_top'
+  /**
+   * Autocomplete behavior
+   * @default "on"
+   */
+  autocomplete?: 'on' | 'off'
+}
+
+const {
+  class: className,
+  action,
+  name,
+  method = 'post',
+  enctype = 'application/x-www-form-urlencoded',
+  target = '_self',
+  autocomplete = 'on',
+  ...rest
+} = Astro.props
+---
+
+<form
+  class:list={['form', 'js-validate', className]}
+  action={action}
+  method={method}
+  enctype={enctype}
+  target={target}
+  autocomplete={autocomplete}
+  novalidate
+  {...rest}
+>
+  <Notification type="error" ariaLive="polite" variant="accent" hidden />
+  <slot />
+</form>
+
+<script>
+  function initializeFormValidation() {
+    const forms = document.querySelectorAll('.js-validate')
+
+    forms.forEach((form) => {
+      if (!(form instanceof HTMLFormElement)) return
+
+      // Skip if already initialized
+      if (form.dataset.validationInitialized === 'true') return
+      form.dataset.validationInitialized = 'true'
+
+      const requiredFields = form.querySelectorAll('[required]')
+      const requiredFieldsets = form.querySelectorAll('fieldset[data-required="true"]')
+      const errorNotification = form.querySelector('.notification') as HTMLElement | null
+      const errorNotificationContent = errorNotification?.querySelector('p') as HTMLElement | null
+
+      // Secure regex pattern validation helper
+      const validateCustomPattern = (pattern: string, value: string): boolean => {
+        // Enforce maximum pattern length to prevent ReDoS attacks
+        const MAX_PATTERN_LENGTH = 200
+        if (pattern.length > MAX_PATTERN_LENGTH) {
+          console.warn(
+            `Form validation: Pattern too long (${pattern.length} chars, max ${MAX_PATTERN_LENGTH}). Pattern rejected.`
+          )
+          return false
+        }
+
+        try {
+          // Compile regex with no flags to prevent untrusted flag injection
+          const regex = new RegExp(pattern)
+          return regex.test(value)
+        } catch (error) {
+          // Log invalid pattern attempt for debugging
+          console.warn('Form validation: Invalid regex pattern detected:', pattern, error.message)
+
+          // Fallback: treat pattern as literal string by escaping metacharacters
+          try {
+            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const literalRegex = new RegExp(escapedPattern)
+            return literalRegex.test(value)
+          } catch (fallbackError) {
+            // If even the escaped version fails, reject the pattern
+            console.error(
+              'Form validation: Failed to create literal regex from pattern:',
+              pattern,
+              fallbackError.message
+            )
+            return false
+          }
+        }
+      }
+
+      // Built-in validation rules
+      const validateField = (field) => {
+        const value = field.value.trim()
+        const type = field.type
+        const customPattern = field.dataset.validationPattern
+        const customFn = field.dataset.validationFn
+
+        // Check required first
+        if (field.required && !value) {
+          return false
+        }
+
+        // Check custom function
+        if (customFn && typeof (window as any)[customFn] === 'function') {
+          return (window as any)[customFn](value)
+        }
+
+        // Check custom pattern with security validation
+        if (customPattern) {
+          return validateCustomPattern(customPattern, value)
+        }
+
+        // Built-in type validation
+        if (type === 'email' && value) return /\S+@\S+\.\S+/.test(value)
+        if (type === 'tel' && value) return /^\+?[\d\s-()]+$/.test(value)
+        if (type === 'url' && value) return /^https?:\/\/.+/.test(value)
+        if (type === 'password' && value) return value.length >= 8
+
+        return true
+      }
+
+      // Validate input groups within fieldsets (checkboxes and radio buttons)
+      const validateFieldset = (fieldset) => {
+        const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]')
+        const radioButtons = fieldset.querySelectorAll('input[type="radio"]')
+
+        // Check if any checkboxes are checked
+        const checkboxValid =
+          checkboxes.length === 0 ||
+          Array.from(checkboxes).some((checkbox: HTMLInputElement) => checkbox.checked)
+
+        // Check if any radio buttons are checked
+        const radioValid =
+          radioButtons.length === 0 ||
+          Array.from(radioButtons).some((radio: HTMLInputElement) => radio.checked)
+
+        // Both types must be valid (if present)
+        return checkboxValid && radioValid
+      }
+
+      const checkValidity = (event) => {
+        event.preventDefault()
+        const invalidFields = []
+        const invalidFieldsets = []
+
+        // Clear previous error states
+        requiredFields.forEach((field) => {
+          field.setAttribute('aria-invalid', 'false')
+        })
+        requiredFieldsets.forEach((fieldset) => {
+          fieldset.setAttribute('aria-invalid', 'false')
+        })
+
+        // Validate all fields
+        requiredFields.forEach((field) => {
+          if (!validateField(field)) {
+            field.setAttribute('aria-invalid', 'true')
+            invalidFields.push(field)
+          }
+        })
+
+        // Validate all fieldsets (checkbox groups)
+        requiredFieldsets.forEach((fieldset) => {
+          if (!validateFieldset(fieldset)) {
+            fieldset.setAttribute('aria-invalid', 'true')
+            invalidFieldsets.push(fieldset)
+          }
+        })
+
+        // Remove existing summary
+        if (errorNotification) {
+          errorNotification.hidden = true
+          errorNotificationContent.innerHTML = ''
+        }
+
+        if (invalidFields.length === 0 && invalidFieldsets.length === 0) {
+          // All valid - submit the form
+          form.submit()
+        } else {
+          // Show errors
+          setSummary([...invalidFields, ...invalidFieldsets])
+          setInlineMessages(invalidFields)
+          setFieldsetMessages(invalidFieldsets)
+        }
+      }
+
+      const setSummary = (elements) => {
+        errorNotification.setAttribute('tabindex', '-1')
+
+        errorNotificationContent.innerHTML = `
+          <div class="space-content">
+            <p>There was a problem with your submission. The following inputs need attention:</p>
+            <ol class="incremented">
+              ${elements
+                .map((element) => {
+                  if (element.tagName === 'FIELDSET') {
+                    const legend = element.querySelector('legend')
+                    const legendText = legend?.textContent || element.getAttribute('name')
+                    const validation =
+                      element.dataset.validation || 'Please select at least one option'
+                    return `<li><a href="#${element.id}">${legendText}: ${validation}</a></li>`
+                  } else {
+                    const label = element
+                      .closest('.input-group, .checkbox-group, .textarea-group')
+                      ?.querySelector('label')
+                    const labelText = label?.textContent || element.name
+                    const validation = label?.dataset.validation || 'This field is required'
+                    return `<li><a href="#${element.id}">${labelText}: ${validation}</a></li>`
+                  }
+                })
+                .join('')}
+            </ol>
+          </div>
+        `
+        errorNotification.hidden = false
+        errorNotification.focus()
+        errorNotification.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+
+      const setInlineMessages = (fields) => {
+        fields.forEach((field) => {
+          const label = field
+            .closest('.input-group, .checkbox-group, .textarea-group')
+            ?.querySelector('label')
+          const validation = label?.dataset.validation || 'This field is required'
+          const messageElement = field.nextElementSibling?.querySelector('.message') as HTMLElement
+
+          if (messageElement) {
+            messageElement.textContent = validation
+          }
+        })
+      }
+
+      const setFieldsetMessages = (fieldsets) => {
+        fieldsets.forEach((fieldset) => {
+          const validation = fieldset.dataset.validation || 'Please select at least one option'
+          const messageElement = fieldset.querySelector('.message') as HTMLElement
+
+          if (messageElement) {
+            messageElement.textContent = validation
+          }
+        })
+      }
+
+      form.addEventListener('submit', checkValidity)
+
+      // Handle form reset
+      form.addEventListener('reset', function () {
+        // Clear error states
+        requiredFields.forEach((field) => {
+          field.setAttribute('aria-invalid', 'false')
+        })
+        requiredFieldsets.forEach((fieldset) => {
+          fieldset.setAttribute('aria-invalid', 'false')
+        })
+
+        // Clear validation messages
+        const validationMessages = form.querySelectorAll('.message')
+        validationMessages.forEach((message) => {
+          message.textContent = ''
+        })
+
+        // Remove summary
+        if (errorNotification) {
+          if (errorNotificationContent) {
+            errorNotificationContent.innerHTML = ''
+          }
+          errorNotification.hidden = true
+        }
+      })
+    })
+  }
+
+  // Initialize on different events for better compatibility
+  document.addEventListener('DOMContentLoaded', initializeFormValidation)
+
+  // For Astro View Transitions
+  document.addEventListener('astro:page-load', initializeFormValidation)
+
+  // If DOM is already ready, initialize immediately
+  if (document.readyState === 'loading') {
+    // DOM still loading, listeners above will handle it
+  } else {
+    // DOM already loaded, initialize now
+    initializeFormValidation()
+  }
+</script>
+
+<style>
+  .form {
+    display: grid;
+    gap: 1rem;
+  }
+</style>

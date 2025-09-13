@@ -1,9 +1,12 @@
 ---
+import Heading from '../heading/Heading.astro'
+
 /**
  * Accordion Item Component
  *
  * @description An individual accordion item that can be expanded/collapsed with smooth animations
  */
+
 interface Props {
   /**
    * Additional classes to apply to the item
@@ -18,10 +21,15 @@ interface Props {
    */
   name?: string
   /**
-   * HTML tag to use for the title (h2-h6)
+   * Heading level for the title (h1-h6)
    * @default 'h3'
    */
-  tagName?: string
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
+   * Visual size of the heading (can differ from semantic level)
+   * @default 'h6'
+   */
+  headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   /**
    * Visual style variant of the accordion
    * @default 'default'
@@ -42,19 +50,18 @@ const {
   class: className,
   title,
   name,
-  tagName = 'h3',
+  headingLevel = 'h3',
+  headingSize = 'h6',
   variant = 'default',
   open = false,
   ...rest
 } = Astro.props
-
-const Tag = tagName
 ---
 
 <li class:list={['item', className]} {...rest}>
-  <details class="wrapper" name={name} data-variant={variant} {...open ? { open } : {}}>
+  <details class:list={['wrapper', `variant-${variant}`]} name={name} {...open ? { open } : {}}>
     <summary class="title">
-      <Tag>
+      <Heading level={headingLevel} size={headingSize}>
         {
           variant === 'chevron' ? (
             <>
@@ -97,7 +104,7 @@ const Tag = tagName
             </>
           )
         }
-      </Tag>
+      </Heading>
     </summary>
     <div class="content">
       <slot />
@@ -114,11 +121,7 @@ const Tag = tagName
     padding-block: 0;
   }
 
-  .title h2,
-  .title h3,
-  .title h4,
-  .title h5,
-  .title h6 {
+  .title :global(.heading) {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -133,7 +136,7 @@ const Tag = tagName
     }
   }
 
-  :where(.wrapper)::details-content {
+  details::details-content {
     opacity: 0;
     transition: content-visibility var(--transition-duration) allow-discrete,
       opacity var(--transition-duration) var(--transition-easing),
@@ -142,24 +145,20 @@ const Tag = tagName
     overflow-y: clip;
   }
 
-  :where(.wrapper[open])::details-content {
+  details[open]::details-content {
     opacity: 1;
     block-size: auto;
   }
 
-  :where(.wrapper[data-variant='default']) .content {
+  .wrapper.variant-default .content {
     padding: 0 0 1.5rem 2.2rem;
   }
 
-  :where(.wrapper[data-variant='chevron']) .title h2,
-  :where(.wrapper[data-variant='chevron']) .title h3,
-  :where(.wrapper[data-variant='chevron']) .title h4,
-  :where(.wrapper[data-variant='chevron']) .title h5,
-  :where(.wrapper[data-variant='chevron']) .title h6 {
+  .wrapper.variant-chevron .title :global(.heading) {
     justify-content: space-between;
   }
 
-  :where(.wrapper[data-variant='chevron']) .content {
+  .wrapper.variant-chevron .content {
     padding-block-end: 2.2rem;
   }
 

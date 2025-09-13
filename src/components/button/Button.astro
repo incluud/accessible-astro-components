@@ -1,0 +1,253 @@
+---
+/**
+ * Button Component
+ * @description A versatile button with variants and delightful animations
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the button
+   */
+  class?: string
+  /**
+   * The id attribute
+   */
+  id?: string
+  /**
+   * The HTML button type attribute
+   * @default 'button'
+   */
+  htmlType?: 'button' | 'submit' | 'reset'
+  /**
+   * Whether the button is disabled
+   */
+  disabled?: boolean
+  /**
+   * The variant of the button
+   * @default 'filled'
+   */
+  variant?: 'filled' | 'outlined'
+  /**
+   * The type of the button (affects color scheme)
+   * @default 'default'
+   */
+  type?: 'default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error'
+  /**
+   * The size of the button
+   */
+  size?: 'sm' | 'md' | 'lg'
+  /**
+   * The aria-label attribute
+   */
+  ariaLabel?: string
+  /**
+   * The aria-describedby attribute
+   */
+  ariaDescribedby?: string
+  /**
+   * Whether to animate the icon on hover
+   * @default false
+   */
+  animateOnHover?: boolean
+  /**
+   * Type of animation to apply on hover
+   * @default "boop"
+   */
+  animationType?: 'rotate' | 'boop' | 'bouncing' | 'nudge' | 'none'
+  /**
+   * Animation intensity (1-10)
+   * @default 5
+   */
+  animationIntensity?: number
+  /**
+   * Whether to apply a pulsating animation to draw attention (pulses 3 times)
+   * @default false
+   */
+  pulse?: boolean
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  htmlType = 'button',
+  disabled = false,
+  variant = 'filled',
+  type = 'default',
+  size = 'md',
+  ariaLabel,
+  ariaDescribedby,
+  animateOnHover = false,
+  animationType = 'boop',
+  animationIntensity = 5,
+  pulse = false,
+  ...rest
+} = Astro.props
+
+// Clamp animation intensity between 1-10
+const clampedIntensity = Math.max(1, Math.min(10, animationIntensity))
+
+// Calculate animation values based on intensity
+const scaleAmount = 1 + clampedIntensity * 0.02 // 1.02 to 1.2
+const rotateAmount = clampedIntensity * 2 // 2deg to 20deg
+
+// Only apply animation class if animateOnHover is true and not 'none' type
+const shouldAnimate = animateOnHover && animationType !== 'none'
+
+// Determine animation class based on type
+const animationClass = shouldAnimate ? `animate-${animationType}-svg` : ''
+
+// Determine if we should apply the pulse class
+const pulseClass = pulse ? 'animation-pulse' : ''
+---
+
+<button
+  id={id}
+  type={htmlType}
+  class:list={[
+    'button',
+    `button--${variant}`,
+    `type-${type}`,
+    `button--${size}`,
+    animationClass,
+    pulseClass,
+    className,
+  ]}
+  style={shouldAnimate || pulse
+    ? `--scaleAmount: ${scaleAmount}; --rotateAmount: ${rotateAmount}deg;`
+    : undefined}
+  disabled={disabled}
+  aria-label={ariaLabel}
+  aria-describedby={ariaDescribedby}
+  {...rest}
+>
+  <slot />
+</button>
+
+<style>
+  :where(.button) {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2xs);
+    transition: all 0.2s var(--animation-timing);
+    cursor: pointer;
+    border: 3px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-default-bg);
+    padding: var(--space-xs) var(--space-s);
+    inline-size: fit-content;
+    color: var(--color-default-text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 4px;
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-color: currentColor;
+      text-underline-offset: 2px;
+
+      @media (prefers-reduced-motion: no-preference) {
+        translate: 0 -3px;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  :where(.button--sm) {
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--font-size--1);
+  }
+
+  :where(.button--lg) {
+    padding: var(--space-s) var(--space-l);
+    font-size: var(--font-size-1);
+  }
+
+  :where(.button.type-primary) {
+    border-color: var(--color-primary-border);
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary-text);
+  }
+
+  :where(.button.type-secondary) {
+    border-color: var(--color-secondary-border);
+    background-color: var(--color-secondary-bg);
+    color: var(--color-secondary-text);
+  }
+
+  :where(.button.type-info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  :where(.button.type-success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  :where(.button.type-warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  :where(.button.type-error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
+  :where(.button--outlined) {
+    background-color: transparent;
+    color: var(--color-default-text);
+  }
+
+  :where(.button) :global(svg) {
+    flex-shrink: 0;
+    transition: transform var(--transition-duration, 0.3s)
+      var(--transition-easing, cubic-bezier(0.165, 0.84, 0.44, 1));
+  }
+
+  /* Set pulse colors based on button type */
+  :where(.button.animation-pulse.type-default) {
+    --pulse-color: var(--color-pulse-default);
+  }
+
+  :where(.button.animation-pulse.type-info) {
+    --pulse-color: var(--color-pulse-info);
+  }
+
+  :where(.button.animation-pulse.type-success) {
+    --pulse-color: var(--color-pulse-success);
+  }
+
+  :where(.button.animation-pulse.type-warning) {
+    --pulse-color: var(--color-pulse-warning);
+  }
+
+  :where(.button.animation-pulse.type-error) {
+    --pulse-color: var(--color-pulse-error);
+  }
+
+  :where(.button.animation-pulse.type-primary) {
+    --pulse-color: var(--color-pulse-primary);
+  }
+
+  :where(.button.animation-pulse.type-secondary) {
+    --pulse-color: var(--color-pulse-secondary);
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+/**
+ * Radio Component
+ *
+ * @description A simple radio button field for use within forms and fieldsets
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the radio button field container
+   */
+  class?: string
+  /**
+   * Unique identifier for the radio button field
+   */
+  id?: string
+  /**
+   * Name attribute for the radio button field (shared within group)
+   */
+  name: string
+  /**
+   * Label text for the radio button field
+   */
+  label: string
+  /**
+   * Value attribute for the radio button (required for radio groups)
+   */
+  value: string
+  /**
+   * Whether the radio button is checked by default
+   * @default false
+   */
+  checked?: boolean
+  /**
+   * Whether the field is disabled
+   * @default false
+   */
+  disabled?: boolean
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  name,
+  label,
+  value,
+  checked = false,
+  disabled = false,
+  ...rest
+} = Astro.props
+
+const inputId = id || `radio-${name}-${value}`
+---
+
+<div class:list={['radio-group', className]}>
+  <input
+    type="radio"
+    id={inputId}
+    name={name}
+    value={value}
+    checked={checked}
+    disabled={disabled}
+    {...rest}
+  />
+
+  <label for={inputId}>
+    <span>{label}</span>
+  </label>
+</div>
+
+<style>
+  :where(.radio-group) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.radio-group input) {
+    margin-block-start: 0.125em;
+    border-radius: 50%;
+    inline-size: 1em;
+    block-size: 1em;
+  }
+
+  :where(.radio-group label) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    cursor: pointer;
+  }
+</style>

@@ -4,6 +4,7 @@
  *
  * @description A versatile notification component with support for different types and ARIA roles
  */
+
 interface Props {
   /**
    * Additional classes to apply to the Notification
@@ -19,15 +20,45 @@ interface Props {
    */
   type?: 'info' | 'success' | 'warning' | 'error' | 'default'
   /**
+   * Variant of the notification
+   * @default "default"
+   */
+  variant?: 'default' | 'accent'
+  /**
+   * Semantic element to use for the notification
+   * @default "div"
+   *
+   * **When to use div (default):**
+   * - System feedback (errors, success, status messages)
+   * - User action responses
+   * - Dynamic notifications that appear/disappear
+   *
+   * **When to use aside:**
+   * - Educational content related to main content
+   * - Tips, explanations, or supplementary information
+   * - Content that enhances but isn't essential to understanding
+   *
+   * @example
+   * ```astro
+   * <!-- System notification (default) -->
+   * <Notification role="alert" type="error">
+   *   Please fix the validation errors
+   * </Notification>
+   *
+   * <!-- Educational callout -->
+   * <Notification element="aside" role="region">
+   *   <h3>Pro Tip</h3>
+   *   <p>This technique works especially well...</p>
+   * </Notification>
+   * ```
+   */
+  element?: 'div' | 'aside'
+  /**
    * ARIA role for the notification
    * @default "none"
+   * Note: 'status' implies aria-live="polite", 'alert' implies aria-live="assertive"
    */
   role?: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region'
-  /**
-   * ARIA live region behavior
-   * @default "off"
-   */
-  ariaLive?: 'off' | 'polite' | 'assertive'
   /**
    * HTML attributes to spread on the notification
    */
@@ -38,22 +69,127 @@ const {
   class: className,
   message = 'This is a notification!',
   type = 'default',
+  variant = 'default',
+  element = 'div',
   role = 'none',
-  ariaLive = 'off',
   ...rest
 } = Astro.props
+
+// Dynamic element based on prop
+const Element = element as any
 ---
 
-<aside
-  class:list={['notification', `type-${type}`, className]}
+<Element
+  class:list={['notification', `type-${type}`, `variant-${variant}`, className]}
   role={role}
-  aria-live={ariaLive}
   {...rest}
 >
+  {
+    variant === 'accent' && (
+      <span class="icon">
+        {type === 'default' && (
+          <svg
+            width="1.25em"
+            height="1.25em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10.268 21a2 2 0 0 0 3.464 0m-10.47-5.674A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+            />
+          </svg>
+        )}
+        {type === 'info' && (
+          <svg
+            width="1.25em"
+            height="1.25em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4m0-4h.01" />
+            </g>
+          </svg>
+        )}
+        {type === 'success' && (
+          <svg
+            width="1.25em"
+            height="1.25em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="m9 12l2 2l4-4" />
+            </g>
+          </svg>
+        )}
+        {type === 'warning' && (
+          <svg
+            width="1.25em"
+            height="1.25em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"
+            />
+          </svg>
+        )}
+        {type === 'error' && (
+          <svg
+            width="1.25em"
+            height="1.25em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="m15 9l-6 6m0-6l6 6" />
+            </g>
+          </svg>
+        )}
+      </span>
+    )
+  }
   <slot>
     <p><strong>Message:</strong> {message}</p>
   </slot>
-</aside>
+</Element>
 
 <style>
   :where(.notification) {
@@ -65,47 +201,113 @@ const {
     padding: 1rem;
   }
 
+  :where(.notification.variant-accent) {
+    position: relative;
+    border: none;
+    padding-inline-start: 1.25rem;
+
+    &::before {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      border-left: 4px solid;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+      block-size: 100%;
+      content: '';
+    }
+
+    &.type-info svg {
+      color: var(--color-info-border);
+    }
+
+    &.type-success svg {
+      color: var(--color-success-border);
+    }
+
+    &.type-warning svg {
+      color: var(--color-warning-border);
+    }
+
+    &.type-error svg {
+      color: var(--color-error-border);
+    }
+
+    &.type-default svg {
+      color: var(--color-default-border);
+    }
+  }
+
+  :where(.notification .icon) {
+    position: absolute;
+    flex-shrink: 0;
+    transform: translate(calc(-50% - 1.5px), -50%);
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    border-radius: 50%;
+    background-color: var(
+      --background-color,
+      light-dark(oklch(from #b9bec4 100% 0 0), oklch(from #b9bec4 15% c h))
+    );
+    padding: var(--space-3xs);
+  }
+
   /* Default */
   :where(.notification) {
-    border-color: var(--color-default-border, #ccc);
-    background-color: var(--color-default-bg, #f8f8f8);
-    color: var(--color-default-text, #333);
+    border-color: var(--color-default-border);
+    background-color: var(--color-default-bg);
+    color: var(--color-default-text);
+
+    &::before {
+      border-color: var(--color-default-border);
+    }
   }
 
   /* Info */
   :where(.notification.type-info) {
-    border-color: var(--color-info-border, #0077ff);
-    background-color: var(--color-info-bg, #e6f2ff);
-    color: var(--color-info-text, #004c99);
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+
+    &::before {
+      border-color: var(--color-info-border);
+    }
   }
 
   /* Success */
   :where(.notification.type-success) {
-    border-color: var(--color-success-border, #34c759);
-    background-color: var(--color-success-bg, #e6f9ed);
-    color: var(--color-success-text, #0d6124);
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+
+    &::before {
+      border-color: var(--color-success-border);
+    }
   }
 
   /* Warning */
   :where(.notification.type-warning) {
-    border-color: var(--color-warning-border, #ff9500);
-    background-color: var(--color-warning-bg, #fff8e6);
-    color: var(--color-warning-text, #7d4900);
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+
+    &::before {
+      border-color: var(--color-warning-border);
+    }
   }
 
   /* Error */
   :where(.notification.type-error) {
-    border-color: var(--color-error-border, #ff3b30);
-    background-color: var(--color-error-bg, #ffe6e6);
-    color: var(--color-error-text, #990c00);
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+
+    &::before {
+      border-color: var(--color-error-border);
+    }
   }
 
-  :where(.notification) :global(svg) {
+  :where(.notification svg) :global(svg) {
     flex-shrink: 0;
-    /* Fallback for browsers without Cascade Layers */
-    inline-size: 1.5rem;
-    inline-size: revert-layer;
-    block-size: auto;
-    block-size: revert-layer;
   }
 </style>

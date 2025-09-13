@@ -2,14 +2,16 @@
  * Accordion item child component
  *
  * @param _props - Record<string, any>
- * @param _props.title - Title text content for the summary element
- * @param _props.name - Optional group name for exclusive accordion behavior
- * @param _props.variant - Optional style variant ('default' | 'chevron') - default: 'default'
- * @param _props.tagName - HTML tag to use for the title (h2-h6) - default: 'h3'
- * @param _props.open - Whether the accordion item is initially open - default: false
  * @param _props.class - Optional CSS class names
+ * @param _props.title - Title text displayed in the accordion header (required)
+ * @param _props.name - Optional name attribute for the details element
+ * @param _props.headingLevel - Heading level for the title ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h3'
+ * @param _props.headingSize - Visual size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h6'
+ * @param _props.variant - Visual style variant ('default' | 'chevron') - default: 'default'
+ * @param _props.open - Whether the accordion item is initially open - default: false
  * @param _props.children - Any HTML elements. Parent element: `<div>`
  * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note The component supports independent control of semantic level (headingLevel) and visual appearance (headingSize)
  */
 export type AccordionItem = typeof import('../../index.js').AccordionItem
 export const AccordionItem: AccordionItem
@@ -72,7 +74,7 @@ export const AvatarGroup: AvatarGroup
  * @param _props.type - Type/color variant ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
  * @param _props.isButton - Whether to render as a button element - default: false
  * @param _props.animateOnHover - Whether to animate the icon on hover (only works with isButton) - default: false
- * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'none') - default: 'boop'
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
  * @param _props.isCircular - Whether to display the badge as a circle (best for single numbers/characters) - default: false
  * @param _props.isPill - Whether to display the badge with fully rounded corners (pill style) - default: false
@@ -84,6 +86,68 @@ export const AvatarGroup: AvatarGroup
  */
 type Badge = typeof import('../../index.js').Badge
 export const Badge: Badge
+
+/**
+ * Button component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - The id attribute
+ * @param _props.htmlType - The HTML button type attribute ('button' | 'submit' | 'reset') - default: 'button'
+ * @param _props.disabled - Whether the button is disabled - default: false
+ * @param _props.variant - The variant of the button ('filled' | 'outlined') - default: 'filled'
+ * @param _props.type - The type of the button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error') - default: 'default'
+ * @param _props.size - The size of the button ('sm' | 'md' | 'lg') - default: 'md'
+ * @param _props.ariaLabel - The aria-label attribute
+ * @param _props.ariaDescribedby - The aria-describedby attribute
+ * @param _props.animateOnHover - Whether to animate the icon on hover - default: false
+ * @param _props.animationType - Type of animation to apply on hover ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.children - Any HTML elements. Parent element: `<button>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Button = typeof import('../../index.js').Button
+export const Button: Button
+
+/**
+ * Heading component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.level - The tag name of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h2'
+ * @param _props.size - The size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: same as level
+ * @param _props.children - Text content or any legal heading innerHTML. Parent element: `<h1>` to `<h6>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note The component supports independent control of semantic level (level) and visual appearance (size)
+ */
+type Heading = typeof import('../../index.js').Heading
+export const Heading: Heading
+
+/**
+ * Link component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.href - The URL to link to (required)
+ * @param _props.isExternal - Whether the link is external - default: false (auto-detected for http/https URLs)
+ * @param _props.isButton - Style the link as a button - default: false
+ * @param _props.variant - The variant of the link when styled as button ('filled' | 'outlined') - default: 'filled'
+ * @param _props.type - Type of the link when styled as button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost') - default: 'default'
+ * @param _props.size - Button size when styled as button ('sm' | 'md' | 'lg') - default: 'md'
+ * @param _props.ariaLabel - The aria-label attribute
+ * @param _props.title - The title attribute
+ * @param _props.animateOnHover - Whether to animate the icon on hover (only when isButton is true) - default: false
+ * @param _props.animationType - Type of animation to apply on hover when isButton is true ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.children - Text content or any legal anchor innerHTML. Parent element: `<a>`
+ * @note External links automatically display an icon and screen reader text "Opens in a new tab"
+ * @note Supports custom external link icons via the "icon" named slot
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Link = typeof import('../../index.js').Link
+export const Link: Link
 
 /**
  * Breadcrumbs item child component
@@ -117,22 +181,44 @@ export const Breadcrumbs: Breadcrumbs
  * Card component
  *
  * @param _props - astroHTML.JSX.HTMLAttributes
- * @param _props.url - `<a href={url}>` - default: "#"
- * @param _props.img - `<img src={img}>` - default value = placeholder
- * @param _props.imageComponent - Optional Astro Image component (supports both ImageMetadata and dynamic import)
+ * @param _props.class - Optional CSS class names
+ * @param _props.title - Card's title - default: "Default title"
+ * @param _props.img - URL for the card's image - default: "https://fakeimg.pl/640x360"
+ * @param _props.imageComponent - Optional Astro Image component (ImageMetadata or Promise from import())
  * @param _props.imageAlt - Alt text for the image - default: ""
  * @param _props.width - Width of the image (required for remote images) - default: 640
  * @param _props.height - Height of the image (required for remote images) - default: 360
  * @param _props.inferSize - Whether to infer the image size (for remote images) - default: false
- * @param _props.title - `<h3>` header > `<a>` text content
- * @param _props.footer - `<small>` text content
- * @param _props.tagName - HTML tag to use for the title - default: 'h3'
- * @param _props.class - Optional CSS class names
+ * @param _props.url - URL for the card's link - default: "#"
+ * @param _props.headingLevel - Heading level for the title ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h3'
+ * @param _props.headingSize - Visual size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h6'
+ * @param _props.footer - Footer content - default: ""
+ * @param _props.fullHeight - Whether the card should take full height (useful for equal height card grids) - default: false
  * @param _props.children - textContent or any legal `<p>` tag innerHTML such as inline HTML elements. Parent element: `<p>`
  * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note The component supports independent control of semantic level (headingLevel) and visual appearance (headingSize)
+ * @note Supports named slot "meta" for metadata content
  */
 type Card = typeof import('../../index.js').Card
 export const Card: Card
+
+/**
+ * Checkbox component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the checkbox field
+ * @param _props.name - Name attribute for the checkbox field (required for form submission)
+ * @param _props.label - Label text for the checkbox field (required)
+ * @param _props.value - Value attribute for the checkbox
+ * @param _props.checked - Whether the checkbox is checked by default - default: false
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.children - Not applicable for checkbox components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Uses grid layout with proper label association for accessibility
+ */
+type Checkbox = typeof import('../../index.js').Checkbox
+export const Checkbox: Checkbox
 
 /**
  * DarkMode toggle component
@@ -162,6 +248,71 @@ type DarkMode = typeof import('../../index.js').DarkMode
 export const DarkMode: DarkMode
 
 /**
+ * Fieldset component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.name - Name attribute for the fieldset (used for group validation) - required
+ * @param _props.id - Unique identifier for the fieldset
+ * @param _props.legend - Legend text for the fieldset (required)
+ * @param _props.required - Whether the fieldset group is required (at least one selection) - default: false
+ * @param _props.data-validation - Error message to display when group validation fails
+ * @param _props.class - Optional CSS class names
+ * @param _props.variant - Variant of the fieldset ('default' | 'minimal') - default: 'default'
+ * @param _props.children - Form controls to group together. Parent element: `<fieldset>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Provides group-level validation for checkbox and radio button groups
+ * @note Automatically generates validation messages if not provided
+ */
+type Fieldset = typeof import('../../index.js').Fieldset
+export const Fieldset: Fieldset
+
+/**
+ * Form component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.action - Form action URL
+ * @param _props.name - Form name attribute
+ * @param _props.method - HTTP method for form submission ('get' | 'post') - default: 'post'
+ * @param _props.enctype - Encoding type for form data ('application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain') - default: 'application/x-www-form-urlencoded'
+ * @param _props.target - Target for form submission ('_self' | '_blank' | '_parent' | '_top') - default: '_self'
+ * @param _props.autocomplete - Autocomplete behavior ('on' | 'off') - default: 'on'
+ * @param _props.children - Form controls and content. Parent element: `<form>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Includes built-in progressive enhancement validation with error handling
+ * @note Features accessibility-first error summary and inline validation messages
+ * @note Supports custom validation patterns and functions
+ */
+type Form = typeof import('../../index.js').Form
+export const Form: Form
+
+/**
+ * Input component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the input field
+ * @param _props.name - Name attribute for the input field (required for form submission)
+ * @param _props.label - Label text for the input field (required)
+ * @param _props.data-validation - Optional custom error message to override automatically generated validation messages
+ * @param _props.type - Input type determining built-in validation rules ('text' | 'email' | 'password' | 'tel' | 'url') - default: 'text'
+ * @param _props.required - Whether the field is required - default: false
+ * @param _props.data-validation-pattern - Custom validation pattern (regex)
+ * @param _props.data-validation-fn - Custom validation function name (must be available on window)
+ * @param _props.value - Default value for the input field
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.readonly - Whether the field is readonly - default: false
+ * @param _props.autocomplete - Autocomplete attribute value - default: 'on'
+ * @param _props.children - Not applicable for input components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Progressive enhancement with built-in validation and accessibility features
+ * @note Automatically generates validation messages based on input type; use data-validation to provide custom messages
+ * @note Supports custom validation patterns and functions
+ */
+type Input = typeof import('../../index.js').Input
+export const Input: Input
+
+/**
  * Media component
  *
  * @param _props - Record<string, any>
@@ -181,13 +332,16 @@ export const Media: Media
  * Modal component
  *
  * @param _props - Record<string, any>
- * @param _props.triggerId - Required: ID of the button that triggers this modal
- * @param _props.title - `<h3>` header text content
- * @param _props.closeText - `<button>` text content - default: "Close"
- * @param _props.closeIcon - Whether to show close icon - default: true
  * @param _props.class - Optional CSS class names
+ * @param _props.title - Modal title (required)
+ * @param _props.triggerId - ID of the trigger element (required)
+ * @param _props.closeText - Close button text - default: "Close"
+ * @param _props.closeIcon - Whether to show close icon - default: true
+ * @param _props.headingSize - Visual size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h4'
  * @param _props.children - Any HTML elements. Parent element: `<div>`
  * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Modal title uses semantic h3 level with customizable visual appearance (headingSize)
+ * @note Features full accessibility with focus management and keyboard interactions
  */
 type Modal = typeof import('../../index.js').Modal
 export const Modal: Modal
@@ -206,11 +360,13 @@ declare global {
  *
  * @param _props - Record<string, any>
  * @param _props.type - Specifies background color: 'info' | 'success' | 'warning' | 'error' | 'default' - default: 'default'
+ * @param _props.element - Semantic element to use: 'div' | 'aside' - default: 'div'
  * @param _props.role - Type of aria role: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region' - default: 'none'
- * @param _props.ariaLive - Defines urgency of live announcements: 'off' | 'polite' | 'assertive' - default: 'off'
  * @param _props.message - Optional text message
  * @param _props.class - Optional CSS class names
- * @param _props.children - Any HTML elements. Parent element: `<aside>`
+ * @param _props.children - Any HTML elements. Parent element: `<div>` or `<aside>` based on element prop
+ * @note Use 'div' for system feedback, 'aside' for educational/supplementary content
+ * @note 'status' role implies aria-live="polite", 'alert' role implies aria-live="assertive"
  * @note Additional HTML attributes can be passed and will be spread to the root element
  */
 type Notification = typeof import('../../index.js').Notification
@@ -239,6 +395,25 @@ export const Notification: Notification
  */
 type Pagination = typeof import('../../index.js').Pagination
 export const Pagination: Pagination
+
+/**
+ * Radio component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the radio button field
+ * @param _props.name - Name attribute for the radio button field (shared within group) - required
+ * @param _props.label - Label text for the radio button field (required)
+ * @param _props.value - Value attribute for the radio button (required for radio groups)
+ * @param _props.checked - Whether the radio button is checked by default - default: false
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.children - Not applicable for radio components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Uses grid layout with proper label association for accessibility
+ * @note Radio buttons with the same name attribute form a group
+ */
+type Radio = typeof import('../../index.js').Radio
+export const Radio: Radio
 
 /**
  * Skip link component
@@ -318,3 +493,30 @@ export const TabsPanel: TabsPanel
  */
 type Video = typeof import('../../index.js').Video
 export const Video: Video
+
+/**
+ * Textarea component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the textarea field
+ * @param _props.name - Name attribute for the textarea field (required for form submission)
+ * @param _props.label - Label text for the textarea field (required)
+ * @param _props.data-validation - Error message to display when validation fails
+ * @param _props.required - Whether the field is required - default: false
+ * @param _props.data-validation-pattern - Custom validation pattern (regex)
+ * @param _props.data-validation-fn - Custom validation function name (must be available on window)
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.readonly - Whether the field is readonly - default: false
+ * @param _props.autocomplete - Autocomplete attribute value - default: 'on'
+ * @param _props.rows - Number of visible text lines
+ * @param _props.cols - Number of visible text columns
+ * @param _props.placeholder - Placeholder text
+ * @param _props.children - Not applicable for textarea components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Progressive enhancement with built-in validation and accessibility features
+ * @note Automatically generates validation messages if not provided
+ * @note Features vertical resize and minimum height styling
+ */
+type Textarea = typeof import('../../index.js').Textarea
+export const Textarea: Textarea

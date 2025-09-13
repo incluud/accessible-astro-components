@@ -1,0 +1,292 @@
+---
+/**
+ * Link Component
+ * @description A versatile link component that handles both internal and external links with proper accessibility
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the link
+   */
+  class?: string
+  /**
+   * The URL to link to
+   */
+  href: string
+  /**
+   * Whether the link is external
+   */
+  isExternal?: boolean
+  /**
+   * Whether to hide the external icon
+   */
+  hideIcon?: boolean
+  /**
+   * Style the link as a button
+   */
+  isButton?: boolean
+  /**
+   * The variant of the link
+   * @default 'filled'
+   */
+  variant?: 'filled' | 'outlined'
+  /**
+   * Type of the link when styled as button (affects color scheme)
+   * @default 'default'
+   */
+  type?: 'default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost'
+  /**
+   * Button size when styled as button
+   */
+  size?: 'sm' | 'md' | 'lg'
+  /**
+   * The aria-label attribute
+   */
+  ariaLabel?: string
+  /**
+   * The title attribute
+   */
+  title?: string
+  /**
+   * Whether to animate the icon on hover (only when isButton is true)
+   * @default false
+   */
+  animateOnHover?: boolean
+  /**
+   * Type of animation to apply on hover (when isButton is true)
+   * @default "boop"
+   */
+  animationType?: 'rotate' | 'boop' | 'bouncing' | 'nudge' | 'none'
+  /**
+   * Animation intensity (1-10)
+   * @default 5
+   */
+  animationIntensity?: number
+  /**
+   * Whether to apply a pulsating animation to draw attention (pulses 3 times)
+   * @default false
+   */
+  pulse?: boolean
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  href,
+  isExternal = false,
+  hideIcon = false,
+  isButton = false,
+  variant = 'filled',
+  type = 'default',
+  size = 'md',
+  ariaLabel,
+  title,
+  animateOnHover = false,
+  animationType = 'boop',
+  animationIntensity = 5,
+  pulse = false,
+  ...rest
+} = Astro.props
+
+const externalAttrs = isExternal
+  ? {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+    }
+  : {}
+
+// Animation logic (only applies when isButton is true)
+const clampedIntensity = Math.max(1, Math.min(10, animationIntensity))
+const scaleAmount = 1 + clampedIntensity * 0.02 // 1.02 to 1.2
+const rotateAmount = clampedIntensity * 2 // 2deg to 20deg
+
+// Only apply animation class if it's a button, animateOnHover is true, and not 'none' type
+const shouldAnimate = isButton && animateOnHover && animationType !== 'none'
+const animationClass = shouldAnimate ? `animate-${animationType}-svg` : ''
+const pulseClass = pulse ? 'animation-pulse' : ''
+
+const buttonClasses = isButton
+  ? ['button', `button--${variant}`, `type-${type}`, `button--${size}`, animationClass, pulseClass]
+  : []
+---
+
+<a
+  href={href}
+  class:list={[
+    className,
+    isButton ? buttonClasses : 'link',
+    { 'link--external': isExternal && !isButton },
+  ]}
+  style={shouldAnimate || pulse
+    ? `--scaleAmount: ${scaleAmount}; --rotateAmount: ${rotateAmount}deg;`
+    : undefined}
+  aria-label={ariaLabel}
+  title={title}
+  {...externalAttrs}
+  {...rest}
+  ><slot />{
+    isExternal && !hideIcon && (
+      <>
+        <>
+          <slot name="icon">
+            <svg
+              aria-hidden="true"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            </svg>
+          </slot>
+          <span class="sr-only">Opens in a new tab</span>
+        </>
+      </>
+    )
+  }</a
+><style>
+  :where(.link) {
+    color: var(--link-color, currentColor);
+  }
+
+  :where(.link--external) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.link--external svg) {
+    flex-shrink: 0;
+    inline-size: 1em;
+    block-size: 1em;
+  }
+
+  :where(.button) {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2xs);
+    transition: all 0.2s var(--animation-timing);
+    cursor: pointer;
+    border: 3px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-default-bg);
+    padding: var(--space-xs) var(--space-s);
+    inline-size: fit-content;
+    color: var(--color-default-text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 4px;
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-color: currentColor;
+      text-underline-offset: 4px;
+
+      @media (prefers-reduced-motion: no-preference) {
+        translate: 0 -3px;
+      }
+    }
+  }
+
+  :where(.button--sm) {
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--font-size--1);
+  }
+
+  :where(.button--lg) {
+    padding: var(--space-s) var(--space-l);
+    font-size: var(--font-size-1);
+  }
+
+  :where(.button.type-primary) {
+    border-color: var(--color-primary-border);
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary-text);
+  }
+
+  :where(.button.type-secondary) {
+    border-color: var(--color-secondary-border);
+    background-color: var(--color-secondary-bg);
+    color: var(--color-secondary-text);
+  }
+
+  :where(.button.type-info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  :where(.button.type-success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  :where(.button.type-warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  :where(.button.type-error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
+  :where(.button--outlined) {
+    background-color: transparent;
+    color: var(--color-default-text);
+  }
+
+  :where(.button) :global(svg) {
+    flex-shrink: 0;
+    transition: transform var(--transition-duration, 0.3s)
+      var(--transition-easing, cubic-bezier(0.165, 0.84, 0.44, 1));
+  }
+
+  /* Set pulse colors based on button type */
+  :where(.button.animation-pulse.type-default) {
+    --pulse-color: var(--color-pulse-default);
+  }
+
+  :where(.button.animation-pulse.type-info) {
+    --pulse-color: var(--color-pulse-info);
+  }
+
+  :where(.button.animation-pulse.type-success) {
+    --pulse-color: var(--color-pulse-success);
+  }
+
+  :where(.button.animation-pulse.type-warning) {
+    --pulse-color: var(--color-pulse-warning);
+  }
+
+  :where(.button.animation-pulse.type-error) {
+    --pulse-color: var(--color-pulse-error);
+  }
+
+  :where(.button.animation-pulse.type-primary) {
+    --pulse-color: var(--color-pulse-primary);
+  }
+
+  :where(.button.animation-pulse.type-secondary) {
+    --pulse-color: var(--color-pulse-secondary);
+  }
+
+  :where(.button.animation-pulse.type-ghost) {
+    --pulse-color: var(--color-pulse-ghost, var(--color-pulse-default));
+  }
+</style>

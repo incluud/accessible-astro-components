@@ -1,0 +1,201 @@
+---
+/**
+ * Input Component
+ *
+ * @description A progressive enhancement input field with built-in validation and accessibility
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the input field container
+   */
+  class?: string
+  /**
+   * Unique identifier for the input field
+   */
+  id?: string
+  /**
+   * Name attribute for the input field (required for form submission)
+   */
+  name: string
+  /**
+   * Label text for the input field
+   */
+  label: string
+  /**
+   * Error message to display when validation fails
+   */
+  'data-validation': string
+  /**
+   * Input type (determines built-in validation rules)
+   * @default "text"
+   */
+  type?: 'text' | 'email' | 'password' | 'tel' | 'url'
+  /**
+   * Whether the field is required
+   * @default false
+   */
+  required?: boolean
+  /**
+   * Custom validation pattern (regex)
+   */
+  'data-validation-pattern'?: string
+  /**
+   * Custom validation function name (must be available on window)
+   */
+  'data-validation-fn'?: string
+  /**
+   * Default value for the input field
+   */
+  value?: string
+  /**
+   * Whether the field is disabled
+   * @default false
+   */
+  disabled?: boolean
+  /**
+   * Whether the field is readonly
+   * @default false
+   */
+  readonly?: boolean
+  /**
+   * Autocomplete attribute value
+   * @default "on"
+   */
+  autocomplete?: string
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  name,
+  label,
+  'data-validation': dataValidation,
+  type = 'text',
+  required = false,
+  'data-validation-pattern': dataValidationPattern,
+  'data-validation-fn': dataValidationFn,
+  value,
+  disabled = false,
+  readonly = false,
+  autocomplete = 'on',
+  ...rest
+} = Astro.props
+
+const inputId = id || `input-${name}`
+
+// Generate default validation messages based on input type
+const getDefaultValidationMessage = (inputType: string, isRequired: boolean): string => {
+  switch (inputType) {
+    case 'email':
+      return 'Please provide an email address, for example houston@astro.build'
+    case 'tel':
+      return 'Please provide a valid phone number'
+    case 'password':
+      return 'Password must be at least 8 characters long'
+    case 'url':
+      return 'Please provide a valid URL, for example https://astro.build'
+    case 'text':
+    default:
+      return isRequired ? 'This field is required' : ''
+  }
+}
+
+// Use provided validation message or default
+const validationMessage = dataValidation || getDefaultValidationMessage(type, required)
+---
+
+<div class="input-group">
+  <label
+    class:list={['input-group-label', className]}
+    for={inputId}
+    data-validation={validationMessage}
+  >
+    <span>{label}</span>
+    {required && <span>(required)</span>}
+  </label>
+
+  <input
+    type={type}
+    id={inputId}
+    name={name}
+    value={value}
+    required={required}
+    disabled={disabled}
+    readonly={readonly}
+    autocomplete={autocomplete}
+    aria-describedby={`${inputId}-validation`}
+    data-validation={validationMessage}
+    data-validation-pattern={dataValidationPattern}
+    data-validation-fn={dataValidationFn}
+    {...rest}
+  />
+
+  <small id={`${inputId}-validation`}>
+    <span class="icon">
+      <svg width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m15 9l-6 6m0-6l6 6"></path>
+        </g>
+      </svg>
+    </span>
+    <span class="message"></span>
+  </small>
+</div>
+
+<style>
+  :where(.input-group) {
+    --text-color: var(--color-default-text);
+
+    display: grid;
+    gap: var(--space-4xs);
+  }
+
+  :where(.input-group label) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.input-group input) {
+    border: 2px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    padding: var(--space-2xs);
+  }
+
+  :where(small) {
+    display: none;
+    align-items: center;
+    gap: var(--space-4xs);
+    margin-block-start: var(--space-2xs);
+    color: var(--text-color);
+  }
+
+  :where(.input-group:has([aria-invalid='true'])) {
+    --text-color: light-dark(hsl(355, 78%, 39%), hsl(339, 88%, 69%));
+
+    label {
+      color: var(--text-color);
+    }
+
+    input {
+      border-color: var(--color-error-border);
+    }
+
+    small {
+      display: flex;
+    }
+  }
+</style>

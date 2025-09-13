@@ -106,29 +106,27 @@ const getSizeValue = (size: string): string => {
 const sizeValue = getSizeValue(size)
 ---
 
-<div
-  class:list={['avatar', `shape-${shape}`, `type-${type}`, className]}
-  {...label && { 'aria-label': label }}
-  {...rest}
->
+<div class:list={['avatar', `shape-${shape}`, `type-${type}`, className]} {...rest}>
   {
     img && (
       <div class="image">
-        <img src={img} alt="" loading="lazy" decoding="async" />
+        <img src={img} alt={label || title || ''} loading="lazy" decoding="async" />
       </div>
     )
   }
   {
     initials && !img && (
       <div class="initials-container">
-        <span class="initials">{initials}</span>
+        <span class="initials" role="img" aria-label={label || title || ''}>
+          {initials}
+        </span>
       </div>
     )
   }
   {
     !initials && !img && (
       <div class="icon-container">
-        <span class="icon">
+        <span class="icon" role="img" aria-label={label || title || 'User avatar'}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60%"
@@ -204,41 +202,41 @@ const sizeValue = getSizeValue(size)
   :where(.initials-container),
   :where(.icon-container) {
     border: 2px solid;
-    border-color: var(--color-default-border, #ccc);
-    background-color: var(--color-default-bg, #f8f8f8);
-    color: var(--color-default-text, #333);
+    border-color: var(--color-default-border);
+    background-color: var(--color-default-bg);
+    color: var(--color-default-text);
   }
 
   /* Info type */
   :where(.type-info .initials-container),
   :where(.type-info .icon-container) {
-    border-color: var(--color-info-border, #0077ff);
-    background-color: var(--color-info-bg, #e6f2ff);
-    color: var(--color-info-text, #004c99);
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
   }
 
   /* Success type */
   :where(.type-success .initials-container),
   :where(.type-success .icon-container) {
-    border-color: var(--color-success-border, #34c759);
-    background-color: var(--color-success-bg, #e6f9ed);
-    color: var(--color-success-text, #0d6124);
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
   }
 
   /* Warning type */
   :where(.type-warning .initials-container),
   :where(.type-warning .icon-container) {
-    border-color: var(--color-warning-border, #ff9500);
-    background-color: var(--color-warning-bg, #fff8e6);
-    color: var(--color-warning-text, #7d4900);
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
   }
 
   /* Error type */
   :where(.type-error .initials-container),
   :where(.type-error .icon-container) {
-    border-color: var(--color-error-border, #ff3b30);
-    background-color: var(--color-error-bg, #ffe6e6);
-    color: var(--color-error-text, #990c00);
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
   }
 
   :where(.avatar img) {

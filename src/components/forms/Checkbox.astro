@@ -1,0 +1,96 @@
+---
+/**
+ * Checkbox Component
+ *
+ * @description A simple checkbox field for use within forms and fieldsets
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the checkbox field container
+   */
+  class?: string
+  /**
+   * Unique identifier for the checkbox field
+   */
+  id?: string
+  /**
+   * Name attribute for the checkbox field (required for form submission)
+   */
+  name: string
+  /**
+   * Label text for the checkbox field
+   */
+  label: string
+  /**
+   * Value attribute for the checkbox
+   */
+  value?: string
+  /**
+   * Whether the checkbox is checked by default
+   * @default false
+   */
+  checked?: boolean
+  /**
+   * Whether the field is disabled
+   * @default false
+   */
+  disabled?: boolean
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  name,
+  label,
+  value,
+  checked = false,
+  disabled = false,
+  ...rest
+} = Astro.props
+
+const inputId = id || `checkbox-${name}`
+---
+
+<div class:list={['checkbox-group', className]}>
+  <input
+    type="checkbox"
+    id={inputId}
+    name={name}
+    value={value}
+    checked={checked}
+    disabled={disabled}
+    {...rest}
+  />
+
+  <label for={inputId}>
+    <span>{label}</span>
+  </label>
+</div>
+
+<style>
+  :where(.checkbox-group) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.checkbox-group input) {
+    margin-block-start: 0.125em;
+    border-radius: 0.25em;
+    inline-size: 1em;
+    block-size: 1em;
+  }
+
+  :where(.checkbox-group label) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    cursor: pointer;
+  }
+</style>

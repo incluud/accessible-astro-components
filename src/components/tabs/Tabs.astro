@@ -4,6 +4,7 @@
  *
  * @description A fully accessible tabs component that follows WAI-ARIA guidelines
  */
+
 interface Props {
   /**
    * Additional classes to apply to the tabs container
@@ -36,7 +37,13 @@ const { class: className, ...rest } = Astro.props
     const tabs = [...component.querySelectorAll<TabElement>('[role="tab"]')]
     const tabPanels = [...component.querySelectorAll<HTMLElement>('[role="tabpanel"]')]
 
-    let tabsIndex = 0
+    let tabsIndex = tabs.findIndex(
+      (tab) => tab.getAttribute('tabindex') === '0' || tab.getAttribute('aria-selected') === 'true'
+    )
+
+    if (tabsIndex === -1) {
+      tabsIndex = 0
+    }
 
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
@@ -49,7 +56,7 @@ const { class: className, ...rest } = Astro.props
         return
       }
 
-      tabs[tabsIndex].setAttribute('tabIndex', '-1')
+      tabs[tabsIndex].setAttribute('tabindex', '-1')
 
       if (event.key === 'ArrowRight') {
         tabsIndex++
@@ -65,7 +72,7 @@ const { class: className, ...rest } = Astro.props
         }
       }
 
-      tabs[tabsIndex].setAttribute('tabIndex', '0')
+      tabs[tabsIndex].setAttribute('tabindex', '0')
       tabs[tabsIndex].focus()
       changeTabs(tabs[tabsIndex])
     })
@@ -75,8 +82,12 @@ const { class: className, ...rest } = Astro.props
      * @param nextTab - The tab element to activate
      */
     function changeTabs(nextTab: TabElement): void {
+      tabsIndex = tabs.indexOf(nextTab)
+
       tabs.forEach((tab) => {
-        tab.setAttribute('aria-selected', String(tab === nextTab))
+        const isSelected = tab === nextTab
+        tab.setAttribute('aria-selected', String(isSelected))
+        tab.setAttribute('tabindex', isSelected ? '0' : '-1')
       })
 
       tabPanels.forEach((panel) => {
