@@ -149,13 +149,13 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
     --text-color: light-dark(hsl(355, 78%, 39%), hsl(339, 88%, 69%));
 
     border-color: var(--color-error-border);
+  }
 
-    legend {
-      color: var(--text-color);
-    }
+  :where(.fieldset[aria-invalid='true']) legend {
+    color: var(--text-color);
+  }
 
-    small {
-      display: flex;
-    }
+  :where(.fieldset[aria-invalid='true']) small {
+    display: flex;
   }
 </style>

@@ -189,14 +189,16 @@ const buttonClasses = isButton
     text-decoration-thickness: 2px;
     text-decoration-skip-ink: none;
     text-underline-offset: 4px;
+  }
 
-    &:where(:hover, :focus-visible) {
-      text-decoration-color: currentColor;
-      text-underline-offset: 4px;
+  :where(.button:where(:hover, :focus-visible)) {
+    text-decoration-color: currentColor;
+    text-underline-offset: 2px;
+  }
 
-      @media (prefers-reduced-motion: no-preference) {
-        translate: 0 -3px;
-      }
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.button:where(:hover, :focus-visible)) {
+      translate: 0 -3px;
     }
   }
 
