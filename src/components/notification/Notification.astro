@@ -201,41 +201,45 @@ const Element = element as any
     padding: 1rem;
   }
 
+  /* Default */
+  :where(.notification) {
+    border-color: var(--color-default-border);
+    background-color: var(--color-default-bg);
+    color: var(--color-default-text);
+  }
+
+  /* Info */
+  :where(.notification.type-info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  /* Success */
+  :where(.notification.type-success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  /* Warning */
+  :where(.notification.type-warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  /* Error */
+  :where(.notification.type-error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+
   :where(.notification.variant-accent) {
     position: relative;
     border: none;
     padding-inline-start: 1.25rem;
-
-    &::before {
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline-start: 0;
-      border-left: 4px solid;
-      border-top-left-radius: 0.5rem;
-      border-bottom-left-radius: 0.5rem;
-      block-size: 100%;
-      content: '';
-    }
-
-    &.type-info svg {
-      color: var(--color-info-border);
-    }
-
-    &.type-success svg {
-      color: var(--color-success-border);
-    }
-
-    &.type-warning svg {
-      color: var(--color-warning-border);
-    }
-
-    &.type-error svg {
-      color: var(--color-error-border);
-    }
-
-    &.type-default svg {
-      color: var(--color-default-border);
-    }
   }
 
   :where(.notification .icon) {
@@ -252,59 +256,35 @@ const Element = element as any
     padding: var(--space-3xs);
   }
 
-  /* Default */
-  :where(.notification) {
-    border-color: var(--color-default-border);
-    background-color: var(--color-default-bg);
-    color: var(--color-default-text);
-
-    &::before {
-      border-color: var(--color-default-border);
-    }
+  .notification.variant-accent::before {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    border-left: 6px solid;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    block-size: 100%;
+    content: '';
   }
 
-  /* Info */
-  :where(.notification.type-info) {
+  .notification.variant-accent.type-info::before {
     border-color: var(--color-info-border);
-    background-color: var(--color-info-bg);
-    color: var(--color-info-text);
-
-    &::before {
-      border-color: var(--color-info-border);
-    }
   }
 
-  /* Success */
-  :where(.notification.type-success) {
+  .notification.variant-accent.type-success::before {
     border-color: var(--color-success-border);
-    background-color: var(--color-success-bg);
-    color: var(--color-success-text);
-
-    &::before {
-      border-color: var(--color-success-border);
-    }
   }
 
-  /* Warning */
-  :where(.notification.type-warning) {
+  .notification.variant-accent.type-warning::before {
     border-color: var(--color-warning-border);
-    background-color: var(--color-warning-bg);
-    color: var(--color-warning-text);
-
-    &::before {
-      border-color: var(--color-warning-border);
-    }
   }
 
-  /* Error */
-  :where(.notification.type-error) {
+  .notification.variant-accent.type-error::before {
     border-color: var(--color-error-border);
-    background-color: var(--color-error-bg);
-    color: var(--color-error-text);
+  }
 
-    &::before {
-      border-color: var(--color-error-border);
-    }
+  .notification.variant-accent.type-default::before {
+    border-color: var(--color-default-border);
   }
 
   :where(.notification svg) :global(svg) {
