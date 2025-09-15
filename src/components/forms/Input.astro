@@ -183,19 +183,19 @@ const validationMessage = dataValidation || getDefaultValidationMessage(type, re
     color: var(--text-color);
   }
 
-  :where(.input-group:has([aria-invalid='true'])) {
+  .input-group:has([aria-invalid='true']) {
     --text-color: light-dark(hsl(355, 78%, 39%), hsl(339, 88%, 69%));
+  }
 
-    label {
-      color: var(--text-color);
-    }
+  .input-group:has([aria-invalid='true']) label {
+    color: var(--text-color);
+  }
 
-    input {
-      border-color: var(--color-error-border);
-    }
+  .input-group:has([aria-invalid='true']) input {
+    border-color: var(--color-error-border);
+  }
 
-    small {
-      display: flex;
-    }
+  .input-group:has([aria-invalid='true']) small {
+    display: flex;
   }
 </style>
