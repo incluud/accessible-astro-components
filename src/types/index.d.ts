@@ -137,6 +137,7 @@ export const Heading: Heading
  * @param _props.size - Button size when styled as button ('sm' | 'md' | 'lg') - default: 'md'
  * @param _props.ariaLabel - The aria-label attribute
  * @param _props.title - The title attribute
+ * @param _props.rel - Additional rel tokens to merge with security defaults (external links always include "noopener noreferrer")
  * @param _props.animateOnHover - Whether to animate the icon on hover (only when isButton is true) - default: false
  * @param _props.animationType - Type of animation to apply on hover when isButton is true ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
  * @param _props.animationIntensity - Animation intensity (1-10) - default: 5

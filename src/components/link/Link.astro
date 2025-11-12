@@ -48,6 +48,10 @@ interface Props {
    */
   title?: string
   /**
+   * Additional rel attribute tokens
+   */
+  rel?: string
+  /**
    * Whether to animate the icon on hover (only when isButton is true)
    * @default false
    */
@@ -88,13 +92,32 @@ const {
   animationType = 'boop',
   animationIntensity = 5,
   pulse = false,
+  rel,
   ...rest
 } = Astro.props
+
+const parseRelTokens = (value: string): string[] => value.split(/\s+/).map((token) => token.trim()).filter(Boolean)
+
+const ensureRel = (base: string, extra: string | undefined): string | undefined => {
+  const finalTokens = new Set<string>()
+
+  parseRelTokens(base).forEach((token) => finalTokens.add(token))
+
+  if (typeof extra === 'string') {
+    parseRelTokens(extra).forEach((token) => finalTokens.add(token))
+  }
+
+  return finalTokens.size > 0 ? Array.from(finalTokens).join(' ') : undefined
+}
+
+const externalRelDefaults = 'noopener noreferrer'
+
+// External links keep the security defaults while letting consumers append extra tokens (e.g., rel="me")
+const finalRel = isExternal ? ensureRel(externalRelDefaults, rel) : ensureRel('', rel)
 
 const externalAttrs = isExternal
   ? {
       target: '_blank',
-      rel: 'noopener noreferrer',
     }
   : {}
 
@@ -125,6 +148,7 @@ const buttonClasses = isButton
     : undefined}
   aria-label={ariaLabel}
   title={title}
+  rel={finalRel}
   {...externalAttrs}
   {...rest}
   ><slot />{
