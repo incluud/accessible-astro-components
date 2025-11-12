@@ -111,6 +111,7 @@ const ensureRel = (base: string, extra: string | undefined): string | undefined 
 }
 
 const externalRelDefaults = 'noopener noreferrer'
+
 // External links keep the security defaults while letting consumers append extra tokens (e.g., rel="me")
 const finalRel = isExternal ? ensureRel(externalRelDefaults, rel) : ensureRel('', rel)
 
