@@ -109,22 +109,28 @@ const {
   nextPageLabel = 'Go to the next page',
   lastPageLabel = 'Go to the last page',
   renderProgress = ({ currentPage, totalPages }) => `Page ${currentPage} of ${totalPages}`,
-  renderPageLabel = ({ type, page }) => {
-    switch (type) {
-      case 'first':
-        return `Go to first page (page 1)`
-      case 'previous':
-        return `Go to previous page (page ${page})`
-      case 'next':
-        return `Go to next page (page ${page})`
-      case 'last':
-        return `Go to last page (page ${page})`
-      default:
-        return `Go to page ${page}`
-    }
-  },
+  renderPageLabel,
   ...rest
 } = Astro.props
+
+// Create default renderPageLabel function that uses individual label props
+const defaultRenderPageLabel = ({ type, page }: { type: string; page: string | number }) => {
+  switch (type) {
+    case 'first':
+      return firstPageLabel
+    case 'previous':
+      return previousPageLabel
+    case 'next':
+      return nextPageLabel
+    case 'last':
+      return lastPageLabel
+    default:
+      return `Go to page ${page}`
+  }
+}
+
+// Use custom renderPageLabel if provided, otherwise use default with individual props
+const pageLabel = renderPageLabel || defaultRenderPageLabel
 
 const progress = renderProgress({ currentPage, totalPages })
 ---
@@ -134,7 +140,7 @@ const progress = renderProgress({ currentPage, totalPages })
     <li>
       {
         firstPage ? (
-          <a href={firstPage} aria-label={renderPageLabel({ type: 'first', page: 1 })}>
+          <a href={firstPage} aria-label={pageLabel({ type: 'first', page: 1 })}>
             <svg
               aria-hidden="true"
               width="32"
@@ -193,7 +199,7 @@ const progress = renderProgress({ currentPage, totalPages })
         previousPage ? (
           <a
             href={previousPage}
-            aria-label={renderPageLabel({
+            aria-label={pageLabel({
               type: 'previous',
               page: Number(currentPage) - 1,
             })}
@@ -245,7 +251,7 @@ const progress = renderProgress({ currentPage, totalPages })
         nextPage ? (
           <a
             href={nextPage}
-            aria-label={renderPageLabel({
+            aria-label={pageLabel({
               type: 'next',
               page: Number(currentPage) + 1,
             })}
@@ -294,7 +300,7 @@ const progress = renderProgress({ currentPage, totalPages })
         lastPage ? (
           <a
             href={lastPage}
-            aria-label={renderPageLabel({
+            aria-label={pageLabel({
               type: 'last',
               page: totalPages,
             })}
