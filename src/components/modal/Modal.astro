@@ -119,6 +119,7 @@ const titleId = `${triggerId}-title`
     const firstFocusable = focusables[0]!
     const lastFocusable = focusables[focusables.length - 1]!
 
+
     if (document.activeElement === lastFocusable && event.key === 'Tab' && !event.shiftKey) {
       event.preventDefault()
       firstFocusable.focus()
@@ -160,15 +161,15 @@ const titleId = `${triggerId}-title`
   }
 
   const closeModal = () => {
-    modals.forEach((modal) => {
-      const triggerId = modal.getAttribute('data-trigger-id')
-      const modalTrigger = document.querySelector(`#${triggerId}`) as HTMLButtonElement
-      modalTrigger.focus({ preventScroll: true })
-      modal.close()
-      trapFocusController?.abort()
-      keydownController?.abort()
-    })
-  }
+  const openModal = document.querySelector<HTMLDialogElement>('.modal[open]')
+  if (!openModal) return
+
+  openModal.close()
+  trapFocusController?.abort()
+  keydownController?.abort()
+}
+
+window.closeModal = closeModal
 
   // execution
   modals.forEach((modal) => {
@@ -204,8 +205,8 @@ const titleId = `${triggerId}-title`
       }
 
       modalTrigger.addEventListener('click', () => openModal(modal))
-      modalCloseButton!.addEventListener('click', closeModal)
-    })
+      modalCloseButton!.addEventListener('click',() => closeModal())
+  })
   })
 </script>
 
