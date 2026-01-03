@@ -180,7 +180,7 @@ const titleId = `${triggerId}-title`
     }
 
     modalTrigger.addEventListener('click', () => openModal(modal))
-    modalCloseButton!.addEventListener('click', closeModal)
+    modalCloseButton!.addEventListener('click', () => closeModal())
   })
 
   window.closeModal = closeModal
