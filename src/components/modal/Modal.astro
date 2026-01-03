@@ -160,14 +160,12 @@ const titleId = `${triggerId}-title`
   }
 
   const closeModal = () => {
-    modals.forEach((modal) => {
-      const triggerId = modal.getAttribute('data-trigger-id')
-      const modalTrigger = document.querySelector(`#${triggerId}`) as HTMLButtonElement
-      modalTrigger.focus({ preventScroll: true })
-      modal.close()
-      trapFocusController?.abort()
-      keydownController?.abort()
-    })
+    const openModal = document.querySelector<HTMLDialogElement>('.modal[open]')
+    if (!openModal) return
+
+    openModal.close()
+    trapFocusController?.abort()
+    keydownController?.abort()
   }
 
   // execution
@@ -182,7 +180,7 @@ const titleId = `${triggerId}-title`
     }
 
     modalTrigger.addEventListener('click', () => openModal(modal))
-    modalCloseButton!.addEventListener('click', closeModal)
+    modalCloseButton!.addEventListener('click', () => closeModal())
   })
 
   window.closeModal = closeModal
@@ -204,7 +202,7 @@ const titleId = `${triggerId}-title`
       }
 
       modalTrigger.addEventListener('click', () => openModal(modal))
-      modalCloseButton!.addEventListener('click', closeModal)
+      modalCloseButton!.addEventListener('click', () => closeModal())
     })
   })
 </script>
