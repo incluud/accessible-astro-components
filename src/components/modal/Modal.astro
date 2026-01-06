@@ -222,12 +222,14 @@ const titleId = `${triggerId}-title`
     padding: 0;
     inline-size: min(80%, 450px);
     overscroll-behavior-block: contain;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.modal) {
       translate: 0 var(--translate-offset-y);
       transition-behavior: allow-discrete;
       transition-duration: var(--transition-duration);
-      transition-property: display, opacity, translate, overlay;
+      transition-property: display, opacity, translate;
       transition-timing-function: var(--transition-easing);
     }
   }
