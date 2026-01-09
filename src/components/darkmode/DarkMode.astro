@@ -84,12 +84,26 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
     const root = document.documentElement
     let darkMode = localStorage.getItem('darkMode')
 
+    /**
+     * Dispatch darkmode:change event for external listeners
+     * @param {boolean} enabled - Whether dark mode is enabled
+     */
+    const dispatchChange = (enabled) => {
+      document.dispatchEvent(
+        new CustomEvent('darkmode:change', {
+          detail: { enabled },
+          bubbles: true,
+        })
+      )
+    }
+
     const enableDarkMode = (store = true) => {
       const darkModeToggles = document.querySelectorAll('.darkmode-toggle')
       root.classList.add('darkmode')
       root.style.colorScheme = 'dark'
       darkModeToggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'true'))
       if (store) localStorage.setItem('darkMode', 'enabled')
+      dispatchChange(true)
     }
 
     const disableDarkMode = (store = true) => {
@@ -98,6 +112,7 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
       root.style.colorScheme = 'light'
       darkModeToggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'false'))
       if (store) localStorage.setItem('darkMode', 'disabled')
+      dispatchChange(false)
     }
 
     const checkPreference = () => {
@@ -126,14 +141,33 @@ const { class: className, label = 'Toggle Dark Mode', initialMode = 'auto', ...r
       }
     }
 
+    /**
+     * Expose global darkMode API for external control
+     * Can be used by launchers, command palettes, or other UI
+     */
+    window.darkMode = {
+      enable: () => enableDarkMode(),
+      disable: () => disableDarkMode(),
+      toggle: () => {
+        root.classList.contains('darkmode') ? disableDarkMode() : enableDarkMode()
+      },
+      isEnabled: () => root.classList.contains('darkmode'),
+    }
+
     // execution
     initializeDarkMode()
 
     // Add click handlers to all toggles
     document.addEventListener('click', (e) => {
       if (e.target.closest('.darkmode-toggle')) {
-        darkMode = root.classList.contains('darkmode')
-        !darkMode ? enableDarkMode() : disableDarkMode()
+        window.darkMode.toggle()
+      }
+    })
+
+    // Listen for launcher actions (integration with accessible-astro-launcher)
+    document.addEventListener('launcher:action', (e) => {
+      if (e.detail?.action === 'toggle-dark-mode') {
+        window.darkMode.toggle()
       }
     })
 
