@@ -249,6 +249,21 @@ type DarkMode = typeof import('../../index.js').DarkMode
 export const DarkMode: DarkMode
 
 /**
+ * HighContrast toggle component
+ * - Toggles class `high-contrast` on `document.documentElement`
+ *
+ * @param _props - Props object
+ * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle High Contrast'
+ * @param _props.class - Optional CSS class names
+ * @param _props.children - Optional: Custom elements for on/off icons using named slots
+ * @note Supports named slots: "off" for normal mode icon and "on" for high contrast mode icon
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Includes global styles that enhance focus indicators and link visibility
+ */
+type HighContrast = typeof import('../../index.js').HighContrast
+export const HighContrast: HighContrast
+
+/**
  * Fieldset component
  *
  * @param _props - Record<string, any>
@@ -353,6 +368,36 @@ export const Modal: Modal
 declare global {
   interface Window {
     closeModal: () => void
+    /**
+     * Dark mode API for external control
+     */
+    darkMode: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    darkModeInitialized?: boolean
+    /**
+     * High contrast API for external control
+     */
+    highContrast: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    highContrastInitialized?: boolean
+    /**
+     * Reduced motion API for external control
+     */
+    reducedMotion: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    reducedMotionInitialized?: boolean
   }
 }
 
@@ -415,6 +460,24 @@ export const Pagination: Pagination
  */
 type Radio = typeof import('../../index.js').Radio
 export const Radio: Radio
+
+/**
+ * ReducedMotion toggle component
+ * - Toggles class `reduce-motion` on `document.documentElement`
+ * - Respects system preference by default
+ *
+ * @param _props - Props object
+ * @param _props.initialMode - Optional: Sets initial mode ('on' | 'off' | 'auto') - default: 'auto'
+ * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle Reduced Motion'
+ * @param _props.class - Optional CSS class names
+ * @param _props.children - Optional: Custom elements for on/off icons using named slots
+ * @note Supports named slots: "off" for motion enabled icon and "on" for reduced motion icon
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Includes global styles that disable animations and transitions when active
+ * @note When initialMode is 'auto', respects the user's prefers-reduced-motion system preference
+ */
+type ReducedMotion = typeof import('../../index.js').ReducedMotion
+export const ReducedMotion: ReducedMotion
 
 /**
  * Skip link component

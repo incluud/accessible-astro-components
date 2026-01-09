@@ -1,0 +1,237 @@
+---
+/**
+ * High Contrast Toggle Component
+ *
+ * @description A fully accessible high contrast mode toggle
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the button
+   */
+  class?: string
+  /**
+   * Accessible label for the toggle button
+   * @default "Toggle High Contrast"
+   */
+  label?: string
+  /**
+   * Children elements for slots
+   */
+  children?: any
+  /**
+   * HTML attributes to spread on the high contrast toggle
+   */
+  [key: string]: string | number | boolean | undefined | any
+}
+
+const { class: className, label = 'Toggle High Contrast', ...rest } = Astro.props
+---
+
+<button
+  class:list={['highcontrast-toggle', className]}
+  aria-pressed="false"
+  aria-label={label}
+  transition:persist
+  {...rest}
+>
+  <span class="icon icon-off">
+    <slot name="off">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        ><circle cx="12" cy="12" r="10"></circle><path d="M12 18a6 6 0 0 0 0-12v12z"></path></svg
+      >
+    </slot>
+  </span>
+  <span class="icon icon-on">
+    <slot name="on">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path
+          d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+        ></path>
+        <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"></path>
+        <path
+          d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+        ></path>
+        <path d="m2 2 20 20"></path>
+      </svg>
+    </slot>
+  </span>
+</button>
+
+<script is:inline>
+  // Only run once
+  if (!window.highContrastInitialized) {
+    window.highContrastInitialized = true
+
+    const root = document.documentElement
+    let highContrast = localStorage.getItem('highContrast')
+
+    /**
+     * Dispatch highcontrast:change event for external listeners
+     * @param {boolean} enabled - Whether high contrast is enabled
+     */
+    const dispatchChange = (enabled) => {
+      document.dispatchEvent(
+        new CustomEvent('highcontrast:change', {
+          detail: { enabled },
+          bubbles: true,
+        })
+      )
+    }
+
+    const enableHighContrast = (store = true) => {
+      const toggles = document.querySelectorAll('.highcontrast-toggle')
+      root.classList.add('high-contrast')
+      toggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'true'))
+      if (store) localStorage.setItem('highContrast', 'enabled')
+      dispatchChange(true)
+    }
+
+    const disableHighContrast = (store = true) => {
+      const toggles = document.querySelectorAll('.highcontrast-toggle')
+      root.classList.remove('high-contrast')
+      toggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'false'))
+      if (store) localStorage.setItem('highContrast', 'disabled')
+      dispatchChange(false)
+    }
+
+    const initializeHighContrast = () => {
+      if (highContrast === 'enabled') {
+        enableHighContrast()
+      } else {
+        disableHighContrast()
+      }
+    }
+
+    /**
+     * Expose global highContrast API for external control
+     * Can be used by launchers, command palettes, or other UI
+     */
+    window.highContrast = {
+      enable: () => enableHighContrast(),
+      disable: () => disableHighContrast(),
+      toggle: () => {
+        root.classList.contains('high-contrast') ? disableHighContrast() : enableHighContrast()
+      },
+      isEnabled: () => root.classList.contains('high-contrast'),
+    }
+
+    // execution
+    initializeHighContrast()
+
+    // Add click handlers to all toggles
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.highcontrast-toggle')) {
+        window.highContrast.toggle()
+      }
+    })
+
+    // Listen for launcher actions (integration with accessible-astro-launcher)
+    document.addEventListener('launcher:action', (e) => {
+      if (e.detail?.action === 'toggle-high-contrast') {
+        window.highContrast.toggle()
+      }
+    })
+
+    // Listen for view transitions
+    document.addEventListener('astro:after-swap', () => {
+      highContrast = localStorage.getItem('highContrast')
+      initializeHighContrast()
+    })
+  }
+</script>
+
+<style>
+  :where(.highcontrast-toggle) {
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    background: transparent;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.highcontrast-toggle) {
+      transition: box-shadow var(--transition-duration) var(--transition-easing);
+    }
+  }
+
+  :where(.highcontrast-toggle:hover),
+  :where(.highcontrast-toggle:focus-visible) {
+    box-shadow: 0 0 0 0.25rem;
+  }
+
+  :where(.highcontrast-toggle:focus-visible) {
+    outline: none;
+  }
+
+  :where(.icon) {
+    display: flex;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  :where(.icon svg),
+  :where(.icon) :global(svg) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  :where(.highcontrast-toggle .icon-on) {
+    display: none;
+  }
+
+  :global(.high-contrast) :where(.highcontrast-toggle .icon-on) {
+    display: flex;
+  }
+
+  :global(.high-contrast) :where(.highcontrast-toggle .icon-off) {
+    display: none;
+  }
+</style>
+
+<style is:global>
+  /* High Contrast Mode Styles */
+  .high-contrast {
+    --contrast-multiplier: 1.2;
+  }
+
+  .high-contrast *:focus-visible {
+    outline-style: solid;
+    outline-width: 3px;
+  }
+
+  .high-contrast a:not([class]) {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+</style>

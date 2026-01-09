@@ -42,7 +42,9 @@ The Accessible Astro Components library provides a collection of pre-built, acce
 - **Breadcrumbs**: Navigation aid showing the current page's location
 - **Button**: Versatile button with variants and delightful animations
 - **Card**: Content container with flexible layout options
-- **DarkMode**: Theme toggle with system preference support
+- **DarkMode**: Theme toggle with system preference support and global API
+- **HighContrast**: High contrast mode toggle for enhanced visual clarity
+- **ReducedMotion**: Reduced motion toggle respecting system preferences
 - **Forms**: Complete form components with validation, error handling, and accessibility features
   - **Form**: Form wrapper with validation and error handling
   - **Input**: Text, email, password, and other input types with validation

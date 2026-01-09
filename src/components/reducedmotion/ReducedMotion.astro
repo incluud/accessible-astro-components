@@ -1,0 +1,257 @@
+---
+/**
+ * Reduced Motion Toggle Component
+ *
+ * @description A fully accessible reduced motion toggle that respects system preferences
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the button
+   */
+  class?: string
+  /**
+   * Accessible label for the toggle button
+   * @default "Toggle Reduced Motion"
+   */
+  label?: string
+  /**
+   * Initial mode - 'auto' respects system preference
+   * @default "auto"
+   */
+  initialMode?: 'on' | 'off' | 'auto'
+  /**
+   * Children elements for slots
+   */
+  children?: any
+  /**
+   * HTML attributes to spread on the reduced motion toggle
+   */
+  [key: string]: string | number | boolean | undefined | any
+}
+
+const {
+  class: className,
+  label = 'Toggle Reduced Motion',
+  initialMode = 'auto',
+  ...rest
+} = Astro.props
+---
+
+<button
+  class:list={['reducedmotion-toggle', className]}
+  aria-pressed="false"
+  aria-label={label}
+  data-initial-mode={initialMode}
+  transition:persist
+  {...rest}
+>
+  <span class="icon icon-off">
+    <slot name="off">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="14" y="3" width="5" height="18" rx="1"></rect>
+        <rect x="5" y="3" width="5" height="18" rx="1"></rect>
+      </svg>
+    </slot>
+  </span>
+  <span class="icon icon-on">
+    <slot name="on">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"
+        ></path>
+      </svg>
+    </slot>
+  </span>
+</button>
+
+<script is:inline define:vars={{ initialMode }}>
+  // Only run once
+  if (!window.reducedMotionInitialized) {
+    window.reducedMotionInitialized = true
+
+    const root = document.documentElement
+    let reducedMotion = localStorage.getItem('reducedMotion')
+
+    /**
+     * Dispatch reducemotion:change event for external listeners
+     * @param {boolean} enabled - Whether reduced motion is enabled
+     */
+    const dispatchChange = (enabled) => {
+      document.dispatchEvent(
+        new CustomEvent('reducemotion:change', {
+          detail: { enabled },
+          bubbles: true,
+        })
+      )
+    }
+
+    const enableReducedMotion = (store = true) => {
+      const toggles = document.querySelectorAll('.reducedmotion-toggle')
+      root.classList.add('reduce-motion')
+      toggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'true'))
+      if (store) localStorage.setItem('reducedMotion', 'enabled')
+      dispatchChange(true)
+    }
+
+    const disableReducedMotion = (store = true) => {
+      const toggles = document.querySelectorAll('.reducedmotion-toggle')
+      root.classList.remove('reduce-motion')
+      toggles.forEach((toggle) => toggle.setAttribute('aria-pressed', 'false'))
+      if (store) localStorage.setItem('reducedMotion', 'disabled')
+      dispatchChange(false)
+    }
+
+    const checkSystemPreference = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        enableReducedMotion(false)
+      } else {
+        disableReducedMotion(false)
+      }
+    }
+
+    const initializeReducedMotion = () => {
+      if (reducedMotion) {
+        reducedMotion === 'enabled' ? enableReducedMotion() : disableReducedMotion()
+        return
+      }
+
+      switch (initialMode) {
+        case 'on':
+          enableReducedMotion()
+          break
+        case 'off':
+          disableReducedMotion()
+          break
+        default: // 'auto'
+          checkSystemPreference()
+      }
+    }
+
+    /**
+     * Expose global reducedMotion API for external control
+     * Can be used by launchers, command palettes, or other UI
+     */
+    window.reducedMotion = {
+      enable: () => enableReducedMotion(),
+      disable: () => disableReducedMotion(),
+      toggle: () => {
+        root.classList.contains('reduce-motion') ? disableReducedMotion() : enableReducedMotion()
+      },
+      isEnabled: () => root.classList.contains('reduce-motion'),
+    }
+
+    // execution
+    initializeReducedMotion()
+
+    // Add click handlers to all toggles
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.reducedmotion-toggle')) {
+        window.reducedMotion.toggle()
+      }
+    })
+
+    // Listen for launcher actions (integration with accessible-astro-launcher)
+    document.addEventListener('launcher:action', (e) => {
+      if (e.detail?.action === 'toggle-reduced-motion') {
+        window.reducedMotion.toggle()
+      }
+    })
+
+    // Listen for view transitions
+    document.addEventListener('astro:after-swap', () => {
+      reducedMotion = localStorage.getItem('reducedMotion')
+      initializeReducedMotion()
+    })
+  }
+</script>
+
+<style>
+  :where(.reducedmotion-toggle) {
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid;
+    border-radius: 0.5rem;
+    background: transparent;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.reducedmotion-toggle) {
+      transition: box-shadow var(--transition-duration) var(--transition-easing);
+    }
+  }
+
+  :where(.reducedmotion-toggle:hover),
+  :where(.reducedmotion-toggle:focus-visible) {
+    box-shadow: 0 0 0 0.25rem;
+  }
+
+  :where(.reducedmotion-toggle:focus-visible) {
+    outline: none;
+  }
+
+  :where(.icon) {
+    display: flex;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  :where(.icon svg),
+  :where(.icon) :global(svg) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  :where(.reducedmotion-toggle .icon-on) {
+    display: none;
+  }
+
+  :global(.reduce-motion) :where(.reducedmotion-toggle .icon-on) {
+    display: flex;
+  }
+
+  :global(.reduce-motion) :where(.reducedmotion-toggle .icon-off) {
+    display: none;
+  }
+</style>
+
+<style is:global>
+  /* Reduced Motion Styles */
+  .reduce-motion *,
+  .reduce-motion *::before,
+  .reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+</style>
