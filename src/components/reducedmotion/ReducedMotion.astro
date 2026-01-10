@@ -134,7 +134,7 @@ const {
 
     const initializeReducedMotion = () => {
       if (reducedMotion) {
-        reducedMotion === 'enabled' ? enableReducedMotion() : disableReducedMotion()
+        reducedMotion === 'enabled' ? enableReducedMotion(false) : disableReducedMotion(false)
         return
       }
 
