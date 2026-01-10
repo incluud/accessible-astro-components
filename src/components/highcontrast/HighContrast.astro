@@ -117,10 +117,8 @@ const { class: className, label = 'Toggle High Contrast', ...rest } = Astro.prop
     }
 
     const initializeHighContrast = () => {
-      if (highContrast === 'enabled') {
-        enableHighContrast()
-      } else {
-        disableHighContrast()
+      if (highContrast) {
+        highContrast === 'enabled' ? enableHighContrast(false) : disableHighContrast(false)
       }
     }
 
