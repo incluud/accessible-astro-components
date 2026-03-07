@@ -1,0 +1,278 @@
+---
+/**
+ * Tooltip Component
+ *
+ * @description Accessible tooltip using Popover API and CSS Anchor Positioning
+ */
+
+interface Props {
+  /**
+   * Unique ID for the tooltip (used for aria-describedby)
+   */
+  id: string
+  /**
+   * Preferred tooltip position
+   * @default "top"
+   */
+  position?: 'top' | 'bottom' | 'left' | 'right'
+  /**
+   * Offset from the anchor element
+   * @default "var(--space-2xs)"
+   */
+  offset?: string
+  /**
+   * Screen reader label for icon-only triggers
+   */
+  triggerLabel?: string
+  /**
+   * Whether to show the default help icon
+   * @default true
+   */
+  showIcon?: boolean
+  /**
+   * Additional classes for the wrapper
+   */
+  class?: string
+  /**
+   * HTML attributes to spread on the wrapper
+   */
+  [key: string]: unknown
+}
+
+const {
+  id,
+  position = 'top',
+  offset = 'var(--space-2xs)',
+  triggerLabel,
+  showIcon = true,
+  class: className,
+  ...rest
+} = Astro.props
+
+if (!id) {
+  throw new Error('Tooltip component requires a unique "id" prop for aria-describedby.')
+}
+
+const hasTriggerSlot = Astro.slots.has('default')
+
+if (!hasTriggerSlot && !triggerLabel) {
+  throw new Error(
+    'Tooltip component requires trigger content or a "triggerLabel" prop for an accessible name.'
+  )
+}
+
+const anchorName = `--tooltip-${id}`
+const triggerId = `${id}-trigger`
+const inlineStyle = `--tooltip-anchor: ${anchorName}; --tooltip-offset: ${offset};`
+---
+
+<span class:list={['tooltip-wrapper', className]} style={inlineStyle} {...rest}>
+  <button
+    id={triggerId}
+    class="tooltip-trigger"
+    type="button"
+    popovertarget={id}
+    aria-controls={id}
+    aria-expanded="false"
+    aria-describedby={id}
+  >
+    <slot />
+    {
+      showIcon && (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01" />
+          </g>
+        </svg>
+      )
+    }
+    {triggerLabel && <span class="sr-only">{triggerLabel}</span>}
+  </button>
+  <span
+    id={id}
+    class:list={['tooltip', `position-${position}`]}
+    role="tooltip"
+    popover
+    data-tooltip-trigger={triggerId}
+  >
+    <slot name="tooltip" />
+  </span>
+</span>
+
+<script>
+  const TOOLTIP_SELECTOR = '[data-tooltip-trigger]'
+
+  const initializeTooltipA11y = (tooltip: HTMLElement) => {
+    if (tooltip.dataset.srStateBound === 'true') return
+
+    const triggerId = tooltip.dataset.tooltipTrigger
+    if (!triggerId) return
+
+    const trigger = document.getElementById(triggerId)
+    if (!(trigger instanceof HTMLButtonElement)) return
+
+    const syncExpandedState = () => {
+      const isOpen = tooltip.matches(':popover-open')
+      trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+    }
+
+    syncExpandedState()
+    tooltip.addEventListener('toggle', syncExpandedState)
+    tooltip.dataset.srStateBound = 'true'
+  }
+
+  const initializeTooltips = () => {
+    document.querySelectorAll<HTMLElement>(TOOLTIP_SELECTOR).forEach((tooltip) => {
+      initializeTooltipA11y(tooltip)
+    })
+  }
+
+  // execution
+  initializeTooltips()
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => {
+    initializeTooltips()
+  })
+</script>
+
+<style>
+  :where(.tooltip-wrapper) {
+    --translate-offset-x: -1rem;
+    --translate-offset-y: -1rem;
+    --transition-duration: 0.2s;
+    --transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: inline-flex;
+    position: relative;
+  }
+
+  :where(.tooltip-trigger) {
+    anchor-name: var(--tooltip-anchor);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    border: none;
+    background: none;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 4px;
+  }
+
+  .tooltip-trigger:hover,
+  .tooltip-trigger:focus-visible {
+    cursor: help;
+  }
+
+  :where(.tooltip) {
+    position: absolute;
+    position-anchor: var(--tooltip-anchor);
+    position-area: top;
+    position-try-fallbacks: flip-block, flip-inline;
+    translate: 0 var(--translate-offset-y);
+    opacity: 0;
+    z-index: var(--z-index-6);
+    transition-behavior: allow-discrete;
+    transition-duration: var(--transition-duration);
+    transition-property: opacity, translate, overlay, display;
+    transition-timing-function: var(--transition-easing);
+    box-shadow: var(--elevation-1);
+    border: 1px solid var(--color-default-border);
+    border-radius: var(--radius-s);
+    background-color: var(--color-default-bg);
+    padding: var(--space-3xs) var(--space-xs);
+    color: var(--color-default-text);
+  }
+
+  :where(.tooltip.position-top) {
+    translate: 0 calc(var(--translate-offset-y) * -1);
+  }
+
+  :where(.tooltip.position-bottom) {
+    translate: 0 var(--translate-offset-y);
+  }
+
+  :where(.tooltip.position-left) {
+    translate: var(--translate-offset-x) 0;
+  }
+
+  :where(.tooltip.position-right) {
+    translate: calc(var(--translate-offset-x) * -1) 0;
+  }
+
+  :where(.tooltip:popover-open) {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  /* Default position (top) */
+  @starting-style {
+    :where(.tooltip.position-top:popover-open) {
+      translate: 0 var(--translate-offset-y);
+      opacity: 0;
+    }
+  }
+
+  /* Right position */
+  @starting-style {
+    :where(.tooltip.position-right:popover-open) {
+      translate: calc(var(--translate-offset-x) * -1) 0;
+      opacity: 0;
+    }
+  }
+
+  /* Bottom position */
+  @starting-style {
+    :where(.tooltip.position-bottom:popover-open) {
+      translate: 0 calc(var(--translate-offset-y) * -1);
+      opacity: 0;
+    }
+  }
+
+  /* Left position */
+  @starting-style {
+    :where(.tooltip.position-left:popover-open) {
+      translate: var(--translate-offset-x) 0;
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(.tooltip) {
+      transition: none;
+    }
+  }
+
+  :where(.tooltip.position-top) {
+    position-area: top;
+    margin-block-end: var(--tooltip-offset);
+  }
+
+  :where(.tooltip.position-bottom) {
+    position-area: bottom;
+    margin-block-start: var(--tooltip-offset);
+  }
+
+  :where(.tooltip.position-left) {
+    position-area: left;
+    margin-inline-end: var(--tooltip-offset);
+  }
+
+  :where(.tooltip.position-right) {
+    position-area: right;
+    margin-inline-start: var(--tooltip-offset);
+  }
+</style>
