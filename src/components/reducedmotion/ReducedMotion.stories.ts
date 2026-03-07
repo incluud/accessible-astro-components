@@ -15,13 +15,6 @@ export const Default = {
   },
 }
 
-export const InitialAuto = {
-  args: {
-    ...baseArgs,
-    initialMode: 'auto',
-  },
-}
-
 export const InitialOn = {
   args: {
     ...baseArgs,

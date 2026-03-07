@@ -35,31 +35,27 @@ const {
   ...rest
 } = Astro.props
 
+const renderSlotValue = (value?: string, isHtml = false) => {
+  return isHtml ? <Fragment set:html={value ?? ''} /> : value
+}
+
+const renderSlotChildren = (items: SlotChild[]) => {
+  return items.map((item) => (
+    <item.Component {...(item.props ?? {})}>
+      {item.children && item.children.length > 0
+        ? renderSlotChildren(item.children)
+        : renderSlotValue(item.slot, item.slotIsHtml ?? false)}
+    </item.Component>
+  ))
+}
+
 ---
 
 {before &&
   (beforeIsHtml ? <Fragment set:html={before ?? ''} /> : before)}
 <Component {...rest}>
   {children.length > 0
-    ? children.map((item) => (
-        <item.Component {...(item.props ?? {})}>
-          {item.children && item.children.length > 0
-            ? item.children.map((child) => (
-                <child.Component {...(child.props ?? {})}>
-                  {child.slotIsHtml ? (
-                    <Fragment set:html={child.slot ?? ''} />
-                  ) : (
-                    child.slot
-                  )}
-                </child.Component>
-              ))
-            : item.slotIsHtml ? (
-                <Fragment set:html={item.slot ?? ''} />
-              ) : (
-                item.slot
-              )}
-        </item.Component>
-      ))
+    ? renderSlotChildren(children)
     : slotIsHtml ? (
         <Fragment set:html={slot} />
       ) : (

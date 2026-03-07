@@ -14,8 +14,8 @@ export const Default = {
   args: {
     ...baseArgs,
     children: [
-      { Component: BreadcrumbsItem, props: { label: 'Home', href: '/' } },
-      { Component: BreadcrumbsItem, props: { label: 'Library', href: '/library' } },
+      { Component: BreadcrumbsItem, props: { label: 'Home', href: '#' } },
+      { Component: BreadcrumbsItem, props: { label: 'Library', href: '#' } },
       { Component: BreadcrumbsItem, props: { label: 'Details', currentPage: true } },
     ],
   },
@@ -27,7 +27,7 @@ export const WithIcons = {
     children: [
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Home', href: '/', hasIcon: true },
+        props: { label: 'Home', href: '#', hasIcon: true },
         slotIsHtml: true,
         slot: `
           <svg slot="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -36,7 +36,7 @@ export const WithIcons = {
           </svg>
         `,
       },
-      { Component: BreadcrumbsItem, props: { label: 'Library', href: '/library' } },
+      { Component: BreadcrumbsItem, props: { label: 'Library', href: '#' } },
       { Component: BreadcrumbsItem, props: { label: 'Details', currentPage: true } },
     ],
   },
@@ -48,13 +48,13 @@ export const CustomSeparator = {
     children: [
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Home', href: '/' },
+        props: { label: 'Home', href: '#' },
         slotIsHtml: true,
         slot: '<span slot="separator" class="separator" aria-hidden="true">→</span>',
       },
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Library', href: '/library' },
+        props: { label: 'Library', href: '#' },
         slotIsHtml: true,
         slot: '<span slot="separator" class="separator" aria-hidden="true">→</span>',
       },
@@ -67,9 +67,9 @@ export const LongTrail = {
   args: {
     ...baseArgs,
     children: [
-      { Component: BreadcrumbsItem, props: { label: 'Home', href: '/' } },
-      { Component: BreadcrumbsItem, props: { label: 'Library', href: '/library' } },
-      { Component: BreadcrumbsItem, props: { label: 'Collections', href: '/library/collections' } },
+      { Component: BreadcrumbsItem, props: { label: 'Home', href: '#' } },
+      { Component: BreadcrumbsItem, props: { label: 'Library', href: '#' } },
+      { Component: BreadcrumbsItem, props: { label: 'Collections', href: '#' } },
       { Component: BreadcrumbsItem, props: { label: 'Details', currentPage: true } },
     ],
   },
@@ -81,7 +81,7 @@ export const LongTrailWithIcons = {
     children: [
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Home', href: '/', hasIcon: true },
+        props: { label: 'Home', href: '#', hasIcon: true },
         slotIsHtml: true,
         slot: `
           <svg slot="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -90,8 +90,8 @@ export const LongTrailWithIcons = {
           </svg>
         `,
       },
-      { Component: BreadcrumbsItem, props: { label: 'Library', href: '/library' } },
-      { Component: BreadcrumbsItem, props: { label: 'Collections', href: '/library/collections' } },
+      { Component: BreadcrumbsItem, props: { label: 'Library', href: '#' } },
+      { Component: BreadcrumbsItem, props: { label: 'Collections', href: '#' } },
       { Component: BreadcrumbsItem, props: { label: 'Details', currentPage: true } },
     ],
   },
@@ -103,19 +103,19 @@ export const LongTrailCustomSeparator = {
     children: [
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Home', href: '/' },
+        props: { label: 'Home', href: '#' },
         slotIsHtml: true,
         slot: '<span slot="separator" class="separator" aria-hidden="true">→</span>',
       },
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Library', href: '/library' },
+        props: { label: 'Library', href: '#' },
         slotIsHtml: true,
         slot: '<span slot="separator" class="separator" aria-hidden="true">→</span>',
       },
       {
         Component: BreadcrumbsItem,
-        props: { label: 'Collections', href: '/library/collections' },
+        props: { label: 'Collections', href: '#' },
         slotIsHtml: true,
         slot: '<span slot="separator" class="separator" aria-hidden="true">→</span>',
       },
