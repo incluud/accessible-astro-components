@@ -1,0 +1,27 @@
+---
+type SlotChild = {
+  Component: (props: Record<string, unknown>) => unknown
+  props?: Record<string, unknown>
+  slot?: string
+  slotIsHtml?: boolean
+  children?: SlotChild[]
+}
+
+interface Props {
+  items: SlotChild[]
+}
+
+const { items = [] } = Astro.props
+---
+
+{items.map((item) => (
+  <item.Component {...(item.props ?? {})}>
+    {item.children && item.children.length > 0 ? (
+      <Astro.self items={item.children} />
+    ) : item.slotIsHtml ? (
+      <Fragment set:html={item.slot ?? ''} />
+    ) : (
+      item.slot
+    )}
+  </item.Component>
+))}

@@ -1,4 +1,6 @@
 ---
+import StorySlotChildren from './StorySlotChildren.astro'
+
 type SlotChild = {
   Component: (props: Record<string, unknown>) => unknown
   props?: Record<string, unknown>
@@ -41,25 +43,7 @@ const {
   (beforeIsHtml ? <Fragment set:html={before} /> : before)}
 <Component {...rest}>
   {children.length > 0
-    ? children.map((item) => (
-        <item.Component {...(item.props ?? {})}>
-          {item.children && item.children.length > 0
-            ? item.children.map((child) => (
-                <child.Component {...(child.props ?? {})}>
-                  {child.slotIsHtml ? (
-                    <Fragment set:html={child.slot ?? ''} />
-                  ) : (
-                    child.slot
-                  )}
-                </child.Component>
-              ))
-            : item.slotIsHtml ? (
-                <Fragment set:html={item.slot ?? ''} />
-              ) : (
-                item.slot
-              )}
-        </item.Component>
-      ))
+    ? <StorySlotChildren items={children} />
     : slotIsHtml ? (
         <Fragment set:html={slot} />
       ) : (
