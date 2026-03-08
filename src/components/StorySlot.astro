@@ -23,7 +23,7 @@ interface Props {
 
 const {
   Component,
-  slot = 'Label',
+  slot = '',
   slotIsHtml = false,
   children = [],
   tooltipSlot,
@@ -52,7 +52,7 @@ const renderSlotChildren = (items: SlotChild[]) => {
 ---
 
 {before &&
-  (beforeIsHtml ? <Fragment set:html={before ?? ''} /> : before)}
+  (beforeIsHtml ? <Fragment set:html={before} /> : before)}
 <Component {...rest}>
   {children.length > 0
     ? renderSlotChildren(children)
@@ -68,4 +68,4 @@ const renderSlotChildren = (items: SlotChild[]) => {
   )}
 </Component>
 {after &&
-  (afterIsHtml ? <Fragment set:html={after ?? ''} /> : after)}
+  (afterIsHtml ? <Fragment set:html={after} /> : after)}
