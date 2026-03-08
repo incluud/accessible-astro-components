@@ -20,5 +20,8 @@ yarn-error.log*
 # vscode settings and dictionaries
 .vscode
 
+# astro build files
+.astro
+
 # cursor
 .cursor/*

@@ -584,3 +584,22 @@ export const Video: Video
  */
 type Textarea = typeof import('../../index.js').Textarea
 export const Textarea: Textarea
+
+/**
+ * Tooltip component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.id - Unique ID for the tooltip (required)
+ * @param _props.position - Preferred tooltip position ('top' | 'bottom' | 'left' | 'right') - default: 'top'
+ * @param _props.offset - Offset distance from anchor - default: 'var(--space-2xs)'
+ * @param _props.triggerLabel - Screen reader label for icon-only triggers
+ * @param _props.showIcon - Whether to show the default help icon - default: true
+ * @param _props.class - Optional CSS class names
+ * @param _props.children -
+ *  - Default slot: trigger content
+ *  - Named slot "tooltip": tooltip content
+ * @note Additional HTML attributes can be passed and will be spread to the wrapper element
+ * @note Uses Popover API with CSS Anchor Positioning
+ */
+type Tooltip = typeof import('../../index.js').Tooltip
+export const Tooltip: Tooltip
