@@ -25,6 +25,8 @@ export { default as Tabs } from './src/components/tabs/Tabs.astro'
 export { default as TabsList } from './src/components/tabs/TabsList.astro'
 export { default as TabsPanel } from './src/components/tabs/TabsPanel.astro'
 export { default as TabsTab } from './src/components/tabs/TabsTab.astro'
+export { default as Toast } from './src/components/toast/Toast.astro'
+export { default as ToastProvider } from './src/components/toast/ToastProvider.astro'
 export { default as Tooltip } from './src/components/tooltip/Tooltip.astro'
 export { default as Video } from './src/components/video/Video.astro'
 
