@@ -1,0 +1,254 @@
+---
+/**
+ * Toast Component
+ *
+ * @description An individual toast message used by the ToastProvider component
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the toast
+   */
+  class?: string
+  /**
+   * Optional id for the toast
+   */
+  id?: string
+  /**
+   * Toast message content
+   */
+  message?: string
+  /**
+   * Type of toast
+   * @default "default"
+   */
+  type?: 'info' | 'success' | 'warning' | 'error' | 'default'
+  /**
+   * Whether the toast is dismissible
+   * @default true
+   */
+  dismissible?: boolean
+  /**
+   * Accessible label for the dismiss button
+   * @default "Dismiss notification"
+   */
+  dismissLabel?: string
+  /**
+   * HTML attributes to spread on the toast
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+const {
+  class: className,
+  id,
+  message = 'Notification',
+  type = 'default',
+  dismissible = true,
+  dismissLabel = 'Dismiss notification',
+  ...rest
+} = Astro.props
+---
+
+<div
+  class:list={['toast', `type-${type}`, className]}
+  data-toast-item
+  data-toast-id={id}
+  {...rest}
+>
+  <span class="toast-icons" aria-hidden="true">
+    <span class="toast-icon" data-type="default">
+      <svg width="16" height="16" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10.268 21a2 2 0 0 0 3.464 0m-10.47-5.674A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+        ></path>
+      </svg>
+    </span>
+    <span class="toast-icon" data-type="info">
+      <svg width="20" height="20" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4m0-4h.01"></path>
+        </g>
+      </svg>
+    </span>
+    <span class="toast-icon" data-type="success">
+      <svg width="20" height="20" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m9 12l2 2l4-4"></path>
+        </g>
+      </svg>
+    </span>
+    <span class="toast-icon" data-type="warning">
+      <svg width="20" height="20" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"
+        ></path>
+      </svg>
+    </span>
+    <span class="toast-icon" data-type="error">
+      <svg width="20" height="20" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m15 9l-6 6m0-6l6 6"></path>
+        </g>
+      </svg>
+    </span>
+  </span>
+  <p class="toast-content">
+    <span class="sr-only" data-toast-type>{type}:</span>
+    <span data-toast-message>{message}</span>
+  </p>
+  {
+    dismissible && (
+      <button type="button" class="toast-dismiss" data-toast-dismiss>
+        <span class="sr-only">{dismissLabel}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m6 6l12 12m0-12l-12 12"
+          />
+        </svg>
+      </button>
+    )
+  }
+</div>
+
+<style>
+  :where(.toast) {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-xs);
+    translate: 0 var(--toast-translate);
+    opacity: 0;
+    box-shadow: var(--elevation-2);
+    border: 2px solid var(--color-default-border);
+    border-radius: var(--radius-m);
+    background-color: var(--color-default-bg);
+    padding: var(--space-2xs);
+    pointer-events: auto;
+    color: var(--color-default-text);
+    font-size: var(--font-size--1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.toast) {
+      transition-duration: 0.2s;
+      transition-property: opacity, translate;
+      transition-timing-function: var(--animation-timing);
+    }
+  }
+
+  @starting-style {
+    :where(.toast)[data-state='ready'] {
+      translate: 0 var(--toast-translate);
+      opacity: 0;
+    }
+  }
+
+  :where(.toast[data-state='ready']) {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  :where(.toast[data-state='leaving']) {
+    translate: 0 var(--toast-translate);
+    opacity: 0;
+  }
+
+  :where(.toast-icons) {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  :where(.toast-icon) {
+    display: none;
+  }
+
+  :where(.toast.type-default .toast-icon[data-type='default']),
+  :where(.toast.type-info .toast-icon[data-type='info']),
+  :where(.toast.type-success .toast-icon[data-type='success']),
+  :where(.toast.type-warning .toast-icon[data-type='warning']),
+  :where(.toast.type-error .toast-icon[data-type='error']) {
+    display: inline-flex;
+  }
+
+  :where(.toast-content) {
+    margin: 0;
+  }
+
+  :where(.toast-dismiss) {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-inline-end: -0.25em;
+    border: none;
+    border-radius: 0.5rem;
+    background: transparent;
+    padding: 0;
+    inline-size: 2rem;
+    block-size: 2rem;
+    color: currentColor;
+  }
+
+  :where(.toast.type-info) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+  }
+
+  :where(.toast.type-success) {
+    border-color: var(--color-success-border);
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  :where(.toast.type-warning) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+  }
+
+  :where(.toast.type-error) {
+    border-color: var(--color-error-border);
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+  }
+</style>

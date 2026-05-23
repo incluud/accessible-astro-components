@@ -1,0 +1,334 @@
+---
+import Toast from './Toast.astro'
+
+/**
+ * Toast Provider Component
+ *
+ * @description A global toast container with a JavaScript API for stacking notifications
+ */
+interface Props {
+  /**
+   * Additional classes to apply to the toast provider
+   */
+  class?: string
+  /**
+   * Toast position in the viewport
+   * @default "bottom-right"
+   */
+  position?:
+    | 'bottom-right'
+    | 'bottom-left'
+    | 'bottom-center'
+    | 'top-right'
+    | 'top-left'
+    | 'top-center'
+  /**
+   * Default duration before auto-dismiss (ms)
+   * @default 5000
+   */
+  duration?: number
+  /**
+   * Maximum number of toasts to display
+   * @default 5
+   */
+  maxToasts?: number
+  /**
+   * Accessible label for the toast region
+   * @default "Notifications"
+   */
+  ariaLabel?: string
+  /**
+   * HTML attributes to spread on the toast provider
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+const {
+  class: className,
+  position = 'bottom-right',
+  duration = 5000,
+  maxToasts = 5,
+  ariaLabel = 'Notifications',
+  ...rest
+} = Astro.props
+---
+
+<div
+  class:list={['toast-provider', className]}
+  role="log"
+  aria-label={ariaLabel}
+  data-toast-provider
+  data-position={position}
+  data-duration={duration}
+  data-max-toasts={maxToasts}
+  {...rest}
+>
+  <template data-toast-template>
+    <Toast message="" />
+  </template>
+</div>
+
+<script>
+  type ToastType = 'info' | 'success' | 'warning' | 'error' | 'default'
+  type ToastOptions = {
+    message: string
+    type?: ToastType
+    duration?: number
+    dismissible?: boolean
+  }
+
+  const PROVIDER_SELECTOR = '[data-toast-provider]'
+  const TEMPLATE_SELECTOR = '[data-toast-template]'
+  const TOAST_ITEM_SELECTOR = '[data-toast-item]'
+
+  const state = {
+    provider: null as HTMLElement | null,
+    timers: new Map<string, number>(),
+    keydownController: undefined as AbortController | undefined,
+  }
+
+  const parseNumber = (value: string | undefined, fallback: number) => {
+    const parsed = Number.parseInt(value ?? '', 10)
+    return Number.isFinite(parsed) ? parsed : fallback
+  }
+
+  const getProviderConfig = () => {
+    if (!state.provider) {
+      return { duration: 5000, maxToasts: 5 }
+    }
+
+    return {
+      duration: parseNumber(state.provider.dataset.duration, 5000),
+      maxToasts: parseNumber(state.provider.dataset.maxToasts, 5),
+    }
+  }
+
+  const createToastId = () => {
+    if ('randomUUID' in crypto) {
+      return crypto.randomUUID()
+    }
+
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+  }
+
+  const setToastState = (toast: HTMLElement, stateValue: 'entering' | 'ready' | 'leaving') => {
+    toast.dataset.state = stateValue
+  }
+
+  const getToastById = (id: string) => {
+    if (!state.provider) return null
+
+    const toasts = state.provider.querySelectorAll<HTMLElement>(TOAST_ITEM_SELECTOR)
+    return Array.from(toasts).find((toast) => toast.dataset.toastId === id) ?? null
+  }
+
+  const removeToast = (toast: HTMLElement, immediate = false) => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (immediate || prefersReducedMotion) {
+      toast.remove()
+      return
+    }
+
+    setToastState(toast, 'leaving')
+    const cleanup = () => toast.remove()
+
+    toast.addEventListener('transitionend', cleanup, { once: true })
+    window.setTimeout(cleanup, 250)
+  }
+
+  const dismissToast = (id: string, immediate = false) => {
+    const toast = getToastById(id)
+    if (!toast) return
+
+    const timeoutId = state.timers.get(id)
+    if (timeoutId) {
+      window.clearTimeout(timeoutId)
+      state.timers.delete(id)
+    }
+
+    removeToast(toast, immediate)
+    document.dispatchEvent(new CustomEvent('toast:dismiss', { detail: { id } }))
+  }
+
+  const dismissAll = (immediate = false) => {
+    if (!state.provider) return
+
+    state.provider.querySelectorAll<HTMLElement>(TOAST_ITEM_SELECTOR).forEach((toast) => {
+      const toastId = toast.dataset.toastId
+      if (toastId) {
+        dismissToast(toastId, immediate)
+      } else {
+        removeToast(toast, immediate)
+      }
+    })
+  }
+
+  const enforceMaxToasts = (maxToasts: number) => {
+    if (!state.provider || maxToasts <= 0) return
+
+    const toasts = state.provider.querySelectorAll<HTMLElement>(TOAST_ITEM_SELECTOR)
+    const overflowCount = toasts.length - maxToasts
+
+    if (overflowCount <= 0) return
+
+    Array.from(toasts)
+      .slice(0, overflowCount)
+      .forEach((toast) => {
+        const toastId = toast.dataset.toastId
+        if (toastId) {
+          dismissToast(toastId, true)
+        } else {
+          removeToast(toast, true)
+        }
+      })
+  }
+
+  const createToastElement = (options: ToastOptions) => {
+    if (!state.provider) return null
+
+    const template = state.provider.querySelector<HTMLTemplateElement>(TEMPLATE_SELECTOR)
+    const toast = template?.content.firstElementChild?.cloneNode(true) as HTMLElement | undefined
+    if (!toast) return null
+
+    const id = createToastId()
+    const type = options.type ?? 'default'
+
+    toast.dataset.toastId = id
+    toast.classList.remove(
+      'type-default',
+      'type-info',
+      'type-success',
+      'type-warning',
+      'type-error'
+    )
+    toast.classList.add(`type-${type}`)
+
+    const typeLabel = toast.querySelector<HTMLElement>('[data-toast-type]')
+    if (typeLabel) {
+      typeLabel.textContent = `${type} -`
+    }
+
+    const messageNode = toast.querySelector<HTMLElement>('[data-toast-message]')
+    if (messageNode) {
+      messageNode.textContent = options.message
+    }
+
+    const dismissButton = toast.querySelector<HTMLButtonElement>('[data-toast-dismiss]')
+    if (dismissButton) {
+      if (options.dismissible === false) {
+        dismissButton.hidden = true
+      } else {
+        dismissButton.addEventListener('click', () => dismissToast(id), { once: true })
+      }
+    }
+
+    return { toast, id, type }
+  }
+
+  const showToast = (options: ToastOptions) => {
+    if (!state.provider) return ''
+
+    const entry = createToastElement(options)
+    if (!entry) return ''
+
+    const { duration, maxToasts } = getProviderConfig()
+    const toastDuration = options.duration ?? duration
+
+    setToastState(entry.toast, 'ready')
+    state.provider.appendChild(entry.toast)
+
+    if (toastDuration > 0) {
+      const timeoutId = window.setTimeout(() => dismissToast(entry.id), toastDuration)
+      state.timers.set(entry.id, timeoutId)
+    }
+
+    enforceMaxToasts(maxToasts)
+    document.dispatchEvent(
+      new CustomEvent('toast:show', {
+        detail: { id: entry.id, type: entry.type, message: options.message },
+      })
+    )
+
+    return entry.id
+  }
+
+  const buildTypedToast = (type: ToastType) => (message: string, duration?: number) =>
+    showToast({ message, type, duration })
+
+  const setupToastProvider = () => {
+    state.provider = document.querySelector<HTMLElement>(PROVIDER_SELECTOR)
+    state.timers.forEach((timeoutId) => window.clearTimeout(timeoutId))
+    state.timers.clear()
+    state.keydownController?.abort()
+
+    if (!state.provider) return
+
+    state.keydownController = new AbortController()
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape') {
+          dismissAll()
+        }
+      },
+      { signal: state.keydownController.signal }
+    )
+  }
+
+  setupToastProvider()
+
+  window.toast = {
+    show: showToast,
+    success: buildTypedToast('success'),
+    error: buildTypedToast('error'),
+    info: buildTypedToast('info'),
+    warning: buildTypedToast('warning'),
+    dismiss: dismissToast,
+    dismissAll: () => dismissAll(),
+  }
+
+  document.addEventListener('astro:after-swap', () => {
+    setupToastProvider()
+  })
+</script>
+
+<style>
+  :where(.toast-provider) {
+    --toast-translate: 0.5rem;
+
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    gap: var(--space-xs);
+    z-index: var(--z-index-2);
+    inline-size: min(90vw, 420px);
+    pointer-events: none;
+  }
+
+  :where(.toast-provider[data-position^='top']) {
+    --toast-translate: -0.5rem;
+
+    inset-block-start: var(--space-l);
+  }
+
+  :where(.toast-provider[data-position^='bottom']) {
+    inset-block-end: var(--space-l);
+  }
+
+  :where(.toast-provider[data-position$='right']) {
+    align-items: flex-end;
+    inset-inline-end: var(--space-l);
+  }
+
+  :where(.toast-provider[data-position$='left']) {
+    align-items: flex-start;
+    inset-inline-start: var(--space-l);
+  }
+
+  :where(.toast-provider[data-position$='center']) {
+    align-items: center;
+    margin-inline: auto;
+    inset-inline: 0;
+  }
+</style>

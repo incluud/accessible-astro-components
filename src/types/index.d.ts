@@ -1,4 +1,132 @@
 /**
+ * Type definitions for accessible-astro-components.
+ *
+ * Table of contents (alphabetical):
+ * - Global definitions
+ * - Accordion
+ * - AccordionItem
+ * - Avatar
+ * - AvatarGroup
+ * - Badge
+ * - Breadcrumbs
+ * - BreadcrumbsItem
+ * - Button
+ * - Card
+ * - Checkbox
+ * - DarkMode
+ * - Fieldset
+ * - Form
+ * - Heading
+ * - HighContrast
+ * - Input
+ * - Link
+ * - Media
+ * - Modal
+ * - Notification
+ * - Pagination
+ * - Radio
+ * - ReducedMotion
+ * - SkipLink
+ * - Tabs
+ * - TabsList
+ * - TabsPanel
+ * - TabsTab
+ * - Textarea
+ * - Toast
+ * - ToastProvider
+ * - Tooltip
+ * - Video
+ */
+
+/**
+ * Global closeModal function for Modal component
+ */
+declare global {
+  type ToastType = 'info' | 'success' | 'warning' | 'error' | 'default'
+
+  type ToastOptions = {
+    message: string
+    type?: ToastType
+    duration?: number
+    dismissible?: boolean
+  }
+
+  interface ToastShowDetail {
+    id: string
+    type: ToastType
+    message: string
+  }
+
+  interface ToastDismissDetail {
+    id: string
+  }
+
+  interface Window {
+    closeModal: () => void
+    /**
+     * Dark mode API for external control
+     */
+    darkMode: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    darkModeInitialized?: boolean
+    /**
+     * High contrast API for external control
+     */
+    highContrast: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    highContrastInitialized?: boolean
+    /**
+     * Reduced motion API for external control
+     */
+    reducedMotion: {
+      enable: () => void
+      disable: () => void
+      toggle: () => void
+      isEnabled: () => boolean
+    }
+    reducedMotionInitialized?: boolean
+    /**
+     * Toast API for external control
+     */
+    toast: {
+      show: (options: ToastOptions) => string
+      success: (message: string, duration?: number) => string
+      error: (message: string, duration?: number) => string
+      info: (message: string, duration?: number) => string
+      warning: (message: string, duration?: number) => string
+      dismiss: (id: string, immediate?: boolean) => void
+      dismissAll: () => void
+    }
+  }
+
+  interface DocumentEventMap {
+    'toast:show': CustomEvent<ToastShowDetail>
+    'toast:dismiss': CustomEvent<ToastDismissDetail>
+  }
+}
+
+/**
+ * Accordion parent component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.children -
+ *  - Expects one or more AccordionItem components. Parent element: `<ul>`
+ *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Accordion = typeof import('../../index.js').Accordion
+export const Accordion: Accordion
+
+/**
  * Accordion item child component
  *
  * @param _props - Record<string, any>
@@ -15,19 +143,6 @@
  */
 export type AccordionItem = typeof import('../../index.js').AccordionItem
 export const AccordionItem: AccordionItem
-
-/**
- * Accordion parent component
- *
- * @param _props - Record<string, any>
- * @param _props.class - Optional CSS class names
- * @param _props.children -
- *  - Expects one or more AccordionItem components. Parent element: `<ul>`
- *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
- * @note Additional HTML attributes can be passed and will be spread to the root element
- */
-type Accordion = typeof import('../../index.js').Accordion
-export const Accordion: Accordion
 
 /**
  * Avatar component
@@ -88,6 +203,34 @@ type Badge = typeof import('../../index.js').Badge
 export const Badge: Badge
 
 /**
+ * Breadcrumbs parent component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.ariaLabel - Accessible label for the breadcrumb navigation - default: 'Breadcrumbs'
+ * @param _props.children -
+ *  - Expects one or more BreadcrumbsItem components. Parent element: `<ol>`
+ *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Breadcrumbs = typeof import('../../index.js').Breadcrumbs
+export const Breadcrumbs: Breadcrumbs
+
+/**
+ * Breadcrumbs item child component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.href - `<a href={href}>` Breadcrumb route string such as "/" or "/blog" - default: "#"
+ * @param _props.label - `<a>` text content for descriptive route name
+ * @param _props.currentPage - Boolean: isCurrentPage?
+ * @param _props.hasIcon - Whether this item has an icon - default: false
+ * @param _props.class - Optional CSS class names
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+export type BreadcrumbsItem = typeof import('../../index.js').BreadcrumbsItem
+export const BreadcrumbsItem: BreadcrumbsItem
+
+/**
  * Button component
  *
  * @param _props - Record<string, any>
@@ -109,74 +252,6 @@ export const Badge: Badge
  */
 type Button = typeof import('../../index.js').Button
 export const Button: Button
-
-/**
- * Heading component
- *
- * @param _props - Record<string, any>
- * @param _props.class - Optional CSS class names
- * @param _props.level - The tag name of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h2'
- * @param _props.size - The size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: same as level
- * @param _props.children - Text content or any legal heading innerHTML. Parent element: `<h1>` to `<h6>`
- * @note Additional HTML attributes can be passed and will be spread to the root element
- * @note The component supports independent control of semantic level (level) and visual appearance (size)
- */
-type Heading = typeof import('../../index.js').Heading
-export const Heading: Heading
-
-/**
- * Link component
- *
- * @param _props - Record<string, any>
- * @param _props.class - Optional CSS class names
- * @param _props.href - The URL to link to (required)
- * @param _props.isExternal - Whether the link is external - default: false (auto-detected for http/https URLs)
- * @param _props.isButton - Style the link as a button - default: false
- * @param _props.variant - The variant of the link when styled as button ('filled' | 'outlined') - default: 'filled'
- * @param _props.type - Type of the link when styled as button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost') - default: 'default'
- * @param _props.size - Button size when styled as button ('sm' | 'md' | 'lg') - default: 'md'
- * @param _props.ariaLabel - The aria-label attribute
- * @param _props.title - The title attribute
- * @param _props.rel - Additional rel tokens to merge with security defaults (external links always include "noopener noreferrer")
- * @param _props.animateOnHover - Whether to animate the icon on hover (only when isButton is true) - default: false
- * @param _props.animationType - Type of animation to apply on hover when isButton is true ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
- * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
- * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
- * @param _props.children - Text content or any legal anchor innerHTML. Parent element: `<a>`
- * @note External links automatically display an icon and screen reader text "Opens in a new tab"
- * @note Supports custom external link icons via the "icon" named slot
- * @note Additional HTML attributes can be passed and will be spread to the root element
- */
-type Link = typeof import('../../index.js').Link
-export const Link: Link
-
-/**
- * Breadcrumbs item child component
- *
- * @param _props - Record<string, any>
- * @param _props.href - `<a href={href}>` Breadcrumb route string such as "/" or "/blog" - default: "#"
- * @param _props.label - `<a>` text content for descriptive route name
- * @param _props.currentPage - Boolean: isCurrentPage?
- * @param _props.hasIcon - Whether this item has an icon - default: false
- * @param _props.class - Optional CSS class names
- * @note Additional HTML attributes can be passed and will be spread to the root element
- */
-export type BreadcrumbsItem = typeof import('../../index.js').BreadcrumbsItem
-export const BreadcrumbsItem: BreadcrumbsItem
-
-/**
- * Breadcrumbs parent component
- *
- * @param _props - Record<string, any>
- * @param _props.class - Optional CSS class names
- * @param _props.ariaLabel - Accessible label for the breadcrumb navigation - default: 'Breadcrumbs'
- * @param _props.children -
- *  - Expects one or more BreadcrumbsItem components. Parent element: `<ol>`
- *  - WARNING: Astro cannot currently enforce the type of children in a `<slot>`
- * @note Additional HTML attributes can be passed and will be spread to the root element
- */
-type Breadcrumbs = typeof import('../../index.js').Breadcrumbs
-export const Breadcrumbs: Breadcrumbs
 
 /**
  * Card component
@@ -249,21 +324,6 @@ type DarkMode = typeof import('../../index.js').DarkMode
 export const DarkMode: DarkMode
 
 /**
- * HighContrast toggle component
- * - Toggles class `high-contrast` on `document.documentElement`
- *
- * @param _props - Props object
- * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle High Contrast'
- * @param _props.class - Optional CSS class names
- * @param _props.children - Optional: Custom elements for on/off icons using named slots
- * @note Supports named slots: "off" for normal mode icon and "on" for high contrast mode icon
- * @note Additional HTML attributes can be passed and will be spread to the root element
- * @note Includes global styles that enhance focus indicators and link visibility
- */
-type HighContrast = typeof import('../../index.js').HighContrast
-export const HighContrast: HighContrast
-
-/**
  * Fieldset component
  *
  * @param _props - Record<string, any>
@@ -303,6 +363,35 @@ type Form = typeof import('../../index.js').Form
 export const Form: Form
 
 /**
+ * Heading component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.level - The tag name of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h2'
+ * @param _props.size - The size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: same as level
+ * @param _props.children - Text content or any legal heading innerHTML. Parent element: `<h1>` to `<h6>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note The component supports independent control of semantic level (level) and visual appearance (size)
+ */
+type Heading = typeof import('../../index.js').Heading
+export const Heading: Heading
+
+/**
+ * HighContrast toggle component
+ * - Toggles class `high-contrast` on `document.documentElement`
+ *
+ * @param _props - Props object
+ * @param _props.label - Optional: Accessible label for the toggle button - default: 'Toggle High Contrast'
+ * @param _props.class - Optional CSS class names
+ * @param _props.children - Optional: Custom elements for on/off icons using named slots
+ * @note Supports named slots: "off" for normal mode icon and "on" for high contrast mode icon
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Includes global styles that enhance focus indicators and link visibility
+ */
+type HighContrast = typeof import('../../index.js').HighContrast
+export const HighContrast: HighContrast
+
+/**
  * Input component
  *
  * @param _props - Record<string, any>
@@ -327,6 +416,32 @@ export const Form: Form
  */
 type Input = typeof import('../../index.js').Input
 export const Input: Input
+
+/**
+ * Link component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.href - The URL to link to (required)
+ * @param _props.isExternal - Whether the link is external - default: false (auto-detected for http/https URLs)
+ * @param _props.isButton - Style the link as a button - default: false
+ * @param _props.variant - The variant of the link when styled as button ('filled' | 'outlined') - default: 'filled'
+ * @param _props.type - Type of the link when styled as button affecting color scheme ('default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'ghost') - default: 'default'
+ * @param _props.size - Button size when styled as button ('sm' | 'md' | 'lg') - default: 'md'
+ * @param _props.ariaLabel - The aria-label attribute
+ * @param _props.title - The title attribute
+ * @param _props.rel - Additional rel tokens to merge with security defaults (external links always include "noopener noreferrer")
+ * @param _props.animateOnHover - Whether to animate the icon on hover (only when isButton is true) - default: false
+ * @param _props.animationType - Type of animation to apply on hover when isButton is true ('rotate' | 'boop' | 'bouncing' | 'nudge' | 'none') - default: 'boop'
+ * @param _props.animationIntensity - Animation intensity (1-10) - default: 5
+ * @param _props.pulse - Whether to apply a pulsating animation to draw attention (pulses 3 times) - default: false
+ * @param _props.children - Text content or any legal anchor innerHTML. Parent element: `<a>`
+ * @note External links automatically display an icon and screen reader text "Opens in a new tab"
+ * @note Supports custom external link icons via the "icon" named slot
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Link = typeof import('../../index.js').Link
+export const Link: Link
 
 /**
  * Media component
@@ -361,45 +476,6 @@ export const Media: Media
  */
 type Modal = typeof import('../../index.js').Modal
 export const Modal: Modal
-
-/**
- * Global closeModal function for Modal component
- */
-declare global {
-  interface Window {
-    closeModal: () => void
-    /**
-     * Dark mode API for external control
-     */
-    darkMode: {
-      enable: () => void
-      disable: () => void
-      toggle: () => void
-      isEnabled: () => boolean
-    }
-    darkModeInitialized?: boolean
-    /**
-     * High contrast API for external control
-     */
-    highContrast: {
-      enable: () => void
-      disable: () => void
-      toggle: () => void
-      isEnabled: () => boolean
-    }
-    highContrastInitialized?: boolean
-    /**
-     * Reduced motion API for external control
-     */
-    reducedMotion: {
-      enable: () => void
-      disable: () => void
-      toggle: () => void
-      isEnabled: () => boolean
-    }
-    reducedMotionInitialized?: boolean
-  }
-}
 
 /**
  * Notification component
@@ -517,20 +593,6 @@ type TabsList = typeof import('../../index.js').TabsList
 export const TabsList: TabsList
 
 /**
- * TabsTab component
- *
- * @param _props - Record<string, any>
- * @param _props.id - Unique identifier for the tab
- * @param _props.controls - ID of the panel this tab controls
- * @param _props.selected - Boolean indicating if this tab is selected
- * @param _props.class - Optional CSS class names
- * @param _props.children - Tab label content
- * @note Additional HTML attributes can be passed and will be spread to the root element
- */
-type TabsTab = typeof import('../../index.js').TabsTab
-export const TabsTab: TabsTab
-
-/**
  * TabsPanel component
  *
  * @param _props - Record<string, any>
@@ -545,18 +607,18 @@ type TabsPanel = typeof import('../../index.js').TabsPanel
 export const TabsPanel: TabsPanel
 
 /**
- * Video component
+ * TabsTab component
  *
  * @param _props - Record<string, any>
- * @param _props.src - URL of the video (YouTube or direct embed)
- * @param _props.title - Accessible title for the video - default: 'YouTube video player'
- * @param _props.ratio - Aspect ratio of the video ('1:1' | '4:3' | '16:9' | '21:9') - default: '16:9'
- * @param _props.loading - Iframe loading strategy ('lazy' | 'eager') - default: 'lazy'
+ * @param _props.id - Unique identifier for the tab
+ * @param _props.controls - ID of the panel this tab controls
+ * @param _props.selected - Boolean indicating if this tab is selected
  * @param _props.class - Optional CSS class names
+ * @param _props.children - Tab label content
  * @note Additional HTML attributes can be passed and will be spread to the root element
  */
-type Video = typeof import('../../index.js').Video
-export const Video: Video
+type TabsTab = typeof import('../../index.js').TabsTab
+export const TabsTab: TabsTab
 
 /**
  * Textarea component
@@ -586,6 +648,37 @@ type Textarea = typeof import('../../index.js').Textarea
 export const Textarea: Textarea
 
 /**
+ * Toast component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Optional id for the toast
+ * @param _props.message - Toast message content - default: 'Notification'
+ * @param _props.type - Type of toast ('info' | 'success' | 'warning' | 'error' | 'default') - default: 'default'
+ * @param _props.dismissible - Whether the toast is dismissible - default: true
+ * @param _props.dismissLabel - Accessible label for the dismiss button - default: 'Dismiss notification'
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Toast = typeof import('../../index.js').Toast
+export const Toast: Toast
+
+/**
+ * ToastProvider component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.position - Toast position in the viewport ('bottom-right' | 'bottom-left' | 'bottom-center' | 'top-right' | 'top-left' | 'top-center') - default: 'bottom-right'
+ * @param _props.duration - Default duration before auto-dismiss in milliseconds - default: 5000
+ * @param _props.maxToasts - Maximum number of toasts to display - default: 5
+ * @param _props.ariaLabel - Accessible label for the toast region - default: 'Notifications'
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Exposes `window.toast` API with `show`, typed shortcut helpers, `dismiss`, and `dismissAll`
+ * @note Dispatches `toast:show` and `toast:dismiss` CustomEvents on `document`
+ */
+type ToastProvider = typeof import('../../index.js').ToastProvider
+export const ToastProvider: ToastProvider
+
+/**
  * Tooltip component
  *
  * @param _props - Record<string, any>
@@ -603,3 +696,17 @@ export const Textarea: Textarea
  */
 type Tooltip = typeof import('../../index.js').Tooltip
 export const Tooltip: Tooltip
+
+/**
+ * Video component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.src - URL of the video (YouTube or direct embed)
+ * @param _props.title - Accessible title for the video - default: 'YouTube video player'
+ * @param _props.ratio - Aspect ratio of the video ('1:1' | '4:3' | '16:9' | '21:9') - default: '16:9'
+ * @param _props.loading - Iframe loading strategy ('lazy' | 'eager') - default: 'lazy'
+ * @param _props.class - Optional CSS class names
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ */
+type Video = typeof import('../../index.js').Video
+export const Video: Video
