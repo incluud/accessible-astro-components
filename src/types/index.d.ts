@@ -671,6 +671,8 @@ export const Toast: Toast
  * @param _props.duration - Default duration before auto-dismiss in milliseconds - default: 5000
  * @param _props.maxToasts - Maximum number of toasts to display - default: 5
  * @param _props.ariaLabel - Accessible label for the toast region - default: 'Notifications'
+ * @param _props.zIndex - CSS z-index value applied through `--toast-z-index` - default: 'var(--z-index-8, 80)'
+ * @param _props.portal - Move the provider to document.body on initialization to escape ancestor stacking contexts - default: false
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Exposes `window.toast` API with `show`, typed shortcut helpers, `dismiss`, and `dismissAll`
  * @note Dispatches `toast:show` and `toast:dismiss` CustomEvents on `document`
