@@ -673,6 +673,7 @@ export const Toast: Toast
  * @param _props.ariaLabel - Accessible label for the toast region - default: 'Notifications'
  * @param _props.zIndex - CSS z-index value applied through `--toast-z-index` - default: 'var(--z-index-8, 80)'
  * @param _props.portal - Move the provider to document.body on initialization to escape ancestor stacking contexts - default: false
+ * @param _props.style - Inline styles appended after the computed `zIndex` style. Avoid declaring `--toast-z-index` here unless intentionally overriding `zIndex`
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Exposes `window.toast` API with `show`, typed shortcut helpers, `dismiss`, and `dismissAll`
  * @note Dispatches `toast:show` and `toast:dismiss` CustomEvents on `document`

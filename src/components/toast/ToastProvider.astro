@@ -48,7 +48,9 @@ interface Props {
    */
   portal?: boolean
   /**
-   * Inline styles to apply to the toast provider
+   * Inline styles to apply to the toast provider.
+   * These are appended after the computed zIndex style, so avoid declaring
+   * `--toast-z-index` here unless you intentionally want to override `zIndex`.
    */
   style?: string
   /**
