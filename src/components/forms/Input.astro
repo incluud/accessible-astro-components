@@ -25,7 +25,7 @@ interface Props {
   /**
    * Error message to display when validation fails
    */
-  'data-validation': string
+  'data-validation'?: string
   /**
    * Input type (determines built-in validation rules)
    * @default "text"
@@ -36,6 +36,36 @@ interface Props {
    * @default false
    */
   required?: boolean
+  /**
+   * Text displayed next to required field labels
+   * @default "(required)"
+   */
+  requiredText?: string
+  /**
+   * Default validation message for required text fields
+   * @default "This field is required"
+   */
+  requiredValidationMessage?: string
+  /**
+   * Default validation message for email fields
+   * @default "Please provide an email address, for example houston@astro.build"
+   */
+  emailValidationMessage?: string
+  /**
+   * Default validation message for telephone fields
+   * @default "Please provide a valid phone number"
+   */
+  telValidationMessage?: string
+  /**
+   * Default validation message for password fields
+   * @default "Password must be at least 8 characters long"
+   */
+  passwordValidationMessage?: string
+  /**
+   * Default validation message for URL fields
+   * @default "Please provide a valid URL, for example https://astro.build"
+   */
+  urlValidationMessage?: string
   /**
    * Custom validation pattern (regex)
    */
@@ -77,6 +107,12 @@ const {
   'data-validation': dataValidation,
   type = 'text',
   required = false,
+  requiredText = '(required)',
+  requiredValidationMessage = 'This field is required',
+  emailValidationMessage = 'Please provide an email address, for example houston@astro.build',
+  telValidationMessage = 'Please provide a valid phone number',
+  passwordValidationMessage = 'Password must be at least 8 characters long',
+  urlValidationMessage = 'Please provide a valid URL, for example https://astro.build',
   'data-validation-pattern': dataValidationPattern,
   'data-validation-fn': dataValidationFn,
   value,
@@ -92,16 +128,16 @@ const inputId = id || `input-${name}`
 const getDefaultValidationMessage = (inputType: string, isRequired: boolean): string => {
   switch (inputType) {
     case 'email':
-      return 'Please provide an email address, for example houston@astro.build'
+      return emailValidationMessage
     case 'tel':
-      return 'Please provide a valid phone number'
+      return telValidationMessage
     case 'password':
-      return 'Password must be at least 8 characters long'
+      return passwordValidationMessage
     case 'url':
-      return 'Please provide a valid URL, for example https://astro.build'
+      return urlValidationMessage
     case 'text':
     default:
-      return isRequired ? 'This field is required' : ''
+      return isRequired ? requiredValidationMessage : ''
   }
 }
 
@@ -116,7 +152,7 @@ const validationMessage = dataValidation || getDefaultValidationMessage(type, re
     data-validation={validationMessage}
   >
     <span>{label}</span>
-    {required && <span>(required)</span>}
+    {required && requiredText && <span>{requiredText}</span>}
   </label>
 
   <input

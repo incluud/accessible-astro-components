@@ -23,6 +23,16 @@ interface Props {
    */
   required?: boolean
   /**
+   * Text displayed next to required fieldset legends
+   * @default "(required)"
+   */
+  requiredText?: string
+  /**
+   * Default validation message for required fieldsets
+   * @default "Please select at least one option"
+   */
+  requiredValidationMessage?: string
+  /**
    * Error message to display when group validation fails
    */
   'data-validation'?: string
@@ -45,6 +55,8 @@ const {
   id,
   legend,
   required = false,
+  requiredText = '(required)',
+  requiredValidationMessage = 'Please select at least one option',
   'data-validation': dataValidation,
   class: className,
   variant = 'default',
@@ -55,7 +67,7 @@ const fieldsetId = id || `fieldset-${name}`
 
 // Generate default validation message for groups
 const getDefaultValidationMessage = (isRequired: boolean): string => {
-  return isRequired ? 'Please select at least one option' : ''
+  return isRequired ? requiredValidationMessage : ''
 }
 
 // Use provided validation message or default
@@ -73,7 +85,7 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
 >
   <legend>
     {legend}
-    {required && <span>(required)</span>}
+    {required && requiredText && <span>{requiredText}</span>}
   </legend>
   <div class="fieldset-group">
     <slot />

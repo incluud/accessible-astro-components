@@ -40,6 +40,21 @@ interface Props {
    * @default "on"
    */
   autocomplete?: 'on' | 'off'
+  /**
+   * Error summary message displayed when form validation fails
+   * @default "There was a problem with your submission. The following inputs need attention:"
+   */
+  errorSummaryMessage?: string
+  /**
+   * Fallback validation message for invalid fields without a custom data-validation value
+   * @default "This field is required"
+   */
+  defaultFieldValidationMessage?: string
+  /**
+   * Fallback validation message for invalid fieldsets without a custom data-validation value
+   * @default "Please select at least one option"
+   */
+  defaultFieldsetValidationMessage?: string
 }
 
 const {
@@ -50,6 +65,9 @@ const {
   enctype = 'application/x-www-form-urlencoded',
   target = '_self',
   autocomplete = 'on',
+  errorSummaryMessage = 'There was a problem with your submission. The following inputs need attention:',
+  defaultFieldValidationMessage = 'This field is required',
+  defaultFieldsetValidationMessage = 'Please select at least one option',
   ...rest
 } = Astro.props
 ---
@@ -61,6 +79,9 @@ const {
   enctype={enctype}
   target={target}
   autocomplete={autocomplete}
+  data-error-summary-message={errorSummaryMessage}
+  data-default-field-validation-message={defaultFieldValidationMessage}
+  data-default-fieldset-validation-message={defaultFieldsetValidationMessage}
   novalidate
   {...rest}
 >
@@ -83,6 +104,32 @@ const {
       const requiredFieldsets = form.querySelectorAll('fieldset[data-required="true"]')
       const errorNotification = form.querySelector('.notification') as HTMLElement | null
       const errorNotificationContent = errorNotification?.querySelector('p') as HTMLElement | null
+      const defaultMessages = {
+        errorSummary:
+          form.dataset.errorSummaryMessage ||
+          'There was a problem with your submission. The following inputs need attention:',
+        field: form.dataset.defaultFieldValidationMessage || 'This field is required',
+        fieldset:
+          form.dataset.defaultFieldsetValidationMessage || 'Please select at least one option',
+      }
+
+      const escapeHTML = (value) =>
+        String(value ?? '').replace(/[&<>"']/g, (character) => {
+          switch (character) {
+            case '&':
+              return '&amp;'
+            case '<':
+              return '&lt;'
+            case '>':
+              return '&gt;'
+            case '"':
+              return '&quot;'
+            case "'":
+              return '&#39;'
+            default:
+              return character
+          }
+        })
 
       // Secure regex pattern validation helper
       const validateCustomPattern = (pattern: string, value: string): boolean => {
@@ -221,23 +268,30 @@ const {
 
         errorNotificationContent.innerHTML = `
           <div class="space-content">
-            <p>There was a problem with your submission. The following inputs need attention:</p>
+            <p>${escapeHTML(defaultMessages.errorSummary)}</p>
             <ol class="incremented">
               ${elements
                 .map((element) => {
+                  const elementId = escapeHTML(element.id)
+
                   if (element.tagName === 'FIELDSET') {
                     const legend = element.querySelector('legend')
-                    const legendText = legend?.textContent || element.getAttribute('name')
-                    const validation =
-                      element.dataset.validation || 'Please select at least one option'
-                    return `<li><a href="#${element.id}">${legendText}: ${validation}</a></li>`
+                    const legendText = escapeHTML(
+                      legend?.textContent || element.getAttribute('name')
+                    )
+                    const validation = escapeHTML(
+                      element.dataset.validation || defaultMessages.fieldset
+                    )
+                    return `<li><a href="#${elementId}">${legendText}: ${validation}</a></li>`
                   } else {
                     const label = element
                       .closest('.input-group, .checkbox-group, .textarea-group')
                       ?.querySelector('label')
-                    const labelText = label?.textContent || element.name
-                    const validation = label?.dataset.validation || 'This field is required'
-                    return `<li><a href="#${element.id}">${labelText}: ${validation}</a></li>`
+                    const labelText = escapeHTML(label?.textContent || element.name)
+                    const validation = escapeHTML(
+                      label?.dataset.validation || defaultMessages.field
+                    )
+                    return `<li><a href="#${elementId}">${labelText}: ${validation}</a></li>`
                   }
                 })
                 .join('')}
@@ -254,7 +308,7 @@ const {
           const label = field
             .closest('.input-group, .checkbox-group, .textarea-group')
             ?.querySelector('label')
-          const validation = label?.dataset.validation || 'This field is required'
+          const validation = label?.dataset.validation || defaultMessages.field
           const messageElement = field.nextElementSibling?.querySelector('.message') as HTMLElement
 
           if (messageElement) {
@@ -265,7 +319,7 @@ const {
 
       const setFieldsetMessages = (fieldsets) => {
         fieldsets.forEach((fieldset) => {
-          const validation = fieldset.dataset.validation || 'Please select at least one option'
+          const validation = fieldset.dataset.validation || defaultMessages.fieldset
           const messageElement = fieldset.querySelector('.message') as HTMLElement
 
           if (messageElement) {

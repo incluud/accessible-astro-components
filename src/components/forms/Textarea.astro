@@ -32,6 +32,16 @@ interface Props {
    */
   required?: boolean
   /**
+   * Text displayed next to required field labels
+   * @default "(required)"
+   */
+  requiredText?: string
+  /**
+   * Default validation message for required textareas
+   * @default "This field is required"
+   */
+  requiredValidationMessage?: string
+  /**
    * Custom validation pattern (regex)
    */
   'data-validation-pattern'?: string
@@ -79,6 +89,8 @@ const {
   label,
   'data-validation': dataValidation,
   required = false,
+  requiredText = '(required)',
+  requiredValidationMessage = 'This field is required',
   'data-validation-pattern': dataValidationPattern,
   'data-validation-fn': dataValidationFn,
   value,
@@ -95,7 +107,7 @@ const inputId = id || `textarea-${name}`
 
 // Generate default validation message
 const getDefaultValidationMessage = (isRequired: boolean): string => {
-  return isRequired ? 'This field is required' : ''
+  return isRequired ? requiredValidationMessage : ''
 }
 
 // Use provided validation message or default
@@ -105,7 +117,7 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
 <div class="textarea-group">
   <label for={inputId} data-validation={validationMessage}>
     <span>{label}</span>
-    {required && <span>(required)</span>}
+    {required && requiredText && <span>{requiredText}</span>}
   </label>
 
   <textarea
