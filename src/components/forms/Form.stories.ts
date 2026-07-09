@@ -109,3 +109,79 @@ export const Basic = {
     after: '<button type="submit">Send message</button>',
   },
 }
+
+export const LocalizedGerman = {
+  args: {
+    ...baseArgs,
+    errorSummaryMessage:
+      'Es gab ein Problem mit Ihrer Eingabe. Die folgenden Felder benoetigen Aufmerksamkeit:',
+    defaultFieldValidationMessage: 'Dieses Feld ist erforderlich',
+    defaultFieldsetValidationMessage: 'Bitte waehlen Sie mindestens eine Option',
+    children: [
+      {
+        Component: Input,
+        props: {
+          name: 'full-name',
+          label: 'Vollstaendiger Name',
+          required: true,
+          requiredText: '(Pflichtfeld)',
+          requiredValidationMessage: 'Bitte geben Sie Ihren vollstaendigen Namen ein',
+        },
+      },
+      {
+        Component: Input,
+        props: {
+          name: 'email',
+          label: 'E-Mail-Adresse',
+          type: 'email',
+          required: true,
+          requiredText: '(Pflichtfeld)',
+          autocomplete: 'email',
+          emailValidationMessage: 'Bitte geben Sie eine gueltige E-Mail-Adresse ein',
+        },
+      },
+      {
+        Component: Textarea,
+        props: {
+          name: 'message',
+          label: 'Nachricht',
+          required: true,
+          requiredText: '(Pflichtfeld)',
+          rows: 4,
+          placeholder: 'Erzaehlen Sie uns etwas ueber Ihr Projekt...',
+          requiredValidationMessage: 'Bitte fuegen Sie eine kurze Nachricht hinzu',
+        },
+      },
+      {
+        Component: Fieldset,
+        props: {
+          name: 'updates',
+          legend: 'E-Mail-Einstellungen',
+          required: true,
+          requiredText: '(Pflichtfeld)',
+          requiredValidationMessage: 'Bitte waehlen Sie mindestens eine Option',
+        },
+        children: [
+          {
+            Component: Checkbox,
+            props: {
+              name: 'updates',
+              label: 'Produkt-Updates',
+              value: 'product',
+            },
+          },
+          {
+            Component: Checkbox,
+            props: {
+              name: 'updates',
+              label: 'Sicherheitsmeldungen',
+              value: 'security',
+            },
+          },
+        ],
+      },
+    ],
+    afterIsHtml: true,
+    after: '<button type="submit">Nachricht senden</button>',
+  },
+}

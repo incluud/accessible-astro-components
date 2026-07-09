@@ -331,6 +331,8 @@ export const DarkMode: DarkMode
  * @param _props.id - Unique identifier for the fieldset
  * @param _props.legend - Legend text for the fieldset (required)
  * @param _props.required - Whether the fieldset group is required (at least one selection) - default: false
+ * @param _props.requiredText - Text displayed next to required fieldset legends - default: '(required)'
+ * @param _props.requiredValidationMessage - Default validation message for required fieldsets - default: 'Please select at least one option'
  * @param _props.data-validation - Error message to display when group validation fails
  * @param _props.class - Optional CSS class names
  * @param _props.variant - Variant of the fieldset ('default' | 'minimal') - default: 'default'
@@ -353,6 +355,9 @@ export const Fieldset: Fieldset
  * @param _props.enctype - Encoding type for form data ('application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain') - default: 'application/x-www-form-urlencoded'
  * @param _props.target - Target for form submission ('_self' | '_blank' | '_parent' | '_top') - default: '_self'
  * @param _props.autocomplete - Autocomplete behavior ('on' | 'off') - default: 'on'
+ * @param _props.errorSummaryMessage - Error summary message displayed when form validation fails
+ * @param _props.defaultFieldValidationMessage - Fallback validation message for invalid fields without a custom data-validation value
+ * @param _props.defaultFieldsetValidationMessage - Fallback validation message for invalid fieldsets without a custom data-validation value
  * @param _props.children - Form controls and content. Parent element: `<form>`
  * @note Additional HTML attributes can be passed and will be spread to the root element
  * @note Includes built-in progressive enhancement validation with error handling
@@ -402,6 +407,12 @@ export const HighContrast: HighContrast
  * @param _props.data-validation - Optional custom error message to override automatically generated validation messages
  * @param _props.type - Input type determining built-in validation rules ('text' | 'email' | 'password' | 'tel' | 'url') - default: 'text'
  * @param _props.required - Whether the field is required - default: false
+ * @param _props.requiredText - Text displayed next to required field labels - default: '(required)'
+ * @param _props.requiredValidationMessage - Default validation message for required text fields - default: 'This field is required'
+ * @param _props.emailValidationMessage - Default validation message for email fields
+ * @param _props.telValidationMessage - Default validation message for telephone fields
+ * @param _props.passwordValidationMessage - Default validation message for password fields
+ * @param _props.urlValidationMessage - Default validation message for URL fields
  * @param _props.data-validation-pattern - Custom validation pattern (regex)
  * @param _props.data-validation-fn - Custom validation function name (must be available on window)
  * @param _props.value - Default value for the input field
@@ -630,6 +641,8 @@ export const TabsTab: TabsTab
  * @param _props.label - Label text for the textarea field (required)
  * @param _props.data-validation - Error message to display when validation fails
  * @param _props.required - Whether the field is required - default: false
+ * @param _props.requiredText - Text displayed next to required field labels - default: '(required)'
+ * @param _props.requiredValidationMessage - Default validation message for required textareas - default: 'This field is required'
  * @param _props.data-validation-pattern - Custom validation pattern (regex)
  * @param _props.data-validation-fn - Custom validation function name (must be available on window)
  * @param _props.disabled - Whether the field is disabled - default: false
