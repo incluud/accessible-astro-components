@@ -1,0 +1,406 @@
+---
+import Heading from '../heading/Heading.astro'
+
+/**
+ * Drawer Component
+ *
+ * @description An accessible drawer dialog with focus management and edge positioning
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the drawer
+   */
+  class?: string
+  /**
+   * Drawer title
+   */
+  title: string
+  /**
+   * ID of the trigger element
+   */
+  triggerId: string
+  /**
+   * Drawer position
+   * @default "right"
+   */
+  position?: 'right' | 'left' | 'top' | 'bottom'
+  /**
+   * Close button text
+   * @default "Close"
+   */
+  closeText?: string
+  /**
+   * Visual size of the heading (can differ from semantic level)
+   * @default "h6"
+   */
+  headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /**
+   * Whether to show the footer for extra buttons
+   * @default false
+   */
+  showFooter?: boolean
+  /**
+   * HTML attributes to spread on the drawer
+   */
+  [key: string]: string | number | boolean | undefined
+}
+
+const {
+  class: className,
+  title,
+  triggerId,
+  position = 'right',
+  closeText = 'Close',
+  headingSize = 'h6',
+  showFooter = false,
+  ...rest
+} = Astro.props
+
+// Create unique ID for drawer title
+const titleId = `${triggerId}-title`
+---
+
+<dialog
+  class:list={['drawer', className]}
+  aria-labelledby={titleId}
+  data-trigger-id={triggerId}
+  data-position={position}
+  {...rest}
+>
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <Heading level="h2" size={headingSize} id={titleId} tabindex="-1" autofocus>
+        {title}
+      </Heading>
+      <button class="drawer-close" type="button">
+        <span class="drawer-close-icon">
+          <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M20 .5v1H0v-1z"></path>
+          </svg>
+          <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M20 .5v1H0v-1z"></path>
+          </svg>
+        </span>
+        <span class="sr-only">{closeText}</span>
+      </button>
+    </div>
+    <div class="drawer-content">
+      <slot>Drawer content.</slot>
+    </div>
+    {
+      showFooter && (
+        <div class="drawer-footer">
+          <slot name="footer">Drawer footer.</slot>
+        </div>
+      )
+    }
+  </div>
+</dialog>
+
+<script>
+  type FocusableElement =
+    | HTMLAnchorElement
+    | HTMLButtonElement
+    | HTMLInputElement
+    | HTMLTextAreaElement
+    | HTMLSelectElement
+    | HTMLDetailsElement
+
+  // one abort controller per drawer instance, so drawers never clean up each other's listeners
+  const controllers = new WeakMap<HTMLDialogElement, AbortController>()
+
+  const getKeyboardFocusableElements = (element: HTMLElement) => {
+    return [
+      ...element.querySelectorAll<FocusableElement>(
+        'a, button, input, textarea, select, details,[tabindex]:not([tabindex="-1"])'
+      ),
+    ].filter((el) => !el.hasAttribute('disabled'))
+  }
+
+  const trapFocus = (event: KeyboardEvent, drawer: HTMLDialogElement) => {
+    const focusables = getKeyboardFocusableElements(drawer)
+
+    // These will not be undefined as a drawer always has at least one <button>
+    const firstFocusable = focusables[0]!
+    const lastFocusable = focusables[focusables.length - 1]!
+
+    if (document.activeElement === lastFocusable && event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault()
+      firstFocusable.focus()
+    }
+
+    if (document.activeElement === firstFocusable && event.key === 'Tab' && event.shiftKey) {
+      event.preventDefault()
+      lastFocusable.focus()
+    }
+  }
+
+  // tears down the listeners belonging to a single drawer. The 'close' event is fired from a queued
+  // task, so a same task close and reopen can already have stored a newer controller by the time
+  // this runs. Always abort the controller that owns the listeners being cleaned up.
+  const cleanupDrawer = (drawer: HTMLDialogElement, controller: AbortController) => {
+    controller.abort()
+
+    if (controllers.get(drawer) === controller) {
+      controllers.delete(drawer)
+    }
+  }
+
+  const openDrawer = (drawer: HTMLDialogElement) => {
+    if (drawer.open) return
+
+    const drawerInner = drawer.querySelector<HTMLDivElement>('.drawer-inner')
+    const controller = new AbortController()
+    const { signal } = controller
+
+    controllers.set(drawer, controller)
+
+    drawer.showModal()
+
+    document.addEventListener('keydown', (event) => trapFocus(event, drawer), { signal })
+
+    // clicking the backdrop closes this drawer, clicks inside it do not
+    drawer.addEventListener('click', () => closeDrawer(drawer), { signal })
+    drawerInner?.addEventListener('click', (event) => event.stopPropagation(), { signal })
+
+    // covers every close path, including Escape and native dialog form submits
+    drawer.addEventListener('close', () => cleanupDrawer(drawer, controller), { signal })
+  }
+
+  const closeDrawer = (drawer?: HTMLDialogElement) => {
+    // without an explicit drawer, close the last open one in DOM order
+    const target =
+      drawer ?? [...document.querySelectorAll<HTMLDialogElement>('.drawer[open]')].pop()
+    if (!target?.open) return
+
+    // the 'close' listener registered in openDrawer handles the cleanup
+    target.close()
+  }
+
+  const setupDrawers = () => {
+    document.querySelectorAll<HTMLDialogElement>('.drawer').forEach((drawer) => {
+      const triggerId = drawer.getAttribute('data-trigger-id')
+      const drawerCloseButton = drawer.querySelector('.drawer-close')
+      // getElementById, because an HTML id can contain characters that a CSS selector cannot
+      const drawerTrigger = triggerId ? document.getElementById(triggerId) : null
+
+      if (!drawerTrigger) {
+        throw new Error(`Trigger element not found. \n
+      Did you forget to add a trigger element with id: "${triggerId}"?`)
+      }
+
+      drawerTrigger.addEventListener('click', () => openDrawer(drawer))
+      drawerCloseButton?.addEventListener('click', () => closeDrawer(drawer))
+    })
+  }
+
+  // execution
+  setupDrawers()
+
+  window.closeDrawer = closeDrawer
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => setupDrawers())
+</script>
+
+<style>
+  :where(.drawer) {
+    --drawer-translate-x: 0;
+    --drawer-translate-y: 0;
+    --drawer-transition-duration: 0.25s;
+    --drawer-transition-easing: var(--animation-timing, cubic-bezier(0.165, 0.84, 0.44, 1));
+
+    position: fixed;
+    translate: var(--drawer-translate-x) var(--drawer-translate-y);
+    opacity: 0;
+    margin: 0;
+    box-shadow: var(--elevation-4);
+    border: none;
+    background-color: var(--color-default-bg);
+    padding: 0;
+    max-inline-size: none;
+    max-block-size: none;
+    overscroll-behavior-block: contain;
+    color: var(--color-default-text);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.drawer) {
+      transition-behavior: allow-discrete;
+      transition-duration: var(--drawer-transition-duration);
+      transition-property: display, opacity, translate;
+      transition-timing-function: var(--drawer-transition-easing);
+    }
+  }
+
+  :where(.drawer[data-position='right']) {
+    --drawer-translate-x: 100%;
+
+    inset-block: 0;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    inline-size: min(400px, 90vw);
+    block-size: 100dvh;
+  }
+
+  :where(.drawer[data-position='left']) {
+    --drawer-translate-x: -100%;
+
+    inset-block: 0;
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+    inline-size: min(400px, 90vw);
+    block-size: 100dvh;
+  }
+
+  :where(.drawer[data-position='top']) {
+    --drawer-translate-y: -100%;
+    inset-block-end: auto;
+    inset-block-start: 0;
+
+    inset-inline: 0;
+    inline-size: 100vw;
+    block-size: min(400px, 90dvh);
+  }
+
+  :where(.drawer[data-position='bottom']) {
+    --drawer-translate-y: 100%;
+    inset-block-end: 0;
+    inset-block-start: auto;
+
+    inset-inline: 0;
+    inline-size: 100vw;
+    block-size: min(400px, 90dvh);
+  }
+
+  .drawer[open] {
+    display: block;
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .drawer[open] {
+      translate: var(--drawer-translate-x) var(--drawer-translate-y);
+      opacity: 0;
+    }
+
+    .drawer[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  .drawer[open]::backdrop {
+    opacity: 1;
+  }
+
+  .drawer::backdrop {
+    opacity: 0;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0 0 0 / 0.5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.drawer)::backdrop {
+      transition-behavior: allow-discrete;
+      transition-duration: var(--drawer-transition-duration);
+      transition-property: display, opacity, overlay;
+      transition-timing-function: var(--drawer-transition-easing);
+    }
+  }
+
+  :where(.drawer-inner) {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+
+  :where(.drawer-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-s);
+    border-block-end: 1px solid var(--color-default-border);
+    background-color: var(--color-default-bg);
+    padding: var(--space-2xs) var(--space-m);
+  }
+
+  :where(.drawer-header .heading) {
+    margin: 0;
+  }
+
+  :where(.drawer-close) {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-s);
+    background-color: transparent;
+    padding: var(--space-2xs);
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.drawer-close) {
+      transition: box-shadow var(--drawer-transition-duration) var(--drawer-transition-easing);
+    }
+  }
+
+  :where(.drawer-close-icon) {
+    display: inline-block;
+    position: relative;
+    aspect-ratio: 1;
+    block-size: 20px;
+  }
+
+  :where(.drawer-close-icon svg) {
+    position: absolute;
+    margin: auto;
+    inset: 0;
+  }
+
+  :where(.drawer-close-icon svg:first-of-type) {
+    transform: rotate(45deg);
+  }
+
+  :where(.drawer-close-icon svg:last-of-type) {
+    transform: rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.drawer-close-icon svg:last-of-type) {
+      transition: transform var(--drawer-transition-duration) var(--drawer-transition-easing);
+    }
+  }
+
+  :where(.drawer-close:hover) .drawer-close-icon svg:first-of-type,
+  :where(.drawer-close:focus-visible) .drawer-close-icon svg:first-of-type {
+    transform: rotate(0deg);
+  }
+
+  :where(.drawer-close:hover) .drawer-close-icon svg:last-of-type,
+  :where(.drawer-close:focus-visible) .drawer-close-icon svg:last-of-type {
+    transform: rotate(180deg);
+  }
+
+  :where(.drawer-content) {
+    flex: 1;
+    padding: var(--space-m);
+    overflow: auto;
+  }
+
+  :where(.drawer-footer) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2xs);
+    border-top: 1px solid var(--color-default-border);
+    padding: var(--space-xs) var(--space-m);
+  }
+
+  :global(body:has(dialog[open])) {
+    overflow-y: clip;
+  }
+</style>

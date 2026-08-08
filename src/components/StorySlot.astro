@@ -16,6 +16,8 @@ interface Props {
   children?: SlotChild[]
   tooltipSlot?: string
   tooltipSlotIsHtml?: boolean
+  footerSlot?: string
+  footerSlotIsHtml?: boolean
   before?: string
   beforeIsHtml?: boolean
   after?: string
@@ -30,34 +32,40 @@ const {
   children = [],
   tooltipSlot,
   tooltipSlotIsHtml = false,
+  footerSlot,
+  footerSlotIsHtml = false,
   before,
   beforeIsHtml = false,
   after,
   afterIsHtml = false,
   ...rest
 } = Astro.props
-
 ---
 
-{before &&
-  (beforeIsHtml ? <Fragment set:html={before} /> : before)}
+{before && (beforeIsHtml ? <Fragment set:html={before} /> : before)}
 <Component {...rest}>
-  {children.length > 0
-    ? <StorySlotChildren items={children} />
-    : slotIsHtml ? (
-        <Fragment set:html={slot} />
-      ) : (
-        slot
-      )}
-  {tooltipSlot !== undefined && (
-    <span slot="tooltip">
-      {tooltipSlotIsHtml ? (
-        <Fragment set:html={tooltipSlot ?? ''} />
-      ) : (
-        tooltipSlot
-      )}
-    </span>
-  )}
+  {
+    children.length > 0 ? (
+      <StorySlotChildren items={children} />
+    ) : slotIsHtml ? (
+      <Fragment set:html={slot} />
+    ) : (
+      slot
+    )
+  }
+  {
+    tooltipSlot !== undefined && (
+      <span slot="tooltip">
+        {tooltipSlotIsHtml ? <Fragment set:html={tooltipSlot ?? ''} /> : tooltipSlot}
+      </span>
+    )
+  }
+  {
+    footerSlot !== undefined && (
+      <Fragment slot="footer">
+        {footerSlotIsHtml ? <Fragment set:html={footerSlot ?? ''} /> : footerSlot}
+      </Fragment>
+    )
+  }
 </Component>
-{after &&
-  (afterIsHtml ? <Fragment set:html={after} /> : after)}
+{after && (afterIsHtml ? <Fragment set:html={after} /> : after)}
