@@ -27,6 +27,7 @@
  * - Radio
  * - ReducedMotion
  * - SkipLink
+ * - Switch
  * - Tabs
  * - TabsList
  * - TabsPanel
@@ -547,6 +548,25 @@ export const Pagination: Pagination
  */
 type Radio = typeof import('../../index.js').Radio
 export const Radio: Radio
+
+/**
+ * Switch component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the switch field
+ * @param _props.name - Name attribute for the switch field (required for form submission)
+ * @param _props.label - Label text for the switch field (required)
+ * @param _props.value - Value attribute submitted when the switch is on - default: "on"
+ * @param _props.checked - Whether the switch is on by default - default: false
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.children - Not applicable for switch components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Built on a native checkbox with role="switch" - form-submittable and keyboard-operable without JS
+ * @note Screen readers announce the on/off state; thumb position (not just color) conveys state
+ */
+type Switch = typeof import('../../index.js').Switch
+export const Switch: Switch
 
 /**
  * ReducedMotion toggle component

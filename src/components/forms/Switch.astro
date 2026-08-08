@@ -1,0 +1,154 @@
+---
+/**
+ * Switch Component
+ *
+ * @description An accessible on/off toggle for use within forms and fieldsets.
+ * Built on a native checkbox with `role="switch"` so it is form-submittable and
+ * fully keyboard-operable (Space toggles) without any JavaScript. Screen readers
+ * announce it as a switch that is "on" or "off".
+ */
+
+interface Props {
+  /**
+   * Additional classes to apply to the switch field container
+   */
+  class?: string
+  /**
+   * Unique identifier for the switch field
+   */
+  id?: string
+  /**
+   * Name attribute for the switch field (required for form submission)
+   */
+  name: string
+  /**
+   * Label text for the switch field
+   */
+  label: string
+  /**
+   * Value attribute submitted when the switch is on
+   * @default "on"
+   */
+  value?: string
+  /**
+   * Whether the switch is on by default
+   * @default false
+   */
+  checked?: boolean
+  /**
+   * Whether the field is disabled
+   * @default false
+   */
+  disabled?: boolean
+  /**
+   * HTML attributes
+   */
+  [key: string]: any
+}
+
+const {
+  class: className,
+  id,
+  name,
+  label,
+  value,
+  checked = false,
+  disabled = false,
+  ...rest
+} = Astro.props
+
+const inputId = id || `switch-${name}`
+---
+
+<div class:list={['switch-group', className]}>
+  <input
+    type="checkbox"
+    role="switch"
+    id={inputId}
+    name={name}
+    value={value}
+    checked={checked}
+    disabled={disabled}
+    {...rest}
+  />
+
+  <label for={inputId}>
+    <span>{label}</span>
+  </label>
+</div>
+
+<style>
+  :where(.switch-group) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  :where(.switch-group input) {
+    position: relative;
+    flex-shrink: 0;
+    appearance: none;
+    cursor: pointer;
+    margin: 0;
+    /* Border and background match the Input component */
+    border: 2px solid var(--color-default-border);
+    border-radius: 1em;
+    background-color: transparent;
+    /* Track: ~2.75rem x 1.5rem hits the 44px min touch width and 24px min height */
+    inline-size: 2.75em;
+    block-size: 1.5em;
+  }
+
+  /* Thumb: its horizontal position (not just color) conveys on/off state */
+  :where(.switch-group input)::before {
+    position: absolute;
+    translate: 0 -50%;
+    inset-block-start: 50%;
+    inset-inline-start: 0.125em;
+    border-radius: 50%;
+    background-color: var(--color-default-border);
+    inline-size: 1em;
+    block-size: 1em;
+    content: '';
+  }
+
+  /* The border stays put in both states so the thumb keeps the same visual size */
+  :where(.switch-group input:checked) {
+    background-color: var(--color-primary-bg);
+  }
+
+  :where(.switch-group input:checked)::before {
+    inset-inline-start: calc(100% - 1em - 0.125em);
+    /* Inverse of the checked track so the thumb keeps 3:1 contrast in both themes */
+    background-color: var(--color-primary-border);
+  }
+
+  :where(.switch-group input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  :where(.switch-group label) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    cursor: pointer;
+  }
+
+  :where(.switch-group input:disabled) + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.switch-group input) {
+      transition: background-color 0.2s var(--animation-timing);
+    }
+
+    :where(.switch-group input)::before {
+      transition: inset-inline-start 0.2s var(--animation-timing),
+        background-color 0.2s var(--animation-timing);
+    }
+  }
+</style>
