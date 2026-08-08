@@ -43,6 +43,7 @@ The Accessible Astro Components library provides a collection of pre-built, acce
 - **Button**: Versatile button with variants and delightful animations
 - **Card**: Content container with flexible layout options
 - **DarkMode**: Theme toggle with system preference support and global API
+- **Drawer**: Slide-in dialog panel from any screen edge with focus management
 - **HighContrast**: High contrast mode toggle for enhanced visual clarity
 - **ReducedMotion**: Reduced motion toggle respecting system preferences
 - **Forms**: Complete form components with validation, error handling, and accessibility features
@@ -51,6 +52,7 @@ The Accessible Astro Components library provides a collection of pre-built, acce
   - **Textarea**: Multi-line text input with validation
   - **Checkbox**: Accessible checkbox with proper labeling
   - **Radio**: Radio button component with proper grouping
+  - **Switch**: Toggle switch built on a native checkbox with `role="switch"`
   - **Fieldset**: Form field grouping with legend support
 - **Heading**: Versatile heading component with proper accessibility and hierarchy
 - **Link**: Link component for internal and external navigation with accessibility features
@@ -58,8 +60,11 @@ The Accessible Astro Components library provides a collection of pre-built, acce
 - **Modal**: Accessible dialog windows
 - **Notification**: Info and alert messages
 - **Pagination**: Navigation for paginated content
-- **SkipLinks**: Keyboard navigation aid for screen readers
+- **SkipLink**: Keyboard navigation aid for screen readers
 - **Tabs**: Content organization with tabbed interfaces
+- **Toast**: Transient notification messages with a global `window.toast` API
+- **ToastProvider**: Positioned live region that renders and manages toasts
+- **Tooltip**: Contextual help using the Popover API with CSS Anchor Positioning
 - **Video**: YouTube embed component
 
 ## Getting started

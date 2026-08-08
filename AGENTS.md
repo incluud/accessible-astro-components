@@ -59,7 +59,14 @@ Check `index.js` for the current, complete list. Major component categories incl
 - **Button**: Accessible button with variants and animations
 - **Link**: Link component for internal/external navigation
 - **Modal**: Accessible dialog with focus trap
+- **Drawer**: Slide-in dialog panel from any screen edge with focus trap
+- **Tooltip**: Contextual help using the Popover API and CSS Anchor Positioning
+
+### Preference Toggles
+
 - **DarkMode**: Theme toggle with system preference support
+- **HighContrast**: High contrast mode toggle
+- **ReducedMotion**: Reduced motion toggle respecting system preferences
 
 ### Forms (Complete Suite)
 
@@ -68,6 +75,7 @@ Check `index.js` for the current, complete list. Major component categories incl
 - **Textarea**: Multi-line text input
 - **Checkbox**: Accessible checkbox with proper labeling
 - **Radio**: Radio buttons with proper grouping
+- **Switch**: Toggle switch built on a native checkbox with `role="switch"`
 - **Fieldset**: Form field grouping with legend
 
 ### Content Display
