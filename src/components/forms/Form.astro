@@ -174,9 +174,17 @@ const {
         const customPattern = field.dataset.validationPattern
         const customFn = field.dataset.validationFn
 
+        // Disabled and readonly controls are barred from constraint validation
+        // by the browser, so they never block submission
+        if (!field.willValidate) return true
+
         // Check required first
         if (field.required) {
-          if (type === 'checkbox' || type === 'radio') {
+          if (type === 'radio') {
+            // A required radio is satisfied when any radio sharing its name is
+            // selected, which is exactly what the browser's own check reports
+            if (!field.checkValidity()) return false
+          } else if (type === 'checkbox') {
             if (!field.checked) return false
           } else if (!value) {
             return false
