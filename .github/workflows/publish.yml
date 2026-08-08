@@ -3,7 +3,7 @@ on:
     branches: main
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: read
 
 jobs:
@@ -14,10 +14,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
-      # Ensure npm 11.5.1 is installed for trusted publishing on Node 20
+      # Astro 6+ (our devDependency) requires Node >=22.12.0
+      # Ensure npm 11.5.1 is installed for trusted publishing
       - name: Update npm
         run: npm install -g npm@11.5.1
       - run: npm ci
