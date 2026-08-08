@@ -175,8 +175,12 @@ const {
         const customFn = field.dataset.validationFn
 
         // Check required first
-        if (field.required && !value) {
-          return false
+        if (field.required) {
+          if (type === 'checkbox' || type === 'radio') {
+            if (!field.checked) return false
+          } else if (!value) {
+            return false
+          }
         }
 
         // Check custom function
