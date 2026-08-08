@@ -14,6 +14,7 @@
  * - Card
  * - Checkbox
  * - DarkMode
+ * - Drawer
  * - Fieldset
  * - Form
  * - Heading
@@ -332,6 +333,27 @@ type DarkMode = typeof import('../../index.js').DarkMode
 export const DarkMode: DarkMode
 
 /**
+ * Drawer component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.title - Drawer title (required)
+ * @param _props.triggerId - ID of the trigger element (required)
+ * @param _props.position - Edge the drawer slides in from ('right' | 'left' | 'top' | 'bottom') - default: 'right'
+ * @param _props.closeText - Close button text for screen readers - default: "Close"
+ * @param _props.headingSize - Visual size of the heading ('h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') - default: 'h6'
+ * @param _props.showFooter - Whether to render the footer area for extra buttons - default: false
+ * @param _props.children - Any HTML elements. Parent element: `<div>`
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Supports a named slot "footer" for footer content (requires showFooter)
+ * @note Drawer title uses semantic h2 level with customizable visual appearance (headingSize)
+ * @note Built on `<dialog>` with focus trapping, backdrop click and Escape to close
+ * @note Exposes `window.closeDrawer` to close a drawer programmatically
+ */
+type Drawer = typeof import('../../index.js').Drawer
+export const Drawer: Drawer
+
+/**
  * Fieldset component
  *
  * @param _props - Record<string, any>
@@ -557,25 +579,6 @@ type Radio = typeof import('../../index.js').Radio
 export const Radio: Radio
 
 /**
- * Switch component
- *
- * @param _props - Record<string, any>
- * @param _props.class - Optional CSS class names
- * @param _props.id - Unique identifier for the switch field
- * @param _props.name - Name attribute for the switch field (required for form submission)
- * @param _props.label - Label text for the switch field (required)
- * @param _props.value - Value attribute submitted when the switch is on - default: "on"
- * @param _props.checked - Whether the switch is on by default - default: false
- * @param _props.disabled - Whether the field is disabled - default: false
- * @param _props.children - Not applicable for switch components
- * @note Additional HTML attributes can be passed and will be spread to the root element
- * @note Built on a native checkbox with role="switch" - form-submittable and keyboard-operable without JS
- * @note Screen readers announce the on/off state; thumb position (not just color) conveys state
- */
-type Switch = typeof import('../../index.js').Switch
-export const Switch: Switch
-
-/**
  * ReducedMotion toggle component
  * - Toggles class `reduce-motion` on `document.documentElement`
  * - Respects system preference by default
@@ -603,6 +606,25 @@ export const ReducedMotion: ReducedMotion
  */
 type SkipLink = typeof import('../../index.js').SkipLink
 export const SkipLink: SkipLink
+
+/**
+ * Switch component
+ *
+ * @param _props - Record<string, any>
+ * @param _props.class - Optional CSS class names
+ * @param _props.id - Unique identifier for the switch field
+ * @param _props.name - Name attribute for the switch field (required for form submission)
+ * @param _props.label - Label text for the switch field (required)
+ * @param _props.value - Value attribute submitted when the switch is on - default: "on"
+ * @param _props.checked - Whether the switch is on by default - default: false
+ * @param _props.disabled - Whether the field is disabled - default: false
+ * @param _props.children - Not applicable for switch components
+ * @note Additional HTML attributes can be passed and will be spread to the root element
+ * @note Built on a native checkbox with role="switch" - form-submittable and keyboard-operable without JS
+ * @note Screen readers announce the on/off state; thumb position (not just color) conveys state
+ */
+type Switch = typeof import('../../index.js').Switch
+export const Switch: Switch
 
 /**
  * Tabs parent component
