@@ -31,11 +31,6 @@ interface Props {
    */
   closeText?: string
   /**
-   * Whether to show close icon
-   * @default true
-   */
-  closeIcon?: boolean
-  /**
    * Visual size of the heading (can differ from semantic level)
    * @default "h6"
    */
@@ -57,7 +52,6 @@ const {
   triggerId,
   position = 'right',
   closeText = 'Close',
-  closeIcon = true,
   headingSize = 'h6',
   showFooter = false,
   ...rest
@@ -80,18 +74,14 @@ const titleId = `${triggerId}-title`
         {title}
       </Heading>
       <button class="drawer-close" type="button">
-        {
-          closeIcon && (
-            <span class="drawer-close-icon">
-              <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor" d="M20 .5v1H0v-1z" />
-              </svg>
-              <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor" d="M20 .5v1H0v-1z" />
-              </svg>
-            </span>
-          )
-        }
+        <span class="drawer-close-icon">
+          <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M20 .5v1H0v-1z"></path>
+          </svg>
+          <svg width="20" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M20 .5v1H0v-1z"></path>
+          </svg>
+        </span>
         <span class="sr-only">{closeText}</span>
       </button>
     </div>

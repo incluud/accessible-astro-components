@@ -64,11 +64,3 @@ export const CustomCloseText = {
     slot: 'Drawer with a custom close label.',
   },
 }
-
-export const NoCloseIcon = {
-  args: {
-    ...baseArgs,
-    closeIcon: false,
-    slot: 'Drawer without the close icon.',
-  },
-}
