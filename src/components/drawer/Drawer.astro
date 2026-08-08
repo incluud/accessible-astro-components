@@ -136,10 +136,15 @@ const titleId = `${triggerId}-title`
     }
   }
 
-  // tears down the listeners belonging to a single drawer
-  const cleanupDrawer = (drawer: HTMLDialogElement) => {
-    controllers.get(drawer)?.abort()
-    controllers.delete(drawer)
+  // tears down the listeners belonging to a single drawer. The 'close' event is fired from a queued
+  // task, so a same task close and reopen can already have stored a newer controller by the time
+  // this runs. Always abort the controller that owns the listeners being cleaned up.
+  const cleanupDrawer = (drawer: HTMLDialogElement, controller: AbortController) => {
+    controller.abort()
+
+    if (controllers.get(drawer) === controller) {
+      controllers.delete(drawer)
+    }
   }
 
   const openDrawer = (drawer: HTMLDialogElement) => {
@@ -160,7 +165,7 @@ const titleId = `${triggerId}-title`
     drawerInner?.addEventListener('click', (event) => event.stopPropagation(), { signal })
 
     // covers every close path, including Escape and native dialog form submits
-    drawer.addEventListener('close', () => cleanupDrawer(drawer), { signal })
+    drawer.addEventListener('close', () => cleanupDrawer(drawer, controller), { signal })
   }
 
   const closeDrawer = (drawer?: HTMLDialogElement) => {
@@ -177,7 +182,8 @@ const titleId = `${triggerId}-title`
     document.querySelectorAll<HTMLDialogElement>('.drawer').forEach((drawer) => {
       const triggerId = drawer.getAttribute('data-trigger-id')
       const drawerCloseButton = drawer.querySelector('.drawer-close')
-      const drawerTrigger = document.querySelector(`#${triggerId}`)
+      // getElementById, because an HTML id can contain characters that a CSS selector cannot
+      const drawerTrigger = triggerId ? document.getElementById(triggerId) : null
 
       if (!drawerTrigger) {
         throw new Error(`Trigger element not found. \n

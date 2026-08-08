@@ -126,10 +126,15 @@ const titleId = `${triggerId}-title`
     }
   }
 
-  // tears down the listeners belonging to a single modal
-  const cleanupModal = (modal: HTMLDialogElement) => {
-    controllers.get(modal)?.abort()
-    controllers.delete(modal)
+  // tears down the listeners belonging to a single modal. The 'close' event is fired from a queued
+  // task, so a same task close and reopen can already have stored a newer controller by the time
+  // this runs. Always abort the controller that owns the listeners being cleaned up.
+  const cleanupModal = (modal: HTMLDialogElement, controller: AbortController) => {
+    controller.abort()
+
+    if (controllers.get(modal) === controller) {
+      controllers.delete(modal)
+    }
   }
 
   const openModal = (modal: HTMLDialogElement) => {
@@ -150,7 +155,7 @@ const titleId = `${triggerId}-title`
     modalInner?.addEventListener('click', (event) => event.stopPropagation(), { signal })
 
     // covers every close path, including Escape and native dialog form submits
-    modal.addEventListener('close', () => cleanupModal(modal), { signal })
+    modal.addEventListener('close', () => cleanupModal(modal, controller), { signal })
   }
 
   const closeModal = (modal?: HTMLDialogElement) => {
@@ -166,7 +171,8 @@ const titleId = `${triggerId}-title`
     document.querySelectorAll<HTMLDialogElement>('.modal').forEach((modal) => {
       const triggerId = modal.getAttribute('data-trigger-id')
       const modalCloseButton = modal.querySelector('.modal-close button')
-      const modalTrigger = document.querySelector(`#${triggerId}`)
+      // getElementById, because an HTML id can contain characters that a CSS selector cannot
+      const modalTrigger = triggerId ? document.getElementById(triggerId) : null
 
       if (!modalTrigger) {
         throw new Error(`Trigger element not found. \n
