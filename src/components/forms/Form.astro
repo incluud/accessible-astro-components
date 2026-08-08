@@ -210,20 +210,25 @@ const {
         return true
       }
 
+      // Disabled controls are not submitted, so they can neither be required nor
+      // satisfy a required group. `willValidate` also covers controls disabled by
+      // an ancestor fieldset, which `disabled` on the control itself does not.
+      const enabledControls = (fieldset, selector) =>
+        Array.from(fieldset.querySelectorAll(selector)).filter(
+          (control: HTMLInputElement) => control.willValidate
+        ) as HTMLInputElement[]
+
       // Validate input groups within fieldsets (checkboxes and radio buttons)
       const validateFieldset = (fieldset) => {
-        const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]')
-        const radioButtons = fieldset.querySelectorAll('input[type="radio"]')
+        const checkboxes = enabledControls(fieldset, 'input[type="checkbox"]')
+        const radioButtons = enabledControls(fieldset, 'input[type="radio"]')
 
         // Check if any checkboxes are checked
         const checkboxValid =
-          checkboxes.length === 0 ||
-          Array.from(checkboxes).some((checkbox: HTMLInputElement) => checkbox.checked)
+          checkboxes.length === 0 || checkboxes.some((checkbox) => checkbox.checked)
 
         // Check if any radio buttons are checked
-        const radioValid =
-          radioButtons.length === 0 ||
-          Array.from(radioButtons).some((radio: HTMLInputElement) => radio.checked)
+        const radioValid = radioButtons.length === 0 || radioButtons.some((radio) => radio.checked)
 
         // Both types must be valid (if present)
         return checkboxValid && radioValid
@@ -250,8 +255,10 @@ const {
           }
         })
 
-        // Validate all fieldsets (checkbox groups)
+        // Validate all fieldsets (checkbox groups), skipping disabled ones
         requiredFieldsets.forEach((fieldset) => {
+          if (fieldset.matches(':disabled')) return
+
           if (!validateFieldset(fieldset)) {
             fieldset.setAttribute('aria-invalid', 'true')
             invalidFieldsets.push(fieldset)
