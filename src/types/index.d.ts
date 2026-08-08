@@ -63,7 +63,14 @@ declare global {
   }
 
   interface Window {
-    closeModal: () => void
+    /**
+     * Closes a Modal. Defaults to the last open modal when no modal is passed.
+     */
+    closeModal: (modal?: HTMLDialogElement) => void
+    /**
+     * Closes a Drawer. Defaults to the last open drawer when no drawer is passed.
+     */
+    closeDrawer: (drawer?: HTMLDialogElement) => void
     /**
      * Dark mode API for external control
      */

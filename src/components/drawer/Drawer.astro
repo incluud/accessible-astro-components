@@ -107,12 +107,8 @@ const titleId = `${triggerId}-title`
     | HTMLSelectElement
     | HTMLDetailsElement
 
-  // variables
-  let drawers = document.querySelectorAll<HTMLDialogElement>('.drawer')
-
-  // abort controllers for global event listeners
-  let trapFocusController: AbortController | undefined
-  let keydownController: AbortController | undefined
+  // one abort controller per drawer instance, so drawers never clean up each other's listeners
+  const controllers = new WeakMap<HTMLDialogElement, AbortController>()
 
   const getKeyboardFocusableElements = (element: HTMLElement) => {
     return [
@@ -140,68 +136,45 @@ const titleId = `${triggerId}-title`
     }
   }
 
+  // tears down the listeners belonging to a single drawer
+  const cleanupDrawer = (drawer: HTMLDialogElement) => {
+    controllers.get(drawer)?.abort()
+    controllers.delete(drawer)
+  }
+
   const openDrawer = (drawer: HTMLDialogElement) => {
+    if (drawer.open) return
+
     const drawerInner = drawer.querySelector<HTMLDivElement>('.drawer-inner')
+    const controller = new AbortController()
+    const { signal } = controller
+
+    controllers.set(drawer, controller)
 
     drawer.showModal()
 
-    trapFocusController = new AbortController()
-    keydownController = new AbortController()
+    document.addEventListener('keydown', (event) => trapFocus(event, drawer), { signal })
 
-    document.addEventListener('keydown', (event) => trapFocus(event, drawer), {
-      signal: trapFocusController.signal,
-    })
+    // clicking the backdrop closes this drawer, clicks inside it do not
+    drawer.addEventListener('click', () => closeDrawer(drawer), { signal })
+    drawerInner?.addEventListener('click', (event) => event.stopPropagation(), { signal })
 
-    drawer.addEventListener(
-      'click',
-      () => {
-        closeDrawer()
-      },
-      { signal: keydownController.signal }
-    )
-
-    drawerInner!.addEventListener(
-      'click',
-      (event) => {
-        event.stopPropagation()
-      },
-      { signal: keydownController.signal }
-    )
+    // covers every close path, including Escape and native dialog form submits
+    drawer.addEventListener('close', () => cleanupDrawer(drawer), { signal })
   }
 
-  const closeDrawer = () => {
-    const openDrawer = document.querySelector<HTMLDialogElement>('.drawer[open]')
-    if (!openDrawer) return
+  const closeDrawer = (drawer?: HTMLDialogElement) => {
+    // without an explicit drawer, close the last open one in DOM order
+    const target =
+      drawer ?? [...document.querySelectorAll<HTMLDialogElement>('.drawer[open]')].pop()
+    if (!target?.open) return
 
-    openDrawer.close()
-    trapFocusController?.abort()
-    keydownController?.abort()
+    // the 'close' listener registered in openDrawer handles the cleanup
+    target.close()
   }
 
-  // execution
-  drawers.forEach((drawer) => {
-    const triggerId = drawer.getAttribute('data-trigger-id')
-    const drawerCloseButton = drawer.querySelector('.drawer-close')
-    const drawerTrigger = document.querySelector(`#${triggerId}`)
-
-    if (!drawerTrigger) {
-      throw new Error(`Trigger element not found. \n
-      Did you forget to add a trigger element with id: "${triggerId}"?`)
-    }
-
-    drawerTrigger.addEventListener('click', () => openDrawer(drawer))
-    drawerCloseButton!.addEventListener('click', () => closeDrawer())
-  })
-
-  window.closeDrawer = closeDrawer
-
-  // Listen for view transitions
-  document.addEventListener('astro:after-swap', () => {
-    // reset variables
-    drawers = document.querySelectorAll<HTMLDialogElement>('.drawer')
-
-    // execution
-    drawers.forEach((drawer) => {
+  const setupDrawers = () => {
+    document.querySelectorAll<HTMLDialogElement>('.drawer').forEach((drawer) => {
       const triggerId = drawer.getAttribute('data-trigger-id')
       const drawerCloseButton = drawer.querySelector('.drawer-close')
       const drawerTrigger = document.querySelector(`#${triggerId}`)
@@ -212,9 +185,17 @@ const titleId = `${triggerId}-title`
       }
 
       drawerTrigger.addEventListener('click', () => openDrawer(drawer))
-      drawerCloseButton!.addEventListener('click', () => closeDrawer())
+      drawerCloseButton?.addEventListener('click', () => closeDrawer(drawer))
     })
-  })
+  }
+
+  // execution
+  setupDrawers()
+
+  window.closeDrawer = closeDrawer
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => setupDrawers())
 </script>
 
 <style>

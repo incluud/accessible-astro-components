@@ -97,12 +97,8 @@ const titleId = `${triggerId}-title`
     | HTMLSelectElement
     | HTMLDetailsElement
 
-  // variables
-  let modals = document.querySelectorAll<HTMLDialogElement>('.modal')
-
-  // abort controllers for global event listeners
-  let trapFocusController: AbortController | undefined
-  let keydownController: AbortController | undefined
+  // one abort controller per modal instance, so modals never clean up each other's listeners
+  const controllers = new WeakMap<HTMLDialogElement, AbortController>()
 
   const getKeyboardFocusableElements = (element: HTMLElement) => {
     return [
@@ -130,68 +126,44 @@ const titleId = `${triggerId}-title`
     }
   }
 
+  // tears down the listeners belonging to a single modal
+  const cleanupModal = (modal: HTMLDialogElement) => {
+    controllers.get(modal)?.abort()
+    controllers.delete(modal)
+  }
+
   const openModal = (modal: HTMLDialogElement) => {
+    if (modal.open) return
+
     const modalInner = modal.querySelector<HTMLDivElement>('.modal-inner')
+    const controller = new AbortController()
+    const { signal } = controller
+
+    controllers.set(modal, controller)
 
     modal.showModal()
 
-    trapFocusController = new AbortController()
-    keydownController = new AbortController()
+    document.addEventListener('keydown', (event) => trapFocus(event, modal), { signal })
 
-    document.addEventListener('keydown', (e) => trapFocus(e, modal), {
-      signal: trapFocusController.signal,
-    })
+    // clicking the backdrop closes this modal, clicks inside it do not
+    modal.addEventListener('click', () => closeModal(modal), { signal })
+    modalInner?.addEventListener('click', (event) => event.stopPropagation(), { signal })
 
-    modal.addEventListener(
-      'click',
-      () => {
-        closeModal()
-      },
-      { signal: keydownController.signal }
-    )
-
-    modalInner!.addEventListener(
-      'click',
-      (event) => {
-        event.stopPropagation()
-      },
-      { signal: keydownController.signal }
-    )
+    // covers every close path, including Escape and native dialog form submits
+    modal.addEventListener('close', () => cleanupModal(modal), { signal })
   }
 
-  const closeModal = () => {
-    const openModal = document.querySelector<HTMLDialogElement>('.modal[open]')
-    if (!openModal) return
+  const closeModal = (modal?: HTMLDialogElement) => {
+    // without an explicit modal, close the last open one in DOM order
+    const target = modal ?? [...document.querySelectorAll<HTMLDialogElement>('.modal[open]')].pop()
+    if (!target?.open) return
 
-    openModal.close()
-    trapFocusController?.abort()
-    keydownController?.abort()
+    // the 'close' listener registered in openModal handles the cleanup
+    target.close()
   }
 
-  // execution
-  modals.forEach((modal) => {
-    const triggerId = modal.getAttribute('data-trigger-id')
-    const modalCloseButton = modal.querySelector('.modal-close button')
-    const modalTrigger = document.querySelector(`#${triggerId}`)
-
-    if (!modalTrigger) {
-      throw new Error(`Trigger element not found. \n
-      Did you forget to add a trigger element with id: "${triggerId}"?`)
-    }
-
-    modalTrigger.addEventListener('click', () => openModal(modal))
-    modalCloseButton!.addEventListener('click', () => closeModal())
-  })
-
-  window.closeModal = closeModal
-
-  // Listen for view transitions
-  document.addEventListener('astro:after-swap', () => {
-    // reset variables
-    modals = document.querySelectorAll<HTMLDialogElement>('.modal')
-
-    // execution
-    modals.forEach((modal) => {
+  const setupModals = () => {
+    document.querySelectorAll<HTMLDialogElement>('.modal').forEach((modal) => {
       const triggerId = modal.getAttribute('data-trigger-id')
       const modalCloseButton = modal.querySelector('.modal-close button')
       const modalTrigger = document.querySelector(`#${triggerId}`)
@@ -202,9 +174,17 @@ const titleId = `${triggerId}-title`
       }
 
       modalTrigger.addEventListener('click', () => openModal(modal))
-      modalCloseButton!.addEventListener('click', () => closeModal())
+      modalCloseButton?.addEventListener('click', () => closeModal(modal))
     })
-  })
+  }
+
+  // execution
+  setupModals()
+
+  window.closeModal = closeModal
+
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', () => setupModals())
 </script>
 
 <style>
