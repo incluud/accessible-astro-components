@@ -6,6 +6,9 @@
   "license": "MIT",
   "homepage": "https://accessible-astro.incluud.dev/components/overview/",
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "import": {
@@ -16,6 +19,18 @@
   },
   "main": "./index.js",
   "types": "./src/types/index.d.ts",
+  "files": [
+    "index.js",
+    "src/components",
+    "src/styles",
+    "src/types",
+    "README.md",
+    "LICENSE",
+    "!**/*.stories.ts",
+    "!src/components/StorySlot.astro",
+    "!src/components/StorySlotChildren.astro",
+    "!src/styles/astrobook.css"
+  ],
   "keywords": [
     "astro",
     "astro-component",
