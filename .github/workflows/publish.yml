@@ -22,5 +22,24 @@ jobs:
       - name: Update npm
         run: npm install -g npm@11.5.1
       - run: npm ci
+
+      - name: Check if version is already published
+        id: check
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - run: npm run build --if-present
+        if: steps.check.outputs.already_published == 'false'
+
       - run: npm publish
+        if: steps.check.outputs.already_published == 'false'
+
+      - name: Skip notice
+        if: steps.check.outputs.already_published == 'true'
+        run: echo "::notice::Version $(node -p \"require('./package.json').version\") is already published on npm — skipping publish."
