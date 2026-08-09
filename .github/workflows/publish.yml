@@ -27,10 +27,13 @@ jobs:
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
-          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+          if OUTPUT=$(npm view "$NAME@$VERSION" version 2>&1); then
             echo "already_published=true" >> "$GITHUB_OUTPUT"
-          else
+          elif echo "$OUTPUT" | grep -q "E404"; then
             echo "already_published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::npm view failed unexpectedly: $OUTPUT"
+            exit 1
           fi
 
       - run: npm run build --if-present
