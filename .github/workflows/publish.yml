@@ -15,7 +15,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
 
       # Astro 6+ (our devDependency) requires Node >=22.12.0
       # Ensure npm 11.5.1 is installed for trusted publishing
