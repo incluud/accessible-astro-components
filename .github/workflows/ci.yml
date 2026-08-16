@@ -1,0 +1,95 @@
+---
+name: 'ci'
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # Validates the `astro` peerDependency range (^5 || ^6 || ^7).
+    # Astro 6 and 7 require Node >=22.12.0, so only Astro 5 is tested on Node 20.
+    name: 'Astro ${{ matrix.astro }} / Node ${{ matrix.node }}'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - astro: '5'
+            node: '20'
+          - astro: '5'
+            node: '22'
+          - astro: '6'
+            node: '22'
+          - astro: '7'
+            node: '22'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Astro ${{ matrix.astro }}
+        run: npm install --no-save --no-audit --no-fund astro@${{ matrix.astro }}
+
+      - name: Report resolved versions
+        run: |
+          node -p "'astro   ' + require('astro/package.json').version"
+          node -p "'node    ' + process.version"
+
+      - name: Build
+        run: npm run build
+
+  package:
+    # Guards the `files` allowlist so development files are never published again.
+    name: 'Verify package contents'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create tarball
+        run: |
+          mkdir -p "${RUNNER_TEMP}/pack"
+          npm pack --pack-destination "${RUNNER_TEMP}/pack"
+
+      - name: Assert no development files are published
+        run: |
+          contents="$(tar -tzf "${RUNNER_TEMP}"/pack/*.tgz)"
+          echo "$contents"
+          forbidden='(^package/\.|^package/AGENTS\.md$|^package/cliff\.toml$|^package/tsconfig\.json$|^package/astro\.config\.mjs$|\.stories\.ts$|StorySlot)'
+          if echo "$contents" | grep -Eq "$forbidden"; then
+            echo "::error::Development files found in the package tarball"
+            echo "$contents" | grep -E "$forbidden"
+            exit 1
+          fi
+          echo "Package contents look clean."

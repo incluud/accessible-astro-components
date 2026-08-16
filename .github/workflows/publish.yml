@@ -3,8 +3,12 @@ on:
     branches: main
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -14,12 +18,34 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '22'
 
-      # Ensure npm 11.5.1 is installed for trusted publishing on Node 20
+      # Astro 6+ (our devDependency) requires Node >=22.12.0
+      # Ensure npm 11.5.1 is installed for trusted publishing
       - name: Update npm
         run: npm install -g npm@11.5.1
       - run: npm ci
+
+      - name: Check if version is already published
+        id: check
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if OUTPUT=$(npm view "$NAME@$VERSION" version 2>&1); then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+          elif echo "$OUTPUT" | grep -q "E404"; then
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::npm view failed unexpectedly: $OUTPUT"
+            exit 1
+          fi
+
       - run: npm run build --if-present
+        if: steps.check.outputs.already_published == 'false'
+
       - run: npm publish
+        if: steps.check.outputs.already_published == 'false'
+
+      - name: Skip notice
+        if: steps.check.outputs.already_published == 'true'
+        run: echo "::notice::Version $(node -p \"require('./package.json').version\") is already published on npm — skipping publish."

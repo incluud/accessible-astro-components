@@ -1,0 +1,11 @@
+# Build output
+dist/
+
+# Astro build cache and generated types
+.astro/
+
+# Dependencies
+node_modules/
+
+# Generated lockfile
+package-lock.json
