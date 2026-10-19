@@ -219,19 +219,32 @@ Since this is a library package, testing happens in consuming projects:
 
 ## Publishing to NPM
 
-1. **Update version** in `package.json` (follow semver)
-2. **Test thoroughly** in all consuming projects
-3. **Format code**: `npx prettier --write .`
-4. **Commit changes**: Follow conventional commits
-5. **Publish**:
-   ```bash
-   npm publish
-   ```
-6. **Update consuming projects**:
+Releases are automated. **Merging the release PR is the only manual step.** Don't
+run `npm publish` or bump `package.json` by hand.
+
+1. **Merge feature/fix PRs into `main`** with conventional commit messages. They
+   decide the next version: `feat` → minor, `fix` and other user-facing changes →
+   patch, `BREAKING CHANGE` → major. Commits that are only chores, CI, style or
+   tests don't open a release on their own.
+2. **`release-pr.yml` keeps one `chore(release): vX.Y.Z` PR open** on the
+   `release/next` branch. It bumps `package.json`/`package-lock.json` and puts the
+   git-cliff release notes in the PR body, @-mentioning contributors. Every push
+   to `main` regenerates it, which overwrites any edits to the notes.
+   - To force a bump, run the **release-pr** workflow manually (Actions tab) and
+     pick `patch`, `minor` or `major`.
+3. **Test the release in consuming projects**, then merge the release PR.
+4. **`publish.yml` runs on the merge**: it publishes to npm (trusted publishing,
+   so keep that filename), creates tag `vX.Y.Z` on the merge commit and the GitHub
+   release, using the notes from the PR body.
+5. **Update consuming projects**:
    ```bash
    cd ../accessible-astro-starter
    npm update accessible-astro-components
    ```
+
+Release note format lives in `cliff.toml`. Preview it locally with
+`GITHUB_TOKEN=$(gh auth token) npx git-cliff --unreleased` (the token is needed to
+resolve GitHub usernames).
 
 ## Consuming Projects
 

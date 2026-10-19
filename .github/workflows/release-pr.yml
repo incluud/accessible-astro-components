@@ -1,0 +1,137 @@
+---
+# Keeps a single "chore(release): vX.Y.Z" PR open on the `release/next` branch.
+# It bumps package.json / package-lock.json and carries the release notes.
+# Merging it is the one manual step: publish.yml then publishes to npm, tags
+# the merge commit and creates the GitHub release.
+#
+# Runs after publish.yml finishes on main, so a release that was just tagged is
+# never proposed again. Run it manually to force a specific bump.
+name: 'release-pr'
+
+on:
+  workflow_run:
+    workflows: ['publish']
+    types: ['completed']
+    branches: ['main']
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump (auto follows conventional commits)'
+        type: choice
+        default: 'auto'
+        options: ['auto', 'patch', 'minor', 'major']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  release-pr:
+    name: 'Update release PR'
+    runs-on: 'ubuntu-latest'
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      # PRs opened with the default GITHUB_TOKEN don't trigger CI. If a GitHub
+      # App is configured (RELEASE_APP_ID variable + RELEASE_APP_PRIVATE_KEY
+      # secret), its token is used instead so CI runs on the release PR.
+      - name: Create GitHub App token
+        id: app-token
+        if: vars.RELEASE_APP_ID != ''
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Determine next version
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BUMP: ${{ inputs.bump || 'auto' }}
+        run: |
+          CURRENT=$(node -p "require('./package.json').version")
+
+          # Only user-facing changes warrant a release on their own;
+          # a run that only contains chores is skipped unless a bump is forced.
+          RELEASABLE=$(npx --yes git-cliff@2.14.2 --unreleased --context \
+            | jq '[.[].commits[] | select(.group | test("Chores") | not)] | length')
+          if [ "$BUMP" = "auto" ] && [ "$RELEASABLE" -eq 0 ]; then
+            echo "::notice::No unreleased user-facing changes; nothing to release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$BUMP" = "auto" ]; then
+            NEXT=$(npx --yes git-cliff@2.14.2 --bumped-version)
+            NEXT="${NEXT#v}"
+          else
+            NEXT=$(node -e '
+              const [maj, min, pat] = process.argv[1].split(".").map(Number)
+              const next = { major: [maj + 1, 0, 0], minor: [maj, min + 1, 0], patch: [maj, min, pat + 1] }
+              console.log(next[process.argv[2]].join("."))
+            ' "$CURRENT" "$BUMP")
+          fi
+
+          echo "Current: $CURRENT, next: $NEXT ($BUMP)"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "next=${NEXT}" >> "$GITHUB_OUTPUT"
+
+      - name: Update release branch
+        if: steps.version.outputs.skip == 'false'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          git switch -C release/next
+          npm version "$NEXT" --no-git-tag-version --allow-same-version
+
+          npx --yes git-cliff@2.14.2 --unreleased --tag "v${NEXT}" > "${RUNNER_TEMP}/release_notes.md"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git commit -m "chore(release): v${NEXT}"
+          git push --force origin release/next
+
+      - name: Open or update release PR
+        if: steps.version.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          {
+            echo "Merging this PR publishes **v${NEXT}** to npm, tags the merge commit and creates the GitHub release."
+            echo
+            echo "The notes between the markers below become the release text. You can edit them before merging,"
+            echo "but any new push to \`main\` regenerates this PR and overwrites those edits."
+            echo "To force a different bump, run the **release-pr** workflow manually and pick patch, minor or major."
+            echo
+            echo "<!-- release-notes-start -->"
+            cat "${RUNNER_TEMP}/release_notes.md"
+            echo
+            echo "<!-- release-notes-end -->"
+          } > "${RUNNER_TEMP}/pr_body.md"
+
+          PR=$(gh pr list --head release/next --base main --state open --json number --jq '.[0].number')
+          if [ -n "$PR" ]; then
+            gh pr edit "$PR" --title "chore(release): v${NEXT}" --body-file "${RUNNER_TEMP}/pr_body.md"
+          else
+            gh pr create --base main --head release/next \
+              --title "chore(release): v${NEXT}" --body-file "${RUNNER_TEMP}/pr_body.md"
+          fi

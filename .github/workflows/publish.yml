@@ -1,10 +1,24 @@
+---
+# Publishes whatever version is in package.json on main, then tags it and
+# creates the GitHub release. Normally that version comes from merging the
+# release PR opened by release-pr.yml.
+#
+# Every step checks whether its work is already done, so a push that doesn't
+# change the version is a no-op and a failed run can simply be re-run.
+#
+# Keep this filename: npm trusted publishing is bound to `publish.yml`.
+name: 'publish'
+
 on:
   push:
-    branches: main
+    branches:
+      - 'main'
+  workflow_dispatch:
 
 permissions:
-  id-token: write # Required for OIDC
-  contents: read
+  id-token: write # Required for npm trusted publishing (OIDC)
+  contents: write # Required to create the tag and GitHub release
+  pull-requests: read # Required to read release notes from the merged release PR
 
 concurrency:
   group: publish-${{ github.ref }}
@@ -12,40 +26,101 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    name: 'Publish'
+    runs-on: 'ubuntu-latest'
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Astro 6+ (our devDependency) requires Node >=22.12.0
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      # Astro 6+ (our devDependency) requires Node >=22.12.0
       # Ensure npm 11.5.1 is installed for trusted publishing
       - name: Update npm
         run: npm install -g npm@11.5.1
-      - run: npm ci
 
-      - name: Check if version is already published
-        id: check
+      - name: Check release state
+        id: state
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
           if OUTPUT=$(npm view "$NAME@$VERSION" version 2>&1); then
-            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "published=true" >> "$GITHUB_OUTPUT"
           elif echo "$OUTPUT" | grep -q "E404"; then
-            echo "already_published=false" >> "$GITHUB_OUTPUT"
+            echo "published=false" >> "$GITHUB_OUTPUT"
           else
             echo "::error::npm view failed unexpectedly: $OUTPUT"
             exit 1
           fi
 
-      - run: npm run build --if-present
-        if: steps.check.outputs.already_published == 'false'
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - run: npm publish
-        if: steps.check.outputs.already_published == 'false'
+      - name: Install dependencies
+        if: steps.state.outputs.published == 'false'
+        run: npm ci
 
-      - name: Skip notice
-        if: steps.check.outputs.already_published == 'true'
-        run: echo "::notice::Version $(node -p \"require('./package.json').version\") is already published on npm — skipping publish."
+      - name: Build
+        if: steps.state.outputs.published == 'false'
+        run: npm run build --if-present
+
+      - name: Publish to npm
+        if: steps.state.outputs.published == 'false'
+        run: npm publish
+
+      - name: Prepare release notes
+        if: steps.state.outputs.released == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.state.outputs.tag }}
+        run: |
+          # Prefer the (possibly hand-edited) notes from the merged release PR.
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
+            --jq ".[] | select(.head.ref == \"release/next\" and .head.repo.full_name == \"${GITHUB_REPOSITORY}\") | .body" \
+            > pr_body.md
+          sed -n '/<!-- release-notes-start -->/,/<!-- release-notes-end -->/p' pr_body.md \
+            | sed '1d;$d' > release_notes.md
+
+          # Fall back to generating them, e.g. when the version was bumped by hand.
+          if [ ! -s release_notes.md ]; then
+            echo "::notice::No release PR notes found; generating with git-cliff."
+            npx --yes git-cliff@2.14.2 --unreleased --tag "$TAG" > release_notes.md
+          fi
+          cat release_notes.md
+
+      - name: Create tag and GitHub release
+        if: steps.state.outputs.released == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.state.outputs.tag }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null; then
+            echo "::notice::Tag ${TAG} already exists; creating the release from it."
+            gh release create "$TAG" --verify-tag --title "$TAG" --notes-file release_notes.md --latest
+          else
+            gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --notes-file release_notes.md --latest
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### ${{ steps.state.outputs.tag }}"
+            echo "- npm: ${{ steps.state.outputs.published == 'true' && 'already published' || 'published' }}"
+            echo "- GitHub release: ${{ steps.state.outputs.released == 'true' && 'already exists' || 'created' }}"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,23 +1,42 @@
-# git-cliff configuration for Accessible Astro changelog format
-# Matches the format from the changelog-generator Skill
+# git-cliff configuration for Accessible Astro release notes
 # https://git-cliff.org/docs/configuration
+#
+# Contributors are @-mentioned by their GitHub username. That lookup needs the
+# GitHub API, so set GITHUB_TOKEN when running locally:
+#   GITHUB_TOKEN=$(gh auth token) npx git-cliff --unreleased
+# Without a token it falls back to the git author name.
+
+[remote.github]
+owner = "incluud"
+repo = "accessible-astro-components"
 
 [changelog]
-# Accessible Astro format: * sha: Subject (@author)
+# Accessible Astro format: * sha: **scope**: Subject by @username
 body = """
-{% if version %}\
-## [{{ version }}] - {{ timestamp | date(format="%Y-%m-%d") }}
-{% else %}\
-## Next Release
-{% endif %}\
+{% if version -%}
+## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else -%}
+## Unreleased
+{% endif -%}
 {% for group, commits in commits | group_by(attribute="group") %}
-## {{ group | striptags | trim }}
-
+### {{ group | striptags | trim }}
 {% for commit in commits %}
-* {{ commit.id | truncate(length=7, end="") }}: {% if commit.breaking %}[BREAKING] {% endif %}{{ commit.message | escape | upper_first }}{% if commit.author %} ({{ commit.author.name | escape }}){% endif %}
-
-{% endfor %}
-{% endfor %}
+* {{ commit.id | truncate(length=7, end="") }}: {% if commit.breaking %}[BREAKING] {% endif %}\
+{% if commit.scope %}**{{ commit.scope }}**: {% endif %}\
+{{ commit.message | split(pat="\n") | first | escape | upper_first }}\
+{% if commit.remote.username %} by @{{ commit.remote.username }}\
+{% elif commit.author.name %} by {{ commit.author.name | escape }}{% endif %}\
+{% if commit.remote.pr_number %} in #{{ commit.remote.pr_number }}{% endif %}
+{%- endfor %}
+{% endfor -%}
+{% set new_contributors = github.contributors | filter(attribute="is_first_time", value=true) -%}
+{% if new_contributors | length > 0 %}
+### New Contributors
+{% for contributor in new_contributors %}
+* @{{ contributor.username }} made their first contribution\
+{% if contributor.pr_number %} in #{{ contributor.pr_number }}{% endif %}
+{%- endfor %}
+{% endif -%}
 """
 trim = true
 render_always = true
@@ -25,19 +44,27 @@ render_always = true
 [git]
 conventional_commits = true
 filter_unconventional = false
-# Match "latest" tag used for rolling prereleases
-tag_pattern = ".*"
+# Only real releases count; ignores the old rolling "latest" tag.
+tag_pattern = "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+# The <!-- n --> prefix only sets the section order; striptags removes it.
 commit_parsers = [
-  { body = ".*BREAKING CHANGE.*", group = "Breaking Changes" },
-  { message = "^feat", group = "Features" },
-  { message = "^fix", group = "Bug Fixes" },
-  { message = "^a11y", group = "Accessibility" },
-  { message = "^doc", group = "Documentation" },
-  { message = "^perf", group = "Performance" },
-  { message = "^refactor", group = "Refactoring" },
-  { message = "^revert", group = "Reverts" },
-  { message = "^chore|^ci|^style|^test", group = "Chores" },
-  { message = ".*", group = "Chores" },
+  { message = "^Merge (pull request|branch|remote-tracking branch)", skip = true },
+  { message = "^chore\\(release\\)", skip = true },
+  { body = ".*BREAKING CHANGE.*", group = "<!-- 0 -->Breaking Changes" },
+  { message = "^feat", group = "<!-- 1 -->Features" },
+  { message = "^fix", group = "<!-- 2 -->Bug Fixes" },
+  { message = "^a11y", group = "<!-- 3 -->Accessibility" },
+  { message = "^doc", group = "<!-- 5 -->Documentation" },
+  { message = "^perf", group = "<!-- 4 -->Performance" },
+  { message = "^refactor", group = "<!-- 6 -->Refactoring" },
+  { message = "^revert", group = "<!-- 7 -->Reverts" },
+  { message = "^chore|^ci|^style|^test", group = "<!-- 8 -->Chores" },
+  { message = ".*", group = "<!-- 8 -->Chores" },
 ]
 protect_breaking_commits = true
 sort_commits = "oldest"
+
+[bump]
+# feat -> minor, fix and everything else -> patch, breaking -> major
+features_always_bump_minor = true
+breaking_always_bump_major = true
