@@ -1,0 +1,541 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T11:37:09.223Z",
+  "title": "Design System: Accessible Astro Components",
+  "extensions": {
+    "colorMeta": {
+      "primary-border": {
+        "role": "primary",
+        "displayName": "Signal Magenta Border",
+        "tonalRamp": [
+          "oklch(18% 0.087 325)",
+          "oklch(28% 0.175 325)",
+          "oklch(38% 0.250 325)",
+          "oklch(48% 0.250 325)",
+          "oklch(60% 0.250 325)",
+          "oklch(72% 0.250 325)",
+          "oklch(84% 0.175 325)",
+          "oklch(95% 0.087 325)"
+        ]
+      },
+      "primary-bg": {
+        "role": "primary",
+        "displayName": "Signal Magenta Fill",
+        "tonalRamp": [
+          "oklch(18% 0.087 325)",
+          "oklch(28% 0.175 325)",
+          "oklch(38% 0.250 325)",
+          "oklch(48% 0.250 325)",
+          "oklch(60% 0.250 325)",
+          "oklch(72% 0.250 325)",
+          "oklch(84% 0.175 325)",
+          "oklch(95% 0.087 325)"
+        ]
+      },
+      "primary-text": {
+        "role": "primary",
+        "displayName": "Signal Magenta Text",
+        "tonalRamp": [
+          "oklch(18% 0.087 325)",
+          "oklch(28% 0.175 325)",
+          "oklch(38% 0.250 325)",
+          "oklch(48% 0.250 325)",
+          "oklch(60% 0.250 325)",
+          "oklch(72% 0.250 325)",
+          "oklch(84% 0.175 325)",
+          "oklch(95% 0.087 325)"
+        ]
+      },
+      "secondary-border": {
+        "role": "secondary",
+        "displayName": "Signal Teal Border",
+        "tonalRamp": [
+          "oklch(18% 0.042 175)",
+          "oklch(28% 0.084 175)",
+          "oklch(38% 0.120 175)",
+          "oklch(48% 0.120 175)",
+          "oklch(60% 0.120 175)",
+          "oklch(72% 0.120 175)",
+          "oklch(84% 0.084 175)",
+          "oklch(95% 0.042 175)"
+        ]
+      },
+      "secondary-bg": {
+        "role": "secondary",
+        "displayName": "Signal Teal Fill",
+        "tonalRamp": [
+          "oklch(18% 0.042 175)",
+          "oklch(28% 0.084 175)",
+          "oklch(38% 0.120 175)",
+          "oklch(48% 0.120 175)",
+          "oklch(60% 0.120 175)",
+          "oklch(72% 0.120 175)",
+          "oklch(84% 0.084 175)",
+          "oklch(95% 0.042 175)"
+        ]
+      },
+      "secondary-text": {
+        "role": "secondary",
+        "displayName": "Signal Teal Text",
+        "tonalRamp": [
+          "oklch(18% 0.042 175)",
+          "oklch(28% 0.084 175)",
+          "oklch(38% 0.120 175)",
+          "oklch(48% 0.120 175)",
+          "oklch(60% 0.120 175)",
+          "oklch(72% 0.120 175)",
+          "oklch(84% 0.084 175)",
+          "oklch(95% 0.042 175)"
+        ]
+      },
+      "default-border": {
+        "role": "neutral",
+        "displayName": "Slate Border",
+        "tonalRamp": [
+          "oklch(18% 0.005 235)",
+          "oklch(28% 0.010 235)",
+          "oklch(38% 0.015 235)",
+          "oklch(48% 0.015 235)",
+          "oklch(60% 0.015 235)",
+          "oklch(72% 0.015 235)",
+          "oklch(84% 0.010 235)",
+          "oklch(95% 0.005 235)"
+        ]
+      },
+      "default-bg": {
+        "role": "neutral",
+        "displayName": "Slate Fill",
+        "tonalRamp": [
+          "oklch(18% 0.005 235)",
+          "oklch(28% 0.010 235)",
+          "oklch(38% 0.015 235)",
+          "oklch(48% 0.015 235)",
+          "oklch(60% 0.015 235)",
+          "oklch(72% 0.015 235)",
+          "oklch(84% 0.010 235)",
+          "oklch(95% 0.005 235)"
+        ]
+      },
+      "default-text": {
+        "role": "neutral",
+        "displayName": "Slate Text",
+        "tonalRamp": [
+          "oklch(18% 0.005 235)",
+          "oklch(28% 0.010 235)",
+          "oklch(38% 0.015 235)",
+          "oklch(48% 0.015 235)",
+          "oklch(60% 0.015 235)",
+          "oklch(72% 0.015 235)",
+          "oklch(84% 0.010 235)",
+          "oklch(95% 0.005 235)"
+        ]
+      },
+      "info-border": {
+        "role": "tertiary",
+        "displayName": "Info Blue Border",
+        "tonalRamp": [
+          "oklch(18% 0.045 235)",
+          "oklch(28% 0.091 235)",
+          "oklch(38% 0.130 235)",
+          "oklch(48% 0.130 235)",
+          "oklch(60% 0.130 235)",
+          "oklch(72% 0.130 235)",
+          "oklch(84% 0.091 235)",
+          "oklch(95% 0.045 235)"
+        ]
+      },
+      "info-bg": {
+        "role": "tertiary",
+        "displayName": "Info Blue Fill",
+        "tonalRamp": [
+          "oklch(18% 0.045 235)",
+          "oklch(28% 0.091 235)",
+          "oklch(38% 0.130 235)",
+          "oklch(48% 0.130 235)",
+          "oklch(60% 0.130 235)",
+          "oklch(72% 0.130 235)",
+          "oklch(84% 0.091 235)",
+          "oklch(95% 0.045 235)"
+        ]
+      },
+      "info-text": {
+        "role": "tertiary",
+        "displayName": "Info Blue Text",
+        "tonalRamp": [
+          "oklch(18% 0.045 235)",
+          "oklch(28% 0.091 235)",
+          "oklch(38% 0.130 235)",
+          "oklch(48% 0.130 235)",
+          "oklch(60% 0.130 235)",
+          "oklch(72% 0.130 235)",
+          "oklch(84% 0.091 235)",
+          "oklch(95% 0.045 235)"
+        ]
+      },
+      "success-border": {
+        "role": "tertiary",
+        "displayName": "Success Green Border",
+        "tonalRamp": [
+          "oklch(18% 0.042 165)",
+          "oklch(28% 0.084 165)",
+          "oklch(38% 0.120 165)",
+          "oklch(48% 0.120 165)",
+          "oklch(60% 0.120 165)",
+          "oklch(72% 0.120 165)",
+          "oklch(84% 0.084 165)",
+          "oklch(95% 0.042 165)"
+        ]
+      },
+      "success-bg": {
+        "role": "tertiary",
+        "displayName": "Success Green Fill",
+        "tonalRamp": [
+          "oklch(18% 0.042 165)",
+          "oklch(28% 0.084 165)",
+          "oklch(38% 0.120 165)",
+          "oklch(48% 0.120 165)",
+          "oklch(60% 0.120 165)",
+          "oklch(72% 0.120 165)",
+          "oklch(84% 0.084 165)",
+          "oklch(95% 0.042 165)"
+        ]
+      },
+      "success-text": {
+        "role": "tertiary",
+        "displayName": "Success Green Text",
+        "tonalRamp": [
+          "oklch(18% 0.042 165)",
+          "oklch(28% 0.084 165)",
+          "oklch(38% 0.120 165)",
+          "oklch(48% 0.120 165)",
+          "oklch(60% 0.120 165)",
+          "oklch(72% 0.120 165)",
+          "oklch(84% 0.084 165)",
+          "oklch(95% 0.042 165)"
+        ]
+      },
+      "warning-border": {
+        "role": "tertiary",
+        "displayName": "Warning Amber Border",
+        "tonalRamp": [
+          "oklch(18% 0.052 70)",
+          "oklch(28% 0.105 70)",
+          "oklch(38% 0.150 70)",
+          "oklch(48% 0.150 70)",
+          "oklch(60% 0.150 70)",
+          "oklch(72% 0.150 70)",
+          "oklch(84% 0.105 70)",
+          "oklch(95% 0.052 70)"
+        ]
+      },
+      "warning-bg": {
+        "role": "tertiary",
+        "displayName": "Warning Amber Fill",
+        "tonalRamp": [
+          "oklch(18% 0.052 70)",
+          "oklch(28% 0.105 70)",
+          "oklch(38% 0.150 70)",
+          "oklch(48% 0.150 70)",
+          "oklch(60% 0.150 70)",
+          "oklch(72% 0.150 70)",
+          "oklch(84% 0.105 70)",
+          "oklch(95% 0.052 70)"
+        ]
+      },
+      "warning-text": {
+        "role": "tertiary",
+        "displayName": "Warning Amber Text",
+        "tonalRamp": [
+          "oklch(18% 0.052 70)",
+          "oklch(28% 0.105 70)",
+          "oklch(38% 0.150 70)",
+          "oklch(48% 0.150 70)",
+          "oklch(60% 0.150 70)",
+          "oklch(72% 0.150 70)",
+          "oklch(84% 0.105 70)",
+          "oklch(95% 0.052 70)"
+        ]
+      },
+      "error-border": {
+        "role": "tertiary",
+        "displayName": "Error Red Border",
+        "tonalRamp": [
+          "oklch(18% 0.070 20)",
+          "oklch(28% 0.140 20)",
+          "oklch(38% 0.200 20)",
+          "oklch(48% 0.200 20)",
+          "oklch(60% 0.200 20)",
+          "oklch(72% 0.200 20)",
+          "oklch(84% 0.140 20)",
+          "oklch(95% 0.070 20)"
+        ]
+      },
+      "error-bg": {
+        "role": "tertiary",
+        "displayName": "Error Red Fill",
+        "tonalRamp": [
+          "oklch(18% 0.070 20)",
+          "oklch(28% 0.140 20)",
+          "oklch(38% 0.200 20)",
+          "oklch(48% 0.200 20)",
+          "oklch(60% 0.200 20)",
+          "oklch(72% 0.200 20)",
+          "oklch(84% 0.140 20)",
+          "oklch(95% 0.070 20)"
+        ]
+      },
+      "error-text": {
+        "role": "tertiary",
+        "displayName": "Error Red Text",
+        "tonalRamp": [
+          "oklch(18% 0.070 20)",
+          "oklch(28% 0.140 20)",
+          "oklch(38% 0.200 20)",
+          "oklch(48% 0.200 20)",
+          "oklch(60% 0.200 20)",
+          "oklch(72% 0.200 20)",
+          "oklch(84% 0.140 20)",
+          "oklch(95% 0.070 20)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "heading-1": {
+        "displayName": "Heading 1",
+        "purpose": "Page titles via Heading level/size 1."
+      },
+      "heading-2": {
+        "displayName": "Heading 2",
+        "purpose": "Section titles."
+      },
+      "heading-3": {
+        "displayName": "Heading 3",
+        "purpose": "Subsection and component titles."
+      },
+      "heading-6": {
+        "displayName": "Heading 6",
+        "purpose": "Smallest heading step."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text; family inherited from host."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Button, link-button and tab labels."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Toasts, small buttons, hints, validation messages."
+      }
+    },
+    "shadows": [
+      {
+        "name": "elevation-1",
+        "value": "0 1px 3px rgba(0 0 0 / 0.12)",
+        "purpose": "Tooltips and small popovers."
+      },
+      {
+        "name": "elevation-2",
+        "value": "0 3px 6px rgba(0 0 0 / 0.15)",
+        "purpose": "Toasts."
+      },
+      {
+        "name": "elevation-3",
+        "value": "0 10px 20px rgba(0 0 0 / 0.15)",
+        "purpose": "Reserved."
+      },
+      {
+        "name": "elevation-4",
+        "value": "0 15px 25px rgba(0 0 0 / 0.15)",
+        "purpose": "Drawer panels."
+      },
+      {
+        "name": "elevation-5",
+        "value": "0 20px 40px rgba(0 0 0 / 0.5)",
+        "purpose": "Reserved."
+      },
+      {
+        "name": "interaction-ring",
+        "value": "0 0 0 0.25rem currentColor",
+        "purpose": "Hover/focus ring on surfaces and chrome controls; not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "animation-timing",
+        "value": "cubic-bezier(0.165, 0.84, 0.44, 1)",
+        "purpose": "The one easing curve for all state transitions."
+      },
+      {
+        "name": "duration-state",
+        "value": "0.2s",
+        "purpose": "Hover, focus, toggle and popover transitions."
+      },
+      {
+        "name": "duration-disclosure",
+        "value": "0.3s",
+        "purpose": "Accordion, card image, backdrop transitions."
+      },
+      {
+        "name": "animation-duration-hover",
+        "value": "0.5s",
+        "purpose": "Opt-in boop/bounce/nudge/rotate keyframes."
+      },
+      {
+        "name": "animation-duration-pulse",
+        "value": "2s",
+        "purpose": "Opt-in attention pulse."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tabs-row",
+        "value": "31.25rem"
+      },
+      {
+        "name": "table-compact",
+        "value": "40rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Neutral action; lift + underline on hover/focus.",
+      "html": "<button class=\"ds-btn\">Save changes</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:var(--space-2xs);border:3px solid var(--color-default-border);border-radius:var(--radius-s);background:var(--color-default-bg);color:var(--color-default-text);padding:var(--space-xs) var(--space-s);font-weight:700;text-decoration:underline 2px transparent;text-underline-offset:4px;cursor:pointer;transition:all .2s var(--animation-timing)}.ds-btn:hover,.ds-btn:focus-visible{text-decoration-color:currentColor;text-underline-offset:2px;translate:0 -3px}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call to action.",
+      "html": "<button class=\"ds-btn-primary\">Get started</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;border:3px solid var(--color-primary-border);border-radius:var(--radius-s);background:var(--color-primary-bg);color:var(--color-primary-text);padding:var(--space-xs) var(--space-s);font-weight:700;text-decoration:underline 2px transparent;text-underline-offset:4px;cursor:pointer;transition:all .2s var(--animation-timing)}.ds-btn-primary:hover,.ds-btn-primary:focus-visible{text-decoration-color:currentColor;text-underline-offset:2px;translate:0 -3px}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled field; error state via aria-invalid.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-e\">Email</label><input id=\"ds-e\" class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\"></div>",
+      "css": ".ds-field{display:grid;gap:var(--space-4xs)}.ds-input{border:2px solid var(--color-default-border);border-radius:var(--radius-s);padding:var(--space-2xs);font:inherit}.ds-input:focus-visible{outline:2px dashed currentColor;outline-offset:2px}.ds-input[aria-invalid=true]{border-color:var(--color-error-border)}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Bordered surface; ring on hover/focus-within.",
+      "html": "<article class=\"ds-card\"><h3>Card title</h3><p>Short description of the linked content.</p></article>",
+      "css": ".ds-card{display:flex;flex-direction:column;gap:var(--space-2xs);border:2px solid var(--color-default-border);border-radius:var(--radius-m);padding:var(--space-s);max-inline-size:60ch;transition:box-shadow .3s var(--animation-timing)}.ds-card:hover,.ds-card:focus-within{box-shadow:0 0 0 .25rem}"
+    },
+    {
+      "name": "Info Notification",
+      "kind": "custom",
+      "refersTo": "notification",
+      "description": "Status message using a semantic triplet.",
+      "html": "<div class=\"ds-note\" role=\"status\"><strong>Heads up:</strong> your session expires in 5 minutes.</div>",
+      "css": ".ds-note{display:flex;gap:var(--space-xs);border:2px solid var(--color-info-border);border-radius:var(--radius-m);background:var(--color-info-bg);color:var(--color-info-text);padding:var(--space-s)}"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Compact status label.",
+      "html": "<span class=\"ds-badge\">New</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;border:2px solid var(--color-success-border);border-radius:var(--radius-m);background:var(--color-success-bg);color:var(--color-success-text);padding:0 var(--space-3xs);font-size:var(--font-size--1)}"
+    },
+    {
+      "name": "Icon Toggle",
+      "kind": "button",
+      "refersTo": "toggle",
+      "description": "Chrome control (DarkMode etc.); ring replaces outline.",
+      "html": "<button class=\"ds-toggle\" aria-pressed=\"false\" aria-label=\"Dark mode\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z\"/></svg></button>",
+      "css": ".ds-toggle{display:inline-flex;border:2px solid;border-radius:var(--radius-m);background:transparent;padding:var(--space-2xs);cursor:pointer;transition:box-shadow .2s var(--animation-timing)}.ds-toggle:hover,.ds-toggle:focus-visible{box-shadow:0 0 0 .25rem;outline:none}"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "custom",
+      "refersTo": "tooltip",
+      "description": "Floating hint; elevation-1.",
+      "html": "<span class=\"ds-tip\">Copied to clipboard</span>",
+      "css": ".ds-tip{display:inline-block;border:1px solid var(--color-default-border);border-radius:var(--radius-s);background:var(--color-default-bg);color:var(--color-default-text);padding:var(--space-3xs) var(--space-xs);box-shadow:var(--elevation-1)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clear Signal",
+    "overview": "The library makes every state as easy to see as it is for assistive technology to announce. If a screen reader hears \"selected\", \"invalid\", \"expanded\" or \"focused\", a sighted user sees it too, without relying on colour alone. State changes show up as thick borders, a solid ring, a lift or an underline, never as a faint tint. This is a component library rather than a brand: it inherits the host's fonts, takes the host's palette through `--color-primary-*`, `--color-secondary-*` and `--color-neutral-*` ramps, and adds a small set of strong defaults that look right in the Accessible Astro Starter and stay neutral anywhere else.\n\nDensity is moderate and touch-friendly. Interactive targets stay at or above 2.75rem (44px) where the layout allows. Spacing and type both use fluid `clamp()` scales, so components grow with the viewport and need no breakpoint overrides. Light and dark themes come from `light-dark()` on every color token. Components never branch on a `.darkmode` class for color.\n\nStyles are written to be overridden. Every component selector is wrapped in `:where()` for zero specificity, so a consumer's single class beats the library. Motion is decorative and opt-in. Anything that moves sits behind `prefers-reduced-motion: no-preference`, and the reduced-motion fallback stays visible but still.",
+    "keyCharacteristics": [
+      "Explicit states: border, ring, lift or underline. A state is never shown by color alone.",
+      "Bordered rather than shadowed: 2px borders define surfaces, and shadows are reserved for floating layers.",
+      "Semantic color triplets (`border` / `bg` / `text`) for default, info, success, warning, error, primary and secondary.",
+      "Fluid tokens for space and type. No hard-coded rem values inside components.",
+      "Zero-specificity styles with `:where()`, so consumers can theme without fighting the library.",
+      "Logical properties throughout (`inline-size`, `padding-block`, `inset-inline-start`)."
+    ],
+    "rules": [
+      {
+        "name": "The Triplet Rule",
+        "body": "A colored component sets all three colors of a single triplet (`--color-X-border`, `--color-X-bg`, `--color-X-text`). Never mix the border from one meaning with the background from another, and never hard-code an `hsl()` that duplicates a token.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token-or-Fallback Rule",
+        "body": "Components read color only through `var(--color-…)`. A component that needs a value the system lacks reads a consumer ramp with an inline fallback (`var(--color-neutral-200, hsl(…))`). It never defines a bare literal.",
+        "section": "colors"
+      },
+      {
+        "name": "The Not-Color-Alone Rule",
+        "body": "Every color-coded state also has a non-color signal: an icon, border weight, underline, ring or text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Scale-Only Rule",
+        "body": "Font sizes inside components come from `--font-size-*`. A literal `1.25rem` or `0.875rem` is a deviation.",
+        "section": "typography"
+      },
+      {
+        "name": "The Underline-Is-Interactive Rule",
+        "body": "Underlines mean \"this is actionable\". Hover and focus move the underline closer (`text-underline-offset` 4px → 2px) instead of adding or removing it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Space-Token Rule",
+        "body": "Padding, margin, gap and inset values inside components come from `--space-*`. Literal rem values are deviations, except geometric sizes such as icon boxes and 2.75rem touch targets.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-Until-Floating Rule",
+        "body": "Inline surfaces (cards, tabs, notifications, inputs) never carry a resting shadow. Only detached layers use `--elevation-*`, and always through the token.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Two-Radius Rule",
+        "body": "A surface uses `--radius-m` and a control inside it uses `--radius-s`. Never write `0.5rem` or `0.25rem` literally.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** wrap every component selector in `:where()` so consumer classes win without `!important`.",
+      "**Do** read color only through `--color-{meaning}-{border|bg|text}`, and give fallbacks when reading the host's `--color-neutral-*` / `--color-primary-*` ramps.",
+      "**Do** use `--space-*` for padding, gaps and offsets, and `--font-size-*` for type.",
+      "**Do** use `--radius-m` on surfaces and `--radius-s` on controls.",
+      "**Do** use `--animation-timing` for easing. Durations are 0.2s for state changes and 0.3s for disclosure and image transitions.",
+      "**Do** put every transition and keyframe behind `@media (prefers-reduced-motion: no-preference)`.",
+      "**Do** keep interactive targets at least 2.75rem (44px) in both dimensions where layout allows.",
+      "**Do** use logical properties (`border-inline-start`, `border-start-start-radius`, `padding-block`)."
+    ],
+    "donts": [
+      "**Don't** hard-code `hsl()`, `rgb()` or hex values in a component when a token exists. In particular, don't use `light-dark(hsl(0 0% 10%), hsl(0 0% 90%))` for borders; use `--color-default-border`.",
+      "**Don't** redeclare `--transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1)` locally. That is `--animation-timing`.",
+      "**Don't** read tokens the library doesn't define (`--cubic-bezier`, `--animation-speed-*`) without also defining them or giving a fallback that matches the library's own tokens.",
+      "**Don't** add resting shadows to inline surfaces. Shadows are for floating layers.",
+      "**Don't** remove `outline` on focus unless the ring replaces it with equal or greater visibility.",
+      "**Don't** use physical properties (`border-left`, `border-top-left-radius`) in component CSS.",
+      "**Don't** signal state by color alone."
+    ]
+  }
+}
