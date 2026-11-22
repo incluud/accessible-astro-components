@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Tooltip Component
  *
  * @description Accessible tooltip using Popover API and CSS Anchor Positioning
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'span'> {
   /**
    * Unique ID for the tooltip (used for aria-describedby)
    */
@@ -33,10 +35,6 @@ interface Props {
    * Additional classes for the wrapper
    */
   class?: string
-  /**
-   * HTML attributes to spread on the wrapper
-   */
-  [key: string]: unknown
 }
 
 const {

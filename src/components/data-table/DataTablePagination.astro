@@ -1,4 +1,6 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTablePagination Component
  *
@@ -9,7 +11,7 @@ import Pagination from '../pagination/Pagination.astro'
 
 type RouteString = string | null | undefined
 
-interface Props {
+interface Props extends HTMLAttributes<'nav'> {
   /** Use buttons with DataTable's pageSize instead of page-reload links. @default false */
   client?: boolean
   /** Client pagination progress template. @default "Page {page} of {pages}" */
@@ -86,10 +88,6 @@ interface Props {
     type: 'first' | 'previous' | 'next' | 'last'
     page: string | number
   }) => string
-  /**
-   * HTML attributes to spread on the pagination component
-   */
-  [key: string]: string | number | boolean | undefined | Function
 }
 
 const {

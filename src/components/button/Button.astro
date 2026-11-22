@@ -1,10 +1,12 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Button Component
  * @description A versatile button with variants and delightful animations
  */
 
-interface Props {
+interface Props extends Omit<HTMLAttributes<'button'>, 'type'> {
   /**
    * Additional classes to apply to the button
    */
@@ -64,10 +66,6 @@ interface Props {
    * @default false
    */
   pulse?: boolean
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

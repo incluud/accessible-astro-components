@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import Heading from '../heading/Heading.astro'
 
 /**
@@ -7,7 +8,7 @@ import Heading from '../heading/Heading.astro'
  * @description An accessible drawer dialog with focus management and edge positioning
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'dialog'> {
   /**
    * Additional classes to apply to the drawer
    */
@@ -40,10 +41,6 @@ interface Props {
    * @default false
    */
   showFooter?: boolean
-  /**
-   * HTML attributes to spread on the drawer
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Fieldset Component
  *
  * @description A fieldset wrapper for grouping form controls with validation support
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'fieldset'> {
   /**
    * Name attribute for the fieldset (used for group validation)
    */
@@ -44,10 +46,6 @@ interface Props {
    * Variant of the fieldset
    */
   variant?: 'default' | 'minimal'
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

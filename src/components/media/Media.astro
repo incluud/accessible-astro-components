@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Media Component
  *
  * @description A responsive media component with support for various aspect ratios and loading strategies
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the media wrapper
    */
@@ -40,10 +42,6 @@ interface Props {
    * @default "auto"
    */
   fetchpriority?: 'high' | 'low' | 'auto'
-  /**
-   * HTML attributes to spread on the media wrapper
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

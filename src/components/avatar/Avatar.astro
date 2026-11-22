@@ -1,4 +1,6 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Avatar Component
  *
@@ -7,7 +9,7 @@
  */
 
 // Base props that are always the same
-type BaseProps = {
+type BaseProps = HTMLAttributes<'div'> & {
   /**
    * Additional classes to apply to the Avatar
    */
@@ -35,10 +37,6 @@ type BaseProps = {
    * @default "md"
    */
   size?: 'sm' | 'md' | 'lg' | string
-  /**
-   * HTML attributes to spread on the avatar
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 // Props when title is provided (label is optional)

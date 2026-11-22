@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * SkipLink Component
  *
  * @description An accessible skip link that helps keyboard users bypass repetitive navigation
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply
    */
@@ -20,10 +22,6 @@ interface Props {
    * @default "#main-content"
    */
   target?: string
-  /**
-   * HTML attributes to spread on the skip link
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

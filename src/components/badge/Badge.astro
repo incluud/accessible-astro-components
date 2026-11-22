@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Badge Component
  *
  * @description A badge component with support for different types and button variant
  */
 
-interface Props {
+interface Props extends Omit<HTMLAttributes<'button'>, 'type'> {
   /**
    * Additional classes to apply to the Badge
    */
@@ -61,10 +63,6 @@ interface Props {
    * for proper accessibility. For badges with clear text content, this is optional.
    */
   label?: string
-  /**
-   * HTML attributes to spread on the badge
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

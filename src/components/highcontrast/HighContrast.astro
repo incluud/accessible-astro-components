@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * High Contrast Toggle Component
  *
  * @description A fully accessible high contrast mode toggle
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'button'> {
   /**
    * Additional classes to apply to the button
    */
@@ -19,10 +21,6 @@ interface Props {
    * Children elements for slots
    */
   children?: any
-  /**
-   * HTML attributes to spread on the high contrast toggle
-   */
-  [key: string]: string | number | boolean | undefined | any
 }
 
 const { class: className, label = 'Toggle High Contrast', ...rest } = Astro.props

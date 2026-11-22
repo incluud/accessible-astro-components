@@ -1,19 +1,17 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Tabs Component
  *
  * @description A fully accessible tabs component that follows WAI-ARIA guidelines
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the tabs container
    */
   class?: string
-  /**
-   * HTML attributes to spread on the tabs container
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, ...rest } = Astro.props

@@ -1,4 +1,6 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Switch Component
  *
@@ -8,7 +10,7 @@
  * announce it as a switch that is "on" or "off".
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'input'> {
   /**
    * Additional classes to apply to the switch field container
    */
@@ -40,10 +42,6 @@ interface Props {
    * @default false
    */
   disabled?: boolean
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

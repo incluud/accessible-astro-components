@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * TabsTab Component
  *
  * @description A tab within a Tabs component
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'button'> {
   /**
    * Additional classes to apply to the tab
    */
@@ -23,10 +25,6 @@ interface Props {
    * @default false
    */
   selected?: boolean
-  /**
-   * HTML attributes to spread on the tab
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, id, controls, selected = false, ...rest } = Astro.props

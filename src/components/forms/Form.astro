@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import Notification from '../notification/Notification.astro'
 
 /**
@@ -7,7 +8,7 @@ import Notification from '../notification/Notification.astro'
  * @description A form wrapper with validation, error handling, and accessibility features
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'form'> {
   /**
    * Additional classes to apply to the form
    */
@@ -84,7 +85,7 @@ const {
   data-default-fieldset-validation-message={defaultFieldsetValidationMessage}
   {...rest}
 >
-  <Notification type="error" ariaLive="polite" variant="accent" hidden />
+  <Notification type="error" variant="accent" hidden />
   <slot />
 </form>
 

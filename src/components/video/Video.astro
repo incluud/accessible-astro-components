@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Video Component
  *
  * @description A responsive video component with YouTube embed support and privacy enhancements
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the video wrapper
    */
@@ -29,10 +31,6 @@ interface Props {
    * @default "lazy"
    */
   loading?: 'lazy' | 'eager'
-  /**
-   * HTML attributes to spread on the video wrapper
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

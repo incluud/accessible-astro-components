@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Checkbox Component
  *
  * @description A simple checkbox field for use within forms and fieldsets
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'input'> {
   /**
    * Additional classes to apply to the checkbox field container
    */
@@ -36,10 +38,6 @@ interface Props {
    * @default false
    */
   disabled?: boolean
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

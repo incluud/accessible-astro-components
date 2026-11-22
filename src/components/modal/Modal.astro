@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import Heading from '../heading/Heading.astro'
 
 /**
@@ -7,7 +8,7 @@ import Heading from '../heading/Heading.astro'
  * @description A fully accessible modal dialog with focus management and keyboard interactions
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'dialog'> {
   /**
    * Additional classes to apply to the modal
    */
@@ -35,10 +36,6 @@ interface Props {
    * @default "h2" (maintains previous 1.5rem visual size)
    */
   headingSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  /**
-   * HTML attributes to spread on the modal
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

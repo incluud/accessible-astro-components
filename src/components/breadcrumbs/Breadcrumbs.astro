@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import type { BreadcrumbsItem } from '../../types/index'
 
 /**
@@ -7,7 +8,7 @@ import type { BreadcrumbsItem } from '../../types/index'
  * @description A fully accessible breadcrumb navigation that follows WAI-ARIA guidelines
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'nav'> {
   /**
    * Additional classes to apply to the breadcrumbs container
    */
@@ -21,10 +22,6 @@ interface Props {
    * @default 'Breadcrumbs'
    */
   ariaLabel?: string
-  /**
-   * HTML attributes to spread on the breadcrumbs
-   */
-  [key: string]: string | number | boolean | undefined | BreadcrumbsItem | BreadcrumbsItem[]
 }
 
 const { class: className, ariaLabel = 'Breadcrumbs', ...rest } = Astro.props

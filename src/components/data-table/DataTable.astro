@@ -1,4 +1,6 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTable Component
  *
@@ -34,7 +36,7 @@ interface DataTableLabels {
   emptyResults?: string
 }
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Optional ID for the table element
    */
@@ -60,10 +62,6 @@ interface Props {
    * Additional classes to apply to the DataTable container
    */
   class?: string
-  /**
-   * HTML attributes to spread on the DataTable container
-   */
-  [key: string]: string | number | boolean | DataTableLabels | undefined
 }
 
 const {

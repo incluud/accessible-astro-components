@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Breadcrumbs Item Component
  *
  * @description An individual breadcrumb item that can be a link or current page indicator
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'li'> {
   /**
    * Additional classes to apply to the item
    */
@@ -29,10 +31,6 @@ interface Props {
    * @default false
    */
   hasIcon?: boolean
-  /**
-   * HTML attributes to spread on the breadcrumb item
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

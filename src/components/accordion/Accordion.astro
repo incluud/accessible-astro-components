@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import type { AccordionItem } from '../../types/index'
 
 /**
@@ -7,7 +8,7 @@ import type { AccordionItem } from '../../types/index'
  * @description A fully accessible accordion component that follows WAI-ARIA guidelines
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'ul'> {
   /**
    * Additional classes to apply to the accordion container
    */
@@ -16,10 +17,6 @@ interface Props {
    * Accordion items to render
    */
   children: AccordionItem | AccordionItem[]
-  /**
-   * HTML attributes to spread on the accordion
-   */
-  [key: string]: string | number | boolean | undefined | AccordionItem | AccordionItem[]
 }
 
 const { class: className, ...rest } = Astro.props

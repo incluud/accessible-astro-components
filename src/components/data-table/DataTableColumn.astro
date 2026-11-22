@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTableColumn Component
  *
  * @description Sortable column header for DataTable
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'th'> {
   /**
    * Additional classes to apply to the column header
    */
@@ -30,10 +32,6 @@ interface Props {
   sortKey?: string
   /** Column width as a CSS length or percentage. Unspecified columns share remaining space. */
   width?: string
-  /**
-   * HTML attributes to spread on the column header
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {
@@ -46,7 +44,11 @@ const {
   style,
   ...rest
 } = Astro.props
-const columnStyle = width ? `--data-table-column-width: ${width}; ${style ?? ''}` : style
+const columnStyle =
+  style && typeof style === 'object'
+    ? { ...(width && { '--data-table-column-width': width }), ...style }
+    : [width && `--data-table-column-width: ${width}`, style].filter(Boolean).join('; ') ||
+      undefined
 ---
 
 {
