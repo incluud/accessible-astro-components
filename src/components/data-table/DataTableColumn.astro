@@ -44,7 +44,11 @@ const {
   style,
   ...rest
 } = Astro.props
-const columnStyle = width ? `--data-table-column-width: ${width}; ${style ?? ''}` : style
+const columnStyle =
+  style && typeof style === 'object'
+    ? { ...(width && { '--data-table-column-width': width }), ...style }
+    : [width && `--data-table-column-width: ${width}`, style].filter(Boolean).join('; ') ||
+      undefined
 ---
 
 {
