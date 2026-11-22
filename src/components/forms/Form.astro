@@ -82,7 +82,6 @@ const {
   data-error-summary-message={errorSummaryMessage}
   data-default-field-validation-message={defaultFieldValidationMessage}
   data-default-fieldset-validation-message={defaultFieldsetValidationMessage}
-  novalidate
   {...rest}
 >
   <Notification type="error" ariaLive="polite" variant="accent" hidden />
@@ -99,6 +98,10 @@ const {
       // Skip if already initialized
       if (form.dataset.validationInitialized === 'true') return
       form.dataset.validationInitialized = 'true'
+
+      // Turn off the browser's own validation only once this script takes over,
+      // so forms still get native validation when JavaScript is unavailable
+      form.noValidate = true
 
       const requiredFields = form.querySelectorAll('[required]')
       const requiredFieldsets = form.querySelectorAll('fieldset[data-required="true"]')
