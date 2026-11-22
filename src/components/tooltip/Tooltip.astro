@@ -44,6 +44,7 @@ const {
   triggerLabel,
   showIcon = true,
   class: className,
+  style,
   ...rest
 } = Astro.props
 
@@ -61,7 +62,13 @@ if (!hasTriggerSlot && !triggerLabel) {
 
 const anchorName = `--tooltip-${id}`
 const triggerId = `${id}-trigger`
-const inlineStyle = `--tooltip-anchor: ${anchorName}; --tooltip-offset: ${offset};`
+// Merge the positioning custom properties with a consumer `style` (string or object)
+const inlineStyle =
+  style && typeof style === 'object'
+    ? { '--tooltip-anchor': anchorName, '--tooltip-offset': offset, ...style }
+    : [`--tooltip-anchor: ${anchorName}; --tooltip-offset: ${offset};`, style]
+        .filter(Boolean)
+        .join(' ')
 ---
 
 <span class:list={['tooltip-wrapper', className]} style={inlineStyle} {...rest}>
