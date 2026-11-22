@@ -1,19 +1,17 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTableRow Component
  *
  * @description Table row wrapper for DataTable cells
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'tr'> {
   /**
    * Additional classes to apply to the table row
    */
   class?: string
-  /**
-   * HTML attributes to spread on the table row
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, ...rest } = Astro.props

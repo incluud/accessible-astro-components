@@ -1,10 +1,12 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Link Component
  * @description A versatile link component that handles both internal and external links with proper accessibility
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'a'> {
   /**
    * Additional classes to apply to the link
    */
@@ -71,10 +73,6 @@ interface Props {
    * @default false
    */
   pulse?: boolean
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

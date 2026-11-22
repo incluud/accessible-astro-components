@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import Heading from '../heading/Heading.astro'
 
 /**
@@ -7,7 +8,7 @@ import Heading from '../heading/Heading.astro'
  * @description An individual accordion item that can be expanded/collapsed with smooth animations
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'li'> {
   /**
    * Additional classes to apply to the item
    */
@@ -40,10 +41,6 @@ interface Props {
    * @default false
    */
   open?: boolean
-  /**
-   * HTML attributes to spread on the accordion item
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

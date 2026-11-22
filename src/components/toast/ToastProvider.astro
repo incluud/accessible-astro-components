@@ -1,4 +1,5 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import Toast from './Toast.astro'
 
 /**
@@ -6,7 +7,7 @@ import Toast from './Toast.astro'
  *
  * @description A global toast container with a JavaScript API for stacking notifications
  */
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the toast provider
    */
@@ -53,10 +54,6 @@ interface Props {
    * `--toast-z-index` here unless you intentionally want to override `zIndex`.
    */
   style?: string
-  /**
-   * HTML attributes to spread on the toast provider
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

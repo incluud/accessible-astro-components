@@ -1,19 +1,17 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTableBody Component
  *
  * @description Table body wrapper for DataTable rows
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'tbody'> {
   /**
    * Additional classes to apply to the table body
    */
   class?: string
-  /**
-   * HTML attributes to spread on the table body
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, ...rest } = Astro.props

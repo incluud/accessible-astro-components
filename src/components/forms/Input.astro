@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Input Component
  *
  * @description A progressive enhancement input field with built-in validation and accessibility
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'input'> {
   /**
    * Additional classes to apply to the input field container
    */
@@ -93,10 +95,6 @@ interface Props {
    * @default "on"
    */
   autocomplete?: string
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

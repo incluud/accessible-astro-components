@@ -1,4 +1,6 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Pagination Component
  *
@@ -9,7 +11,7 @@
 export type NumericalString = `${number}`
 export type RouteString = string | null | undefined
 
-interface Props {
+interface Props extends HTMLAttributes<'nav'> {
   /**
    * Additional classes to apply
    */
@@ -89,10 +91,6 @@ interface Props {
     type: 'first' | 'previous' | 'next' | 'last'
     page: string | number
   }) => string
-  /**
-   * HTML attributes to spread on the pagination
-   */
-  [key: string]: string | number | boolean | undefined | Function
 }
 
 const {

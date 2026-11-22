@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * DataTableSearch Component
  *
  * @description Search input for filtering DataTable rows
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'input'> {
   /**
    * Additional classes to apply to the search wrapper
    */
@@ -31,10 +33,6 @@ interface Props {
   showLabel?: boolean
   /** Accessible name for the clear button. @default "Clear search" */
   clearLabel?: string
-  /**
-   * HTML attributes to spread on the search input
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

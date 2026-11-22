@@ -1,19 +1,17 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * TabsList Component
  *
  * @description A list of tabs within a Tabs component
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the tabs list container
    */
   class?: string
-  /**
-   * HTML attributes to spread on the tabs list
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const { class: className, ...rest } = Astro.props

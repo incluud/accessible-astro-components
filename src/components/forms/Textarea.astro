@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Textarea Component
  *
  * @description A progressive enhancement textarea field with built-in validation and accessibility
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'textarea'> {
   /**
    * Additional classes to apply to the textarea field container
    */
@@ -76,10 +78,6 @@ interface Props {
    * Placeholder text
    */
   placeholder?: string
-  /**
-   * HTML attributes
-   */
-  [key: string]: any
 }
 
 const {

@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * AvatarGroup Component
  *
  * @description A component for displaying multiple avatars in a group, either condensed or in a grid layout
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the AvatarGroup
    */
@@ -31,10 +33,6 @@ interface Props {
    * @note Should be a negative value to create overlap effect
    */
   overlapAmount?: string
-  /**
-   * HTML attributes to spread on the avatar group
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

@@ -1,10 +1,12 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Toast Component
  *
  * @description An individual toast message used by the ToastProvider component
  */
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the toast
    */
@@ -32,10 +34,6 @@ interface Props {
    * @default "Dismiss notification"
    */
   dismissLabel?: string
-  /**
-   * HTML attributes to spread on the toast
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

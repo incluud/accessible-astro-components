@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Notification Component
  *
  * @description A versatile notification component with support for different types and ARIA roles
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'div'> {
   /**
    * Additional classes to apply to the Notification
    */
@@ -59,10 +61,6 @@ interface Props {
    * Note: 'status' implies aria-live="polite", 'alert' implies aria-live="assertive"
    */
   role?: 'none' | 'alert' | 'log' | 'marquee' | 'status' | 'timer' | 'region'
-  /**
-   * HTML attributes to spread on the notification
-   */
-  [key: string]: string | number | boolean | undefined
 }
 
 const {

@@ -1,11 +1,13 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 /**
  * Reduced Motion Toggle Component
  *
  * @description A fully accessible reduced motion toggle that respects system preferences
  */
 
-interface Props {
+interface Props extends HTMLAttributes<'button'> {
   /**
    * Additional classes to apply to the button
    */
@@ -24,10 +26,6 @@ interface Props {
    * Children elements for slots
    */
   children?: any
-  /**
-   * HTML attributes to spread on the reduced motion toggle
-   */
-  [key: string]: string | number | boolean | undefined | any
 }
 
 const {
