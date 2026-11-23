@@ -82,6 +82,7 @@ const {
   animationType = 'boop',
   animationIntensity = 5,
   pulse = false,
+  style,
   ...rest
 } = Astro.props
 
@@ -100,6 +101,24 @@ const animationClass = shouldAnimate ? `animate-${animationType}-svg` : ''
 
 // Determine if we should apply the pulse class
 const pulseClass = pulse ? 'animation-pulse' : ''
+
+// Merge the animation custom properties with a consumer `style` (string or object)
+const hasAnimationStyle = shouldAnimate || pulse
+const mergedStyle =
+  style && typeof style === 'object'
+    ? {
+        ...(hasAnimationStyle && {
+          '--scaleAmount': scaleAmount,
+          '--rotateAmount': `${rotateAmount}deg`,
+        }),
+        ...style,
+      }
+    : [
+        hasAnimationStyle && `--scaleAmount: ${scaleAmount}; --rotateAmount: ${rotateAmount}deg;`,
+        style,
+      ]
+        .filter(Boolean)
+        .join(' ') || undefined
 ---
 
 <button
@@ -114,9 +133,7 @@ const pulseClass = pulse ? 'animation-pulse' : ''
     pulseClass,
     className,
   ]}
-  style={shouldAnimate || pulse
-    ? `--scaleAmount: ${scaleAmount}; --rotateAmount: ${rotateAmount}deg;`
-    : undefined}
+  style={mergedStyle}
   disabled={disabled}
   aria-label={ariaLabel}
   aria-describedby={ariaDescribedby}
