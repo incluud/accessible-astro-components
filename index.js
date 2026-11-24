@@ -40,6 +40,7 @@ export { default as Toast } from './src/components/toast/Toast.astro'
 export { default as ToastProvider } from './src/components/toast/ToastProvider.astro'
 export { default as Tooltip } from './src/components/tooltip/Tooltip.astro'
 export { default as Video } from './src/components/video/Video.astro'
+export { default as VisuallyHidden } from './src/components/visuallyhidden/VisuallyHidden.astro'
 
 // Forms
 export { default as Checkbox } from './src/components/forms/Checkbox.astro'

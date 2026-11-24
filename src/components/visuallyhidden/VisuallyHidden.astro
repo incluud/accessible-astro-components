@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+/**
+ * VisuallyHidden Component
+ *
+ * @description Hides content visually while keeping it available to screen readers.
+ * It does not hide content from assistive technology: use `hidden` or `aria-hidden` for that.
+ */
+
+interface Props extends HTMLAttributes<'span' | 'div' | 'p' | 'li'> {
+  /**
+   * The element to render
+   * @default "span"
+   */
+  as?: 'span' | 'div' | 'p' | 'li'
+  /**
+   * Shows the content while it, or an element inside it, has focus
+   * @default false
+   */
+  focusable?: boolean
+}
+
+const { as: Tag = 'span', focusable = false, class: className, ...rest } = Astro.props
+---
+
+<Tag class:list={['sr-only', { 'sr-only-focusable': focusable }, className]} {...rest}>
+  <slot />
+</Tag>

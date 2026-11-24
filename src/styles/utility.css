@@ -16,3 +16,13 @@
   border-width: 0;
   white-space: nowrap;
 }
+
+.sr-only-focusable:focus-within {
+  position: static;
+  margin: 0;
+  inline-size: auto;
+  block-size: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
