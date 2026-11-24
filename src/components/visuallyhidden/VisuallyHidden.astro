@@ -19,6 +19,10 @@ interface Props extends HTMLAttributes<'span' | 'div' | 'p' | 'li'> {
    * @default false
    */
   focusable?: boolean
+  /**
+   * The ordinal value of the list item, only used when `as="li"`
+   */
+  value?: HTMLAttributes<'li'>['value']
 }
 
 const { as: Tag = 'span', focusable = false, class: className, ...rest } = Astro.props
@@ -27,3 +31,19 @@ const { as: Tag = 'span', focusable = false, class: className, ...rest } = Astro
 <Tag class:list={['sr-only', { 'sr-only-focusable': focusable }, className]} {...rest}>
   <slot />
 </Tag>
+
+<style>
+  /* Scoped to outrank any consumer `.sr-only`, and resets every property its common variants set */
+  .sr-only-focusable:focus-within {
+    position: static;
+    margin: 0;
+    padding: 0;
+    inline-size: auto;
+    block-size: auto;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    border: 0;
+    white-space: normal;
+  }
+</style>

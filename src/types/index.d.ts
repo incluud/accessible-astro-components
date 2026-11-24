@@ -957,6 +957,7 @@ export const Video: Video
  * @param _props - Record<string, any>
  * @param _props.as - The element to render ('span' | 'div' | 'p' | 'li') - default: 'span'
  * @param _props.focusable - Shows the content while it, or an element inside it, has focus (for skip links) - default: false
+ * @param _props.value - The ordinal value of the list item, only used when `as="li"`
  * @param _props.class - Optional CSS class names
  * @param _props.children - Content for screen readers
  * @note Additional HTML attributes can be passed and will be spread to the root element
