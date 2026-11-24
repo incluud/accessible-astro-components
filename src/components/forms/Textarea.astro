@@ -98,6 +98,7 @@ const {
   rows,
   cols,
   placeholder,
+  'aria-describedby': ariaDescribedby,
   ...rest
 } = Astro.props
 
@@ -128,7 +129,7 @@ const validationMessage = dataValidation || getDefaultValidationMessage(required
     rows={rows}
     cols={cols}
     placeholder={placeholder}
-    aria-describedby={`${inputId}-validation`}
+    aria-describedby={[`${inputId}-validation`, ariaDescribedby].filter(Boolean).join(' ')}
     data-validation={validationMessage}
     data-validation-pattern={dataValidationPattern}
     data-validation-fn={dataValidationFn}
