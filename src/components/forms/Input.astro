@@ -117,6 +117,7 @@ const {
   disabled = false,
   readonly = false,
   autocomplete = 'on',
+  'aria-describedby': ariaDescribedby,
   ...rest
 } = Astro.props
 
@@ -162,7 +163,7 @@ const validationMessage = dataValidation || getDefaultValidationMessage(type, re
     disabled={disabled}
     readonly={readonly}
     autocomplete={autocomplete}
-    aria-describedby={`${inputId}-validation`}
+    aria-describedby={[`${inputId}-validation`, ariaDescribedby].filter(Boolean).join(' ')}
     data-validation={validationMessage}
     data-validation-pattern={dataValidationPattern}
     data-validation-fn={dataValidationFn}
